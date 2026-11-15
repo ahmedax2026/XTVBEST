@@ -4,6 +4,7 @@
  */
 export const LINGUI_TO_DAYJS: Record<string, string> = {
   en: 'en',
+  ar: 'ar',
   es: 'es',
   'zh-CN': 'zh-cn',
   'pseudo-LOCALE': 'en',

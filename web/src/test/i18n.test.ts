@@ -24,6 +24,12 @@ describe('loadCatalog', () => {
     expect(i18n.locale).toBe('en');
   });
 
+  it('activates Arabic locale and translates navigation', async () => {
+    await loadCatalog('ar');
+    expect(i18n.locale).toBe('ar');
+    expect(i18n._('Channels')).toBe('القنوات');
+  });
+
   it('activates Spanish locale', async () => {
     await loadCatalog('es');
     expect(i18n.locale).toBe('es');

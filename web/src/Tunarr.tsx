@@ -34,6 +34,8 @@ export const Tunarr = () => {
   // dayjs locale module. setUiLocale handles both; the English catalog is
   // already loaded above so 'en' is effectively idempotent.
   useEffect(() => {
+    document.documentElement.lang = locale;
+    document.documentElement.dir = locale === 'ar' ? 'rtl' : 'ltr';
     void setUiLocale(locale);
   }, [locale]);
 
@@ -41,6 +43,9 @@ export const Tunarr = () => {
 
   const muiLocaleTheme = useMemo(() => {
     const theme = createTunarrTheme(density);
+    if (locale === 'ar') {
+      return createTheme(theme, { direction: 'rtl' });
+    }
     if (locale === 'es') {
       return createTheme(theme, muiEsES, pickersEsES);
     }
