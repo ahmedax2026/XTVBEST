@@ -2,7 +2,7 @@ name: XBest CPU GPU and login checks
 
 on:
   pull_request:
-    branches: [feature/xbest-studio]
+    branches: [feature/xbest-studio, feature/xbest-cpu-gpu-auth]
   workflow_dispatch:
 
 permissions:
@@ -37,10 +37,23 @@ jobs:
           pnpm --filter @tunarr/web typecheck
       - name: Test hardware selection, persistence, pipeline and authentication
         run: pnpm --filter @tunarr/server test src/ffmpeg/AutoHardwareAcceleration.test.ts src/db/TranscodeConfigDB.test.ts src/ffmpeg/FfmpegStreamFactory.test.ts src/stream/etv/EtvNextSession.test.ts src/util/basicAuth.test.ts
-      - name: Check Arabic catalog
-        run: pnpm --filter @tunarr/web exec vitest run --project unit src/locales/catalogs.test.ts
+      - name: Test live monitor, countdown, links and Arabic catalog
+        run: pnpm --filter @tunarr/web exec vitest run --project unit src/components/channels/ChannelSessionsDialog.test.tsx src/components/channels/ChannelNowPlayingCard.test.tsx src/components/channels/ChannelMenuButton.test.tsx src/components/channels/channelSummary.test.ts src/locales/catalogs.test.ts
       - name: Build web bundle
         run: pnpm --filter @tunarr/web bundle
+      - name: Install browser for Arabic monitor smoke test
+        if: runner.os == 'Linux'
+        run: pnpm --filter @tunarr/web exec playwright install --with-deps chromium
+      - name: Check Arabic monitor in a real browser
+        if: runner.os == 'Linux'
+        run: pnpm --filter @tunarr/web exec node src/test/live-monitor-smoke.mjs
+      - name: Upload monitor screenshots
+        if: always() && runner.os == 'Linux'
+        uses: actions/upload-artifact@v4
+        with:
+          name: xbest-live-monitor-screenshots
+          path: web/test-results/live-monitor/
+          if-no-files-found: ignore
       - name: Check Linux launcher syntax
         if: runner.os == 'Linux'
         run: bash -n scripts/start-xbest.sh

@@ -223,3 +223,21 @@ export const channelsM3uUrl = (m3uUrl: string, numbers?: readonly number[]) => {
   url.searchParams.set('download', 'true');
   return url.toString();
 };
+
+// UUID-based stream links survive channel renaming and renumbering.
+export const channelStreamUrl = (backendUri: string, channelId: string) => {
+  const base = backendUri || window.location.origin;
+  return `${base.replace(/\/+$/, '')}/stream/channels/${encodeURIComponent(channelId)}.m3u8`;
+};
+
+export const programCountdown = (stop: number, now: number) => {
+  const seconds = Math.max(0, Math.ceil((stop - now) / 1000));
+  if (!Number.isFinite(seconds)) return '00:00:00';
+  return [
+    Math.floor(seconds / 3600),
+    Math.floor(seconds / 60) % 60,
+    seconds % 60,
+  ]
+    .map((part) => String(part).padStart(2, '0'))
+    .join(':');
+};

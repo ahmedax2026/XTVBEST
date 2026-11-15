@@ -31,10 +31,9 @@ msgstr "次日。"
 msgid "\"{0}\" Live"
 msgstr "「{0}」直播中"
 
-#. placeholder {0}: channel.name
 #: src/components/channels/ChannelSessionsDialog.tsx
-msgid "\"{0}\" Sessions"
-msgstr "「{0}」会话"
+#~ msgid "\"{0}\" Sessions"
+#~ msgstr "「{0}」会话"
 
 #: src/components/channel_config/ChannelEpgConfig.tsx
 #~ msgid "\"Stealth\" channels are hidden from TV guides, spoofed HDHR, m3u playlist, etc. The channel can still be streamed directly or be used as a redirect target."
@@ -202,9 +201,23 @@ msgstr ""
 msgid "{0} Poster"
 msgstr "{0} 海报"
 
+#. placeholder {0}: sessions.length
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "{0} sessions"
+msgstr ""
+
+#. placeholder {0}: session.numConnections
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "{0} stream connections"
+msgstr ""
+
 #: src/components/programming_controls/AddRerunBlockModal.tsx
 msgid "{block} Hours"
 msgstr "{block} 小时"
+
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "{connections} stream connections"
+msgstr ""
 
 #. placeholder {0}: <> <MonoText>{count}</MonoText> selected </>
 #. placeholder {1}: <> <MonoText>{count}</MonoText> selected </>
@@ -406,6 +419,10 @@ msgstr "12 小时制"
 #: src/components/settings/general/WebSettings.tsx
 msgid "24-hour"
 msgstr "24 小时制"
+
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "A player can open more than one connection. This is not a count of unique viewers."
+msgstr ""
 
 #: src/components/settings/media_source/LocalMediaEditDialog.tsx
 msgid "A root path to scan for media. Local sources can search many different paths."
@@ -1489,6 +1506,10 @@ msgstr "复制 M3U 链接"
 msgid "Copy of {0}"
 msgstr ""
 
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Copy stream URL"
+msgstr ""
+
 #: src/pages/system/TroubleshootPage.tsx
 msgid "Copy to clipboard"
 msgstr "复制到剪贴板"
@@ -2216,6 +2237,10 @@ msgstr ""
 msgid "Episodes"
 msgstr "剧集"
 
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Error"
+msgstr ""
+
 #: src/hooks/useBulkAssignFillers.tsx
 msgid "Error assigning fillers: {message}"
 msgstr ""
@@ -2918,6 +2943,10 @@ msgstr "初始延迟（分钟）"
 msgid "Initial Delay + Interval"
 msgstr "初始延迟 + 间隔"
 
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Initializing"
+msgstr ""
+
 #: src/components/slot_scheduler/MidRollConfigPanel.tsx
 msgid "Insert breaks at these percentages of the program duration"
 msgstr "在节目时长的这些百分比位置插入广告"
@@ -2991,6 +3020,10 @@ msgstr "语言"
 
 #: src/components/profiles/StreamSelectionRuleEditor.tsx
 msgid "Languages"
+msgstr ""
+
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Last activity:"
 msgstr ""
 
 #: src/pages/settings/TaskSettingsPage.tsx
@@ -3099,6 +3132,15 @@ msgstr "关联的时段会一起按顺序推进剧集进度。"
 #: src/components/channel_config/ChannelProgrammingConfig.tsx
 msgid "List"
 msgstr "列表"
+
+#: src/components/channels/ChannelOptionsMenu.tsx
+msgid "Live monitor"
+msgstr ""
+
+#. placeholder {0}: channel.name
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Live monitor: {0}"
+msgstr ""
 
 #: src/components/programs/Actors.tsx
 msgid "Load More"
@@ -3584,6 +3626,10 @@ msgstr ""
 #: src/pages/channels/ChannelsPage.tsx
 #~ msgid "No active sessions"
 #~ msgstr "暂无活动会话"
+
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "No active sessions for this channel."
+msgstr ""
 
 #: src/components/fillers/AssignFillerToChannelsDialog.tsx
 msgid "No channels found. Create a channel first."
@@ -4288,6 +4334,7 @@ msgstr "跳转到频道 {0}"
 msgid "Redirect..."
 msgstr ""
 
+#: src/components/channels/ChannelSessionsDialog.tsx
 #: src/hooks/useVersion.tsx
 msgid "Refresh"
 msgstr "刷新"
@@ -4310,6 +4357,10 @@ msgstr "刷新预览"
 #: src/pages/settings/XmlTvSettingsPage.tsx
 msgid "Refresh Timer (Hours)"
 msgstr "刷新周期（小时）"
+
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Refreshing sessions"
+msgstr ""
 
 #: src/components/channels/BulkAssignFillersDialog.tsx
 #: src/components/fillers/AssignFillerToChannelsDialog.tsx
@@ -4335,6 +4386,10 @@ msgstr "上映日期（降序）"
 #: src/components/Video.tsx
 msgid "Reload Stream"
 msgstr "重新加载流"
+
+#: src/components/channels/ChannelNowPlayingCard.tsx
+msgid "Remaining:"
+msgstr ""
 
 #: src/components/library/ProgramListItem.tsx
 msgid "Remove"
@@ -4595,6 +4650,10 @@ msgstr "立即运行"
 #: src/pages/system/TroubleshootPage.tsx
 msgid "Run Troubleshooter"
 msgstr "运行排查工具"
+
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Running"
+msgstr ""
 
 #: src/pages/system/TroubleshootPage.tsx
 msgid "Running..."
@@ -5096,6 +5155,10 @@ msgstr "媒体源"
 msgid "Specials"
 msgstr "特别篇"
 
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Stable HLS URL"
+msgstr ""
+
 #: src/components/programming_controls/AddRerunBlockModal.tsx
 msgid "Start"
 msgstr "开始"
@@ -5107,8 +5170,16 @@ msgid "Start Time"
 msgstr "开始时间"
 
 #: src/components/channels/ChannelNowPlayingCard.tsx
-msgid "Started {startedAgo} - {remainingTime}remaining"
-msgstr "已于 {startedAgo} 开始 - 剩余 {remainingTime}"
+msgid "Started {startedAgo}"
+msgstr ""
+
+#: src/components/channels/ChannelNowPlayingCard.tsx
+#~ msgid "Started {startedAgo} - {remainingTime}remaining"
+#~ msgstr "已于 {startedAgo} 开始 - 剩余 {remainingTime}"
+
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Starting"
+msgstr ""
 
 #: src/components/programming_controls/AddBlockShuffleModal.tsx
 #: src/components/programming_controls/AddBlockShuffleModal.tsx
@@ -5138,13 +5209,33 @@ msgstr "隐身模式"
 #~ msgid "Stealth?"
 #~ msgstr "隐身？"
 
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Stop sessions"
+msgstr ""
+
 #: src/components/MediaSourceLibraryTable.tsx
 msgid "Stop syncing this library"
 msgstr ""
 
 #: src/components/channels/ChannelOptionsMenu.tsx
-msgid "Stop Transcode Session"
-msgstr "停止转码会话"
+#~ msgid "Stop Transcode Session"
+#~ msgstr "停止转码会话"
+
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Stopped"
+msgstr ""
+
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Stopping"
+msgstr ""
+
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Stopping sessions disconnects current players. A player that reconnects can start a new session; this does not take the channel permanently offline."
+msgstr ""
+
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Stopping sessions…"
+msgstr ""
 
 #: src/components/programs/ProgramDetailsDialog.tsx
 msgid "Stream Info"
@@ -5445,6 +5536,10 @@ msgstr "这些设置保存在你的浏览器中，修改后会自动保存。"
 #: src/components/slot_scheduler/TimeSlotTable.tsx
 msgid "This {0} is marked as missing in the database."
 msgstr "此 {0} 在数据库中被标记为缺失。"
+
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "This address stays the same when you rename or renumber the channel."
+msgstr ""
 
 #: src/components/channel_config/ChannelProgrammingOrganizeOptions.tsx
 msgid "This allows to schedule specific shows to run at specific time slots of the day or a week. It's recommended you first populate the channel with the episodes from the shows you want to play and/or other content like movies and redirects."
@@ -5847,6 +5942,14 @@ msgstr "剧集按剧名分组"
 msgid "Type"
 msgstr "类型"
 
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Unable to refresh sessions. Previously loaded values may be out of date."
+msgstr ""
+
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Unable to stop sessions. Try again."
+msgstr ""
+
 #: src/components/UnavailableLibraryIndicator.tsx
 #: src/components/UnavailableLibraryIndicator.tsx
 msgid "Unavailable"
@@ -5856,6 +5959,10 @@ msgstr ""
 #: src/components/search/DateSearchValueNode.tsx
 msgid "Unit"
 msgstr "单位"
+
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Unknown"
+msgstr ""
 
 #: src/components/profiles/condition/LibrarySelect.tsx
 msgid "Unknown library"
@@ -5879,6 +5986,10 @@ msgstr "更新"
 #: src/components/settings/media_source/JelllyfinServerEditDialog.tsx
 #: src/components/settings/media_source/PlexServerEditDialog.tsx
 msgid "Update Play Status"
+msgstr ""
+
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Updates every five seconds while this window is open."
 msgstr ""
 
 #: src/components/settings/media_source/EmbyServerEditDialog.tsx
