@@ -31,10 +31,9 @@ msgstr ""
 msgid "\"{0}\" Live"
 msgstr ""
 
-#. placeholder {0}: channel.name
 #: src/components/channels/ChannelSessionsDialog.tsx
-msgid "\"{0}\" Sessions"
-msgstr ""
+#~ msgid "\"{0}\" Sessions"
+#~ msgstr ""
 
 #: src/components/channel_config/ChannelEpgConfig.tsx
 #~ msgid "\"Stealth\" channels are hidden from TV guides, spoofed HDHR, m3u playlist, etc. The channel can still be streamed directly or be used as a redirect target."
@@ -202,8 +201,22 @@ msgstr ""
 msgid "{0} Poster"
 msgstr ""
 
+#. placeholder {0}: sessions.length
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "{0} sessions"
+msgstr ""
+
+#. placeholder {0}: session.numConnections
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "{0} stream connections"
+msgstr ""
+
 #: src/components/programming_controls/AddRerunBlockModal.tsx
 msgid "{block} Hours"
+msgstr ""
+
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "{connections} stream connections"
 msgstr ""
 
 #. placeholder {0}: <> <MonoText>{count}</MonoText> selected </>
@@ -405,6 +418,10 @@ msgstr ""
 
 #: src/components/settings/general/WebSettings.tsx
 msgid "24-hour"
+msgstr ""
+
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "A player can open more than one connection. This is not a count of unique viewers."
 msgstr ""
 
 #: src/components/settings/media_source/LocalMediaEditDialog.tsx
@@ -1489,6 +1506,10 @@ msgstr ""
 msgid "Copy of {0}"
 msgstr ""
 
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Copy stream URL"
+msgstr ""
+
 #: src/pages/system/TroubleshootPage.tsx
 msgid "Copy to clipboard"
 msgstr ""
@@ -2216,6 +2237,10 @@ msgstr ""
 msgid "Episodes"
 msgstr ""
 
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Error"
+msgstr ""
+
 #: src/hooks/useBulkAssignFillers.tsx
 msgid "Error assigning fillers: {message}"
 msgstr ""
@@ -2918,6 +2943,10 @@ msgstr ""
 msgid "Initial Delay + Interval"
 msgstr ""
 
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Initializing"
+msgstr ""
+
 #: src/components/slot_scheduler/MidRollConfigPanel.tsx
 msgid "Insert breaks at these percentages of the program duration"
 msgstr ""
@@ -2991,6 +3020,10 @@ msgstr ""
 
 #: src/components/profiles/StreamSelectionRuleEditor.tsx
 msgid "Languages"
+msgstr ""
+
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Last activity:"
 msgstr ""
 
 #: src/pages/settings/TaskSettingsPage.tsx
@@ -3098,6 +3131,15 @@ msgstr ""
 #: src/components/base/ProgramViewToggleButton.tsx
 #: src/components/channel_config/ChannelProgrammingConfig.tsx
 msgid "List"
+msgstr ""
+
+#: src/components/channels/ChannelOptionsMenu.tsx
+msgid "Live monitor"
+msgstr ""
+
+#. placeholder {0}: channel.name
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Live monitor: {0}"
 msgstr ""
 
 #: src/components/programs/Actors.tsx
@@ -3584,6 +3626,10 @@ msgstr ""
 #: src/pages/channels/ChannelsPage.tsx
 #~ msgid "No active sessions"
 #~ msgstr ""
+
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "No active sessions for this channel."
+msgstr ""
 
 #: src/components/fillers/AssignFillerToChannelsDialog.tsx
 msgid "No channels found. Create a channel first."
@@ -4286,6 +4332,7 @@ msgstr ""
 msgid "Redirect..."
 msgstr ""
 
+#: src/components/channels/ChannelSessionsDialog.tsx
 #: src/hooks/useVersion.tsx
 msgid "Refresh"
 msgstr ""
@@ -4307,6 +4354,10 @@ msgstr ""
 #: src/pages/settings/XmlTvSettingsPage.tsx
 #: src/pages/settings/XmlTvSettingsPage.tsx
 msgid "Refresh Timer (Hours)"
+msgstr ""
+
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Refreshing sessions"
 msgstr ""
 
 #: src/components/channels/BulkAssignFillersDialog.tsx
@@ -4332,6 +4383,10 @@ msgstr ""
 
 #: src/components/Video.tsx
 msgid "Reload Stream"
+msgstr ""
+
+#: src/components/channels/ChannelNowPlayingCard.tsx
+msgid "Remaining:"
 msgstr ""
 
 #: src/components/library/ProgramListItem.tsx
@@ -4592,6 +4647,10 @@ msgstr ""
 
 #: src/pages/system/TroubleshootPage.tsx
 msgid "Run Troubleshooter"
+msgstr ""
+
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Running"
 msgstr ""
 
 #: src/pages/system/TroubleshootPage.tsx
@@ -5094,6 +5153,10 @@ msgstr ""
 msgid "Specials"
 msgstr ""
 
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Stable HLS URL"
+msgstr ""
+
 #: src/components/programming_controls/AddRerunBlockModal.tsx
 msgid "Start"
 msgstr ""
@@ -5105,7 +5168,15 @@ msgid "Start Time"
 msgstr ""
 
 #: src/components/channels/ChannelNowPlayingCard.tsx
-msgid "Started {startedAgo} - {remainingTime}remaining"
+msgid "Started {startedAgo}"
+msgstr ""
+
+#: src/components/channels/ChannelNowPlayingCard.tsx
+#~ msgid "Started {startedAgo} - {remainingTime}remaining"
+#~ msgstr ""
+
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Starting"
 msgstr ""
 
 #: src/components/programming_controls/AddBlockShuffleModal.tsx
@@ -5136,12 +5207,32 @@ msgstr ""
 #~ msgid "Stealth?"
 #~ msgstr ""
 
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Stop sessions"
+msgstr ""
+
 #: src/components/MediaSourceLibraryTable.tsx
 msgid "Stop syncing this library"
 msgstr ""
 
 #: src/components/channels/ChannelOptionsMenu.tsx
-msgid "Stop Transcode Session"
+#~ msgid "Stop Transcode Session"
+#~ msgstr ""
+
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Stopped"
+msgstr ""
+
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Stopping"
+msgstr ""
+
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Stopping sessions disconnects current players. A player that reconnects can start a new session; this does not take the channel permanently offline."
+msgstr ""
+
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Stopping sessions…"
 msgstr ""
 
 #: src/components/programs/ProgramDetailsDialog.tsx
@@ -5442,6 +5533,10 @@ msgstr ""
 #: src/components/slot_scheduler/RandomSlotTable.tsx
 #: src/components/slot_scheduler/TimeSlotTable.tsx
 msgid "This {0} is marked as missing in the database."
+msgstr ""
+
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "This address stays the same when you rename or renumber the channel."
 msgstr ""
 
 #: src/components/channel_config/ChannelProgrammingOrganizeOptions.tsx
@@ -5845,6 +5940,14 @@ msgstr ""
 msgid "Type"
 msgstr ""
 
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Unable to refresh sessions. Previously loaded values may be out of date."
+msgstr ""
+
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Unable to stop sessions. Try again."
+msgstr ""
+
 #: src/components/UnavailableLibraryIndicator.tsx
 #: src/components/UnavailableLibraryIndicator.tsx
 msgid "Unavailable"
@@ -5853,6 +5956,10 @@ msgstr ""
 #: src/components/search/DateSearchValueNode.tsx
 #: src/components/search/DateSearchValueNode.tsx
 msgid "Unit"
+msgstr ""
+
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Unknown"
 msgstr ""
 
 #: src/components/profiles/condition/LibrarySelect.tsx
@@ -5877,6 +5984,10 @@ msgstr ""
 #: src/components/settings/media_source/JelllyfinServerEditDialog.tsx
 #: src/components/settings/media_source/PlexServerEditDialog.tsx
 msgid "Update Play Status"
+msgstr ""
+
+#: src/components/channels/ChannelSessionsDialog.tsx
+msgid "Updates every five seconds while this window is open."
 msgstr ""
 
 #: src/components/settings/media_source/EmbyServerEditDialog.tsx

@@ -14,11 +14,10 @@ import {
 } from '@mui/material';
 import { useQueryClient } from '@tanstack/react-query';
 import { getApiChannelsByIdNowPlayingQueryKey } from '@/generated/@tanstack/react-query.gen.ts';
-import * as globalDayjs from 'dayjs';
 import { capitalize, isNil } from 'lodash-es';
-import { useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { match, P } from 'ts-pattern';
-import { useTimeout, useToggle } from 'usehooks-ts';
+import { useToggle } from 'usehooks-ts';
 import { extractProgramGrandparent } from '../../helpers/programUtil.ts';
 import { useChannelAndProgramming } from '../../hooks/useChannelLineup.ts';
 import { useDayjs } from '../../hooks/useDayjs.ts';
@@ -26,7 +25,11 @@ import { useChannelNowPlaying } from '../../hooks/useTvGuide.ts';
 import { useSettings } from '../../store/settings/selectors.ts';
 import ProgramDetailsDialog from '../programs/ProgramDetailsDialog.tsx';
 import { NetworkIcon } from '../util/NetworkIcon.tsx';
-import { programArtworkUrl } from './channelSummary.ts';
+import {
+  guideRefreshDelay,
+  programArtworkUrl,
+  programCountdown,
+} from './channelSummary.ts';
 
 type Props = {
   channelId: string;
@@ -48,20 +51,30 @@ export const ChannelNowPlayingCard = ({ channelId }: Props) => {
   const {
     data: { lineup },
   } = useChannelAndProgramming(channelId);
-  const { data: firstProgram } = useChannelNowPlaying(channelId);
+  const { data: firstProgram, dataUpdatedAt } = useChannelNowPlaying(channelId);
   const [open, toggleOpen] = useToggle(false);
 
   const queryClient = useQueryClient();
+  const [now, setNow] = useState(() => Date.now());
+  useEffect(() => {
+    const interval = setInterval(() => setNow(Date.now()), 1_000);
+    return () => clearInterval(interval);
+  }, []);
 
-  useTimeout(() => {
-    queryClient
-      .invalidateQueries({
-        queryKey: getApiChannelsByIdNowPlayingQueryKey({
-          path: { id: channelId },
-        }),
-      })
-      .catch(console.error);
-  }, firstProgram.stop + 5_000);
+  useEffect(() => {
+    const delay = guideRefreshDelay([firstProgram.stop], Date.now(), false);
+    if (delay === undefined) return;
+    const timer = setTimeout(() => {
+      queryClient
+        .invalidateQueries({
+          queryKey: getApiChannelsByIdNowPlayingQueryKey({
+            path: { id: channelId },
+          }),
+        })
+        .catch(console.error);
+    }, delay);
+    return () => clearTimeout(timer);
+  }, [channelId, firstProgram.stop, dataUpdatedAt, queryClient]);
 
   const details = useMemo(() => {
     return match(firstProgram)
@@ -129,10 +142,7 @@ export const ChannelNowPlayingCard = ({ channelId }: Props) => {
   };
 
   const startedAgo = dayjs(firstProgram?.start).fromNow();
-  const remainingTime =
-    globalDayjs
-      .duration(dayjs(firstProgram?.stop ?? 0).diff(dayjs()))
-      .humanize() + ' ';
+  const remainingTime = programCountdown(firstProgram.stop, now);
 
   return (
     <Card
@@ -189,10 +199,17 @@ export const ChannelNowPlayingCard = ({ channelId }: Props) => {
           </Typography>
           {details?.showTitle && <Typography>{details.title}</Typography>}
           <Typography variant="body2" sx={{ color: 'text.secondary' }}>
-            <Trans>
-              Started {startedAgo} - {remainingTime}
-              remaining
-            </Trans>
+            <Trans>Started {startedAgo}</Trans>
+          </Typography>
+          <Typography
+            variant="h5"
+            component="div"
+            sx={{ fontVariantNumeric: 'tabular-nums' }}
+          >
+            <Trans>Remaining:</Trans>{' '}
+            <Box component="span" dir="ltr">
+              {remainingTime}
+            </Box>
           </Typography>
         </CardContent>
         <CardActions>

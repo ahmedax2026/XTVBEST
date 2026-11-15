@@ -5,24 +5,21 @@ import {
   CopyAll,
   Delete,
   Edit,
-  Stop,
+  MonitorHeart,
   Tv,
 } from '@mui/icons-material';
 import { ListItemIcon, ListItemText, Menu, MenuItem } from '@mui/material';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { Link } from '@tanstack/react-router';
 import type { Channel } from '@tunarr/types';
-import { isEmpty, trimEnd } from 'lodash-es';
 import type { SyntheticEvent } from 'react';
 import { useCallback, useState } from 'react';
-import { deleteApiChannelsByIdSessionsMutation } from '../../generated/@tanstack/react-query.gen.ts';
-import { invalidateTaggedQueries } from '../../helpers/queryUtil.ts';
-import { isNonEmptyString } from '../../helpers/util.ts';
 import { useCopyToClipboard } from '../../hooks/useCopyToClipboard.ts';
 import { useCreateChannel } from '../../hooks/useCreateChannel.ts';
 import { useSettings } from '../../store/settings/selectors.ts';
 import type { PopoverAnchorEl } from '../../types/dom.ts';
 import { ChannelDeleteDialog } from './ChannelDeleteDialog.tsx';
+import { channelStreamUrl } from './channelSummary.ts';
+import { ChannelSessionsDialog } from './ChannelSessionsDialog.tsx';
 
 type Props = {
   row: Channel;
@@ -47,23 +44,7 @@ export const ChannelOptionsMenu = ({
   const copyToClipboard = useCopyToClipboard();
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const { t } = useLingui();
-
-  const queryClient = useQueryClient();
-  const stopSessionsMutation = useMutation({
-    ...deleteApiChannelsByIdSessionsMutation(),
-    onSuccess: () => {
-      return queryClient.invalidateQueries({
-        predicate: invalidateTaggedQueries(['Channels']),
-      });
-    },
-  });
-
-  const handleStopSessions = useCallback(
-    (channelId: string) => {
-      stopSessionsMutation.mutate({ path: { id: channelId } });
-    },
-    [stopSessionsMutation],
-  );
+  const [monitorOpen, setMonitorOpen] = useState(false);
 
   const duplicateChannelMutation = useCreateChannel();
 
@@ -75,7 +56,7 @@ export const ChannelOptionsMenu = ({
     [onClose],
   );
 
-  const { id: channelId, name: channelName, sessions } = row;
+  const { id: channelId, name: channelName } = row;
 
   return (
     <>
@@ -135,13 +116,7 @@ export const ChannelOptionsMenu = ({
         <MenuItem
           onClick={(e) => {
             e.stopPropagation();
-            const base = isNonEmptyString(backendUri)
-              ? backendUri
-              : window.location.origin;
-            const url = `${trimEnd(
-              base,
-              '/',
-            )}/stream/channels/${row.number}.m3u8`;
+            const url = channelStreamUrl(backendUri, channelId);
             copyToClipboard(
               url,
               t`Copied channel "${channelName}" m3u link to clipboard`,
@@ -197,15 +172,14 @@ export const ChannelOptionsMenu = ({
         <MenuItem
           onClick={(e) => {
             e.stopPropagation();
-            handleStopSessions(channelId);
+            setMonitorOpen(true);
             onClose(e);
           }}
-          disabled={isEmpty(sessions)}
         >
           <ListItemIcon>
-            <Stop />
+            <MonitorHeart />
           </ListItemIcon>
-          <ListItemText primary={t`Stop Transcode Session`} />
+          <ListItemText primary={t`Live monitor`} />
         </MenuItem>
         {!hideItems?.includes('duplicate') && (
           <MenuItem
@@ -244,6 +218,11 @@ export const ChannelOptionsMenu = ({
           </MenuItem>
         )}
       </Menu>
+      <ChannelSessionsDialog
+        open={monitorOpen}
+        channel={row}
+        onClose={() => setMonitorOpen(false)}
+      />
       <ChannelDeleteDialog
         open={deleteConfirmOpen}
         onClose={(e) => {

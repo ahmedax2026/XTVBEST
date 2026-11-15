@@ -12,6 +12,12 @@ CPU and manual GPU profiles use the existing FFmpeg pipeline. Auto now probes an
 
 Protected startup scripts for Windows and Linux prompt for credentials; server-side Basic Auth protects the panel and administrative requests. Incomplete credentials stop startup. Streaming authorization remains separate. GPU playback on actual Windows/Linux hardware still requires device verification.
 
+## Live session monitor
+
+The session window polls the existing server API every five seconds while open, shows session state, connection counts and client activity, and stops sessions with server confirmation and error feedback. It is available from every channel menu, including idle channels. Counts represent connections, not unique viewers. Reconnecting players may restart a stopped session; persistent offline/standby remains pending.
+
+Copied HLS links now use channel UUIDs and survive renaming/renumbering. The summary card counts down in HH:MM:SS every second and refreshes after a program ends. This countdown is in the administration panel; the burned-in countdown and its visual styles remain pending.
+
 ## Remaining acceptance criteria
 
 - Arabic locale and RTL layout; preserve English fallback.
