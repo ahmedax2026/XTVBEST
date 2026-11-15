@@ -59,7 +59,7 @@ export const Tunarr = () => {
               <ServerEventsProvider>
                 <QueryClientProvider client={queryClient}>
                   <SnackbarProvider maxSnack={2} autoHideDuration={5000}>
-                    <ThemeProvider theme={muiLocaleTheme} noSsr>
+                    <ThemeProvider theme={muiLocaleTheme} defaultMode="dark" noSsr>
                       <RouterProvider basepath="/web" router={router} />
                     </ThemeProvider>
                   </SnackbarProvider>

@@ -116,7 +116,7 @@ const Wordmark = () => (
     component="span"
     sx={{ fontSize: 20, fontWeight: 700, letterSpacing: '-0.01em' }}
   >
-    Tunarr
+    XBest Studio
   </Box>
 );
 

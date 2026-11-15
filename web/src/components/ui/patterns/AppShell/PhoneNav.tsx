@@ -64,7 +64,7 @@ export const PhoneHeader = ({
       >
         <TunarrLogo style={{ width: 36, height: 29 }} />
         <Box component="span" sx={{ fontSize: 18, fontWeight: 700 }}>
-          Tunarr
+          XBest Studio
         </Box>
       </LinkButtonBase>
       <Box sx={{ ml: 'auto', display: 'flex', alignItems: 'center' }}>
