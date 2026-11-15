@@ -130,6 +130,7 @@ export const TranscodeConfigColumns: (keyof TranscodeConfigTable)[] = [
   'errorScreen',
   'errorScreenAudio',
   'hardwareAccelerationMode',
+  'autoHardwareAcceleration',
   'isDefault',
   'name',
   'normalizeFrameRate',

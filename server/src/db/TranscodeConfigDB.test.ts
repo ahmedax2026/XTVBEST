@@ -6,6 +6,7 @@ import { copyPreMigratedDb } from '../testing/testDbFactory.ts';
 import { transcodeConfigOrmToDto } from './converters/transcodeConfigConverters.ts';
 import { DBAccess } from './DBAccess.ts';
 import { TranscodeConfigDB } from './TranscodeConfigDB.ts';
+import { TranscodeConfigColumns } from './schema/TranscodeConfig.ts';
 
 test('saves Auto per profile, round-trips the API flag, and can switch back to manual CPU', async () => {
   const dir = await tmp.dir({ unsafeCleanup: true });
@@ -23,6 +24,14 @@ test('saves Auto per profile, round-trips the API flag, and can switch back to m
       isDefault: false,
       autoHardwareAcceleration: true,
     });
+    const legacyDb = DBAccess.instance.db;
+    if (!legacyDb) throw new Error('Legacy database unavailable');
+    const legacy = await legacyDb
+      .selectFrom('transcodeConfig')
+      .select(TranscodeConfigColumns)
+      .where('uuid', '=', created.uuid)
+      .executeTakeFirstOrThrow();
+    expect(legacy.autoHardwareAcceleration).toBe(1);
     const saved = await db.getById(created.uuid);
     if (!saved) throw new Error('Saved profile missing');
     expect(transcodeConfigOrmToDto(saved).autoHardwareAcceleration).toBe(true);
