@@ -35,7 +35,7 @@ try {
   await fs.mkdir(output, { recursive: true });
   await fs.writeFile(
     html,
-    '<!doctype html><html lang="ar" dir="rtl"><meta charset="UTF-8"/><body><div id="root"></div><script type="module" src="/web/src/monitor-smoke.tsx"></script></body></html>',
+    '<!doctype html><html lang="ar" dir="rtl"><meta charset="UTF-8"/><body><div id="root"></div><script type="module" src="/src/monitor-smoke.tsx"></script></body></html>',
   );
   await fs.writeFile(source, entry);
   server = spawn(
