@@ -4,7 +4,7 @@ Modified distribution based on Tunarr. The original zlib license and copyright n
 
 ## Development status
 
-Initial branding: red and black theme, dark default, studio wordmark.
+Initial branding: red and black theme, dark default, studio wordmark. The interface supports Arabic and English only; Arabic is the default and uses RTL. Removed saved locale choices fall back to Arabic without resetting the server URL or other settings.
 
 ## CPU/GPU and protected startup
 

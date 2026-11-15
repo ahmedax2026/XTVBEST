@@ -23,9 +23,9 @@ export const DayjsProvider = ({ children }: Props) => {
   // and the 'en-gb' module for 24h format)
   useEffect(() => {
     const load = async () => {
-      if (effectiveDayjsLocale !== 'en') {
-        await import(`dayjs/locale/${effectiveDayjsLocale}.js`);
-      }
+      if (effectiveDayjsLocale === 'ar') await import('dayjs/locale/ar.js');
+      if (effectiveDayjsLocale === 'en-gb')
+        await import('dayjs/locale/en-gb.js');
       originalDayjs.locale(effectiveDayjsLocale);
     };
     void load();

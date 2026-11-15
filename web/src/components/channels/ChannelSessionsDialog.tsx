@@ -205,6 +205,7 @@ const LiveSessions = ({
           />
           <Button
             startIcon={<ContentCopy />}
+            sx={{ gap: 1, '& .MuiButton-startIcon': { m: 0 } }}
             onClick={() => {
               copy(streamUrl).catch(console.error);
             }}
@@ -220,7 +221,14 @@ const LiveSessions = ({
           </Alert>
         </Stack>
       </DialogContent>
-      <DialogActions sx={{ flexWrap: 'wrap', gap: 1 }}>
+      <DialogActions
+        sx={{
+          flexWrap: 'wrap',
+          gap: 1,
+          '& .MuiButton-root': { gap: 1 },
+          '& .MuiButton-startIcon': { m: 0 },
+        }}
+      >
         <Button
           startIcon={<Refresh />}
           disabled={query.isFetching}
