@@ -15,8 +15,8 @@ msgstr ""
 
 #. js-lingui-explicit-id
 #: src/test/i18n.test.ts
-msgid "Channels"
-msgstr "القنوات"
+#~ msgid "Channels"
+#~ msgstr "القنوات"
 
 #: src/components/slot_scheduler/MidRollConfigPanel.tsx
 msgid " Scheduling Strategy"
@@ -1237,6 +1237,7 @@ msgstr "Channel Transcode Config"
 #: src/components/shell/useShellNav.tsx
 #: src/hooks/useRouteName.ts
 #: src/pages/system/TroubleshootPage.tsx
+#: src/test/i18n.test.ts
 msgid "Channels"
 msgstr "القنوات"
 
@@ -4336,8 +4337,9 @@ msgstr "Redirect..."
 
 #: src/components/channels/ChannelSessionsDialog.tsx
 #: src/hooks/useVersion.tsx
+#: src/test/i18n.test.ts
 msgid "Refresh"
-msgstr "Refresh"
+msgstr "تحديث"
 
 #: src/pages/settings/MediaSourceSettingsPage.tsx
 #: src/pages/settings/MediaSourceSettingsPage.tsx

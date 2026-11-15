@@ -108,6 +108,16 @@ try {
   });
   await page.goto(url);
   await page.getByText('192.0.2.12').waitFor();
+  await page.locator('.MuiDialog-root').evaluate(async (element) => {
+    const finite = element
+      .getAnimations({ subtree: true })
+      .filter(
+        (animation) => animation.effect?.getTiming().iterations !== Infinity,
+      );
+    await Promise.all(
+      finite.map((animation) => animation.finished.catch(() => {})),
+    );
+  });
   assert(
     (await page.getByLabel('رابط HLS الثابت').inputValue()).endsWith(
       `/stream/channels/${id}.m3u8`,

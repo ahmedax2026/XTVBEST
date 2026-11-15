@@ -1,4 +1,5 @@
 import { i18n } from '@lingui/core';
+import { msg } from '@lingui/core/macro';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { loadCatalog } from '../i18n.ts';
 
@@ -27,7 +28,8 @@ describe('loadCatalog', () => {
   it('activates Arabic locale and translates navigation', async () => {
     await loadCatalog('ar');
     expect(i18n.locale).toBe('ar');
-    expect(i18n._('Channels')).toBe('القنوات');
+    expect(i18n._(msg`Channels`)).toBe('القنوات');
+    expect(i18n._(msg`Refresh`)).toBe('تحديث');
   });
 
   it.each(['es', 'zh-CN', 'pseudo-LOCALE'])(
