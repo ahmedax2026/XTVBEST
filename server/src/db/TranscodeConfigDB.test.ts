@@ -1,3 +1,4 @@
+import path from 'node:path';
 import tmp from 'tmp-promise';
 import { expect, test } from 'vitest';
 import { bootstrapTunarr } from '../bootstrap.ts';
@@ -14,7 +15,9 @@ test('saves Auto per profile, round-trips the API flag, and can switch back to m
     await copyPreMigratedDb(dir.path);
     setGlobalOptions({ database: dir.path, log_level: 'error', verbose: 0 });
     await bootstrapTunarr();
-    const db = new TranscodeConfigDB(DBAccess.instance.drizzle);
+    const drizzle = DBAccess.instance.drizzle;
+    if (!drizzle) throw new Error('Migrated database unavailable');
+    const db = new TranscodeConfigDB(drizzle);
     const original = await db.getDefaultConfig();
     if (!original) throw new Error('Missing migrated default profile');
     expect(original.autoHardwareAcceleration).toBe(false);
@@ -43,18 +46,18 @@ test('saves Auto per profile, round-trips the API flag, and can switch back to m
       autoHardwareAcceleration: false,
       hardwareAccelerationMode: 'none',
     });
-    await DBAccess.instance.closeConnection(`${dir.path}/db.db`);
+    await DBAccess.instance.closeConnection(path.join(dir.path, 'db.db'));
     // Reopen the persisted database, as happens on application restart.
     await bootstrapTunarr();
-    const reloaded = await new TranscodeConfigDB(
-      DBAccess.instance.drizzle,
-    ).getById(saved.uuid);
+    const reopened = DBAccess.instance.drizzle;
+    if (!reopened) throw new Error('Reopened database unavailable');
+    const reloaded = await new TranscodeConfigDB(reopened).getById(saved.uuid);
     expect(reloaded).toMatchObject({
       autoHardwareAcceleration: false,
       hardwareAccelerationMode: 'none',
     });
   } finally {
-    await DBAccess.instance.closeConnection(`${dir.path}/db.db`);
+    await DBAccess.instance.closeConnection(path.join(dir.path, 'db.db'));
     await dir.cleanup();
   }
 });
