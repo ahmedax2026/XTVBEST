@@ -216,6 +216,13 @@ export default function ChannelTranscodingConfig() {
               </FormHelperText>
             </FormControl>
           </Stack>
+          <Typography variant="body2" sx={{ mt: 1 }}>
+            {transcodeConfig.autoHardwareAcceleration
+              ? t`Processing: Auto — GPU with CPU fallback`
+              : transcodeConfig.hardwareAccelerationMode === 'none'
+                ? t`Processing: CPU`
+                : t`Processing: GPU (${transcodeConfig.hardwareAccelerationMode})`}
+          </Typography>
           {!etvNextEnabledGlobally && (
             <FormControl margin="normal">
               <FormControlLabel

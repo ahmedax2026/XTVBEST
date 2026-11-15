@@ -13,6 +13,7 @@ const conflictMarker = /<<<<<<<|=======|>>>>>>>/;
 describe('lingui catalogs', () => {
   test('every locale has a catalog', () => {
     expect(Object.keys(catalogs).sort()).toEqual([
+      './ar/messages.po',
       './en/messages.po',
       './es/messages.po',
       './pseudo-LOCALE/messages.po',

@@ -23,8 +23,12 @@ type Opts = {
 export const useBaseTranscodeConfigFormOptions = (
   initialConfig: z.input<typeof TranscodeConfigSchema>,
 ) => {
+  const defaultValues: z.input<typeof TranscodeConfigSchema> = {
+    ...initialConfig,
+    autoHardwareAcceleration: initialConfig.autoHardwareAcceleration ?? false,
+  };
   return formOptions({
-    defaultValues: initialConfig,
+    defaultValues,
     // mode: 'onChange',
     validators: {
       onChange: TranscodeConfigSchema,

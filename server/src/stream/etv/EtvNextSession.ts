@@ -1,3 +1,4 @@
+import { autoHardwareAcceleration } from '../../ffmpeg/AutoHardwareAcceleration.ts';
 import { once } from 'node:events';
 import fs from 'node:fs/promises';
 import path from 'node:path';
@@ -205,6 +206,10 @@ export class EtvNextSession extends Session<EtvNextSessionOptions> {
   }
 
   protected async startInternal(): Promise<void> {
+    this.channel.transcodeConfig = await autoHardwareAcceleration.resolve(
+      this.channel.transcodeConfig,
+      this.settingsDB.ffmpegSettings().ffmpegExecutablePath,
+    );
     const executablePath = await this.binaryResolver.resolveChecked();
 
     this.#stopping = false;

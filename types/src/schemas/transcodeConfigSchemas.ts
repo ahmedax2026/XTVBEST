@@ -49,6 +49,7 @@ export const TranscodeConfigSchema = z.object({
     .min(1, { error: 'Name cannot be empty' }),
   threadCount: z.coerce.number(),
   hardwareAccelerationMode: z.enum(SupportedHardwareAccels),
+  autoHardwareAcceleration: z.boolean().optional(),
   vaapiDriver: z.enum(SupportedVaapiDrivers),
   vaapiDevice: z.string().nullable(),
   resolution: ResolutionSchema,

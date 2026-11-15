@@ -6,7 +6,13 @@ Modified distribution based on Tunarr. The original zlib license and copyright n
 
 Initial branding: red and black theme, dark default, studio wordmark.
 
-## Planned acceptance criteria (not implemented yet)
+## CPU/GPU and protected startup
+
+CPU and manual GPU profiles use the existing FFmpeg pipeline. Auto now probes an actual encoder before each new session (cached for one minute), uses software decoding/filtering with GPU encoding, and falls back to CPU if every probe fails. Each channel chooses its transcode profile. Configuration changes apply to new playback sessions. See [setup and limitations](docs/xbest-cpu-gpu-login.md).
+
+Protected startup scripts for Windows and Linux prompt for credentials; server-side Basic Auth protects the panel and administrative requests. Incomplete credentials stop startup. Streaming authorization remains separate. GPU playback on actual Windows/Linux hardware still requires device verification.
+
+## Remaining acceptance criteria
 
 - Arabic locale and RTL layout; preserve English fallback.
 - Per-channel countdown based on scheduled program duration and playback offset, HH:MM:SS; circular, ring, square, pill, bar and digital styles; adjustable placement, margins, size, opacity and color; hide on fillers.

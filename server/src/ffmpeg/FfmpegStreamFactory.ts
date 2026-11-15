@@ -1,3 +1,4 @@
+import { autoHardwareAcceleration } from './AutoHardwareAcceleration.ts';
 import type {
   ISettingsDB,
   ReadableFfmpegSettings,
@@ -131,6 +132,13 @@ export class FfmpegStreamFactory {
     this.ffmpegSettings = this.settingsDB.ffmpegSettings();
   }
 
+  private async resolveHardwareAcceleration() {
+    this.transcodeConfig = await autoHardwareAcceleration.resolve(
+      this.transcodeConfig,
+      this.ffmpegSettings.ffmpegExecutablePath,
+    );
+  }
+
   async createConcatSession(
     streamUrl: string,
     opts: DeepReadonly<ConcatOptions>,
@@ -138,6 +146,7 @@ export class FfmpegStreamFactory {
     if (ConcatStreamModeRemuxes[opts.mode]) {
       return this.createHlsWrapperSession(streamUrl, opts);
     }
+    await this.resolveHardwareAcceleration();
 
     const concatInput = new ConcatInputSource(
       new HttpStreamSource(streamUrl),
@@ -331,6 +340,7 @@ export class FfmpegStreamFactory {
     // Subtitles are still processed as WebVTT sidecar when available.
     const isPassthrough =
       isRemux || outputFormat.type === OutputFormatTypes.HlsDirectV2;
+    if (!isPassthrough) await this.resolveHardwareAcceleration();
     const playbackParams = isPassthrough
       ? null
       : new FfmpegPlaybackParamsCalculator(
@@ -756,6 +766,7 @@ export class FfmpegStreamFactory {
   async createPlaceholderSession(
     opts: PlaceholderSessionOpts,
   ): Promise<Maybe<TranscodeSessionResult>> {
+    await this.resolveHardwareAcceleration();
     const realtime = opts.realtime ?? true;
     const ptsOffset = opts.ptsOffset ?? 0;
 

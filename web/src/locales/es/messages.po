@@ -13,6 +13,11 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 
+#. js-lingui-explicit-id
+#: src/test/i18n.test.ts
+msgid "Channels"
+msgstr ""
+
 #: src/components/slot_scheduler/MidRollConfigPanel.tsx
 msgid " Scheduling Strategy"
 msgstr ""
@@ -914,6 +919,10 @@ msgid "Auto"
 msgstr ""
 
 #: src/components/settings/ffmpeg/TranscodeConfigVideoSettingsForm.tsx
+msgid "Auto — GPU with CPU fallback"
+msgstr ""
+
+#: src/components/settings/ffmpeg/TranscodeConfigVideoSettingsForm.tsx
 msgid "Auto Deinterlace Video"
 msgstr ""
 
@@ -1512,6 +1521,10 @@ msgstr ""
 #: src/components/channel_config/WatermarkTimingFields.tsx
 #~ msgid "Counted from the start of each program. Set to 0 for no limit."
 #~ msgstr ""
+
+#: src/components/settings/ffmpeg/TranscodeConfigVideoSettingsForm.tsx
+msgid "CPU / GPU"
+msgstr ""
 
 #: src/components/smart_collections/SmartCollectionsTable.tsx
 msgid "Create"
@@ -2735,8 +2748,8 @@ msgid "Hardware Accel."
 msgstr ""
 
 #: src/components/settings/ffmpeg/TranscodeConfigVideoSettingsForm.tsx
-msgid "Hardware Acceleration"
-msgstr ""
+#~ msgid "Hardware Acceleration"
+#~ msgstr ""
 
 #: src/pages/welcome/WelcomePage.tsx
 #~ msgid "HDHomeRun Settings"
@@ -4068,6 +4081,19 @@ msgstr ""
 msgid "Proceed"
 msgstr ""
 
+#: src/components/channel_config/ChannelTranscodingConfig.tsx
+msgid "Processing: Auto — GPU with CPU fallback"
+msgstr ""
+
+#: src/components/channel_config/ChannelTranscodingConfig.tsx
+msgid "Processing: CPU"
+msgstr ""
+
+#. placeholder {0}: transcodeConfig.hardwareAccelerationMode
+#: src/components/channel_config/ChannelTranscodingConfig.tsx
+msgid "Processing: GPU ({0})"
+msgstr ""
+
 #: src/pages/system/TroubleshootPage.tsx
 #~ msgid "Profile"
 #~ msgstr ""
@@ -5322,6 +5348,14 @@ msgstr ""
 
 #: src/pages/system/TroubleshootPage.tsx
 msgid "Test Transcode"
+msgstr ""
+
+#: src/components/settings/ffmpeg/TranscodeConfigVideoSettingsForm.tsx
+#~ msgid "Tests GPU encoding before starting playback. Uses CPU if no compatible GPU works. CPU still decodes and filters video in Auto mode."
+#~ msgstr ""
+
+#: src/components/settings/ffmpeg/TranscodeConfigVideoSettingsForm.tsx
+msgid "Tests GPU encoding before starting playback. Uses CPU if no compatible GPU works. The standard backend uses CPU decoding and filters in Auto mode."
 msgstr ""
 
 #: src/components/programming_controls/AddRestrictHoursModal.tsx

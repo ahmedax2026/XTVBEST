@@ -40,6 +40,7 @@ import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration.js';
 import { describe, expect, test, vi } from 'vitest';
 import { FfmpegStreamFactory } from './FfmpegStreamFactory.ts';
+import { autoHardwareAcceleration } from './AutoHardwareAcceleration.ts';
 
 vi.mock('@/util/serverUtil.ts', () => ({
   makeLocalUrl: (path: string) => `http://localhost:8000${path}`,
@@ -1704,4 +1705,52 @@ describe('createConcatSession', () => {
   test('encodes an mpegts_concat child, which has no HLS to wrap', async () => {
     await expect(runConcatSession('mpegts_concat')).resolves.toBe('concat');
   });
+});
+
+describe('automatic hardware selection reaches the output pipeline', () => {
+  test.each(['cuda', 'none'] as const)(
+    'uses resolved %s instead of the saved fallback mode',
+    async (mode) => {
+      const config = makeTranscodeConfig({
+        autoHardwareAcceleration: true,
+        hardwareAccelerationMode: 'qsv',
+      });
+      const resolve = vi
+        .spyOn(autoHardwareAcceleration, 'resolve')
+        .mockResolvedValue({ ...config, hardwareAccelerationMode: mode });
+      const { factory, getCapturedHwAccel } =
+        createCapturingPipelineBuilderFactory();
+      try {
+        const sut = new FfmpegStreamFactory(
+          makeMockFfmpegInfo(),
+          makeMockSettingsDB(makeFfmpegSettings()),
+          factory,
+          makeMockFeatureFlagService(),
+          makeMockStreamSelector(),
+          config,
+          makeChannel(),
+        );
+        await sut.createStreamSession({
+          stream: {
+            source: new HttpStreamSource('http://example.com/video.ts'),
+            details: makeStreamDetails(),
+          },
+          options: {
+            startTime: dayjs.duration(0),
+            duration: dayjs.duration({ seconds: 30 }),
+            outputFormat: MpegTsOutputFormat,
+            ptsOffset: 0,
+            realtime: true,
+            streamMode: 'hls',
+          },
+          lineupItem: makeLineupItem(),
+        });
+        expect(resolve).toHaveBeenCalledWith(config, '/usr/bin/ffmpeg');
+        expect(getCapturedHwAccel()).toBe(mode);
+        expect(config.hardwareAccelerationMode).toBe('qsv');
+      } finally {
+        resolve.mockRestore();
+      }
+    },
+  );
 });

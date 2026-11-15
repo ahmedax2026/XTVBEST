@@ -6538,6 +6538,7 @@ export type GetApiChannelsByIdTranscodeConfigResponses = {
         name: string;
         threadCount: number;
         hardwareAccelerationMode: 'none' | 'cuda' | 'vaapi' | 'qsv' | 'videotoolbox';
+        autoHardwareAcceleration?: boolean;
         vaapiDriver: 'system' | 'ihd' | 'i965' | 'radeonsi' | 'nouveau';
         vaapiDevice: string | null;
         resolution: {
@@ -9630,6 +9631,7 @@ export type GetApiTranscodeConfigsResponses = {
         name: string;
         threadCount: number;
         hardwareAccelerationMode: 'none' | 'cuda' | 'vaapi' | 'qsv' | 'videotoolbox';
+        autoHardwareAcceleration?: boolean;
         vaapiDriver: 'system' | 'ihd' | 'i965' | 'radeonsi' | 'nouveau';
         vaapiDevice: string | null;
         resolution: {
@@ -9685,6 +9687,7 @@ export type PostApiTranscodeConfigsData = {
         name: string;
         threadCount: number;
         hardwareAccelerationMode: 'none' | 'cuda' | 'vaapi' | 'qsv' | 'videotoolbox';
+        autoHardwareAcceleration?: boolean;
         vaapiDriver: 'system' | 'ihd' | 'i965' | 'radeonsi' | 'nouveau';
         vaapiDevice: string | null;
         resolution: {
@@ -9745,6 +9748,7 @@ export type PostApiTranscodeConfigsResponses = {
         name: string;
         threadCount: number;
         hardwareAccelerationMode: 'none' | 'cuda' | 'vaapi' | 'qsv' | 'videotoolbox';
+        autoHardwareAcceleration?: boolean;
         vaapiDriver: 'system' | 'ihd' | 'i965' | 'radeonsi' | 'nouveau';
         vaapiDevice: string | null;
         resolution: {
@@ -9843,6 +9847,7 @@ export type GetApiTranscodeConfigsByIdResponses = {
         name: string;
         threadCount: number;
         hardwareAccelerationMode: 'none' | 'cuda' | 'vaapi' | 'qsv' | 'videotoolbox';
+        autoHardwareAcceleration?: boolean;
         vaapiDriver: 'system' | 'ihd' | 'i965' | 'radeonsi' | 'nouveau';
         vaapiDevice: string | null;
         resolution: {
@@ -9899,6 +9904,7 @@ export type PutApiTranscodeConfigsByIdData = {
         name: string;
         threadCount: number;
         hardwareAccelerationMode: 'none' | 'cuda' | 'vaapi' | 'qsv' | 'videotoolbox';
+        autoHardwareAcceleration?: boolean;
         vaapiDriver: 'system' | 'ihd' | 'i965' | 'radeonsi' | 'nouveau';
         vaapiDevice: string | null;
         resolution: {
@@ -9961,6 +9967,7 @@ export type PutApiTranscodeConfigsByIdResponses = {
         name: string;
         threadCount: number;
         hardwareAccelerationMode: 'none' | 'cuda' | 'vaapi' | 'qsv' | 'videotoolbox';
+        autoHardwareAcceleration?: boolean;
         vaapiDriver: 'system' | 'ihd' | 'i965' | 'radeonsi' | 'nouveau';
         vaapiDevice: string | null;
         resolution: {
@@ -10040,6 +10047,7 @@ export type PostApiTranscodeConfigsByIdCopyResponses = {
         name: string;
         threadCount: number;
         hardwareAccelerationMode: 'none' | 'cuda' | 'vaapi' | 'qsv' | 'videotoolbox';
+        autoHardwareAcceleration?: boolean;
         vaapiDriver: 'system' | 'ihd' | 'i965' | 'radeonsi' | 'nouveau';
         vaapiDevice: string | null;
         resolution: {
@@ -13297,6 +13305,7 @@ export type PostApiTroubleshootResponses = {
             name: string;
             threadCount: number;
             hardwareAccelerationMode: 'none' | 'cuda' | 'vaapi' | 'qsv' | 'videotoolbox';
+            autoHardwareAcceleration?: boolean;
             vaapiDriver: 'system' | 'ihd' | 'i965' | 'radeonsi' | 'nouveau';
             vaapiDevice: string | null;
             resolution: {

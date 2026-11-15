@@ -161,6 +161,7 @@ export const TranscodeConfig = sqliteTable(
     hardwareAccelerationMode: text({
       enum: HardwareAccelerationModes,
     }).notNull(),
+    autoHardwareAcceleration: integer({ mode: 'boolean' }).default(false),
     vaapiDriver: text({ enum: VaapiDrivers }).notNull().default('system'),
     vaapiDevice: text(),
     resolution: text({ mode: 'json' }).$type<Resolution>().notNull(),

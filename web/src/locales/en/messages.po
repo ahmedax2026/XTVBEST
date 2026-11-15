@@ -13,6 +13,11 @@ msgstr ""
 "Language-Team: \n"
 "Plural-Forms: \n"
 
+#. js-lingui-explicit-id
+#: src/test/i18n.test.ts
+msgid "Channels"
+msgstr "Channels"
+
 #: src/components/slot_scheduler/MidRollConfigPanel.tsx
 msgid " Scheduling Strategy"
 msgstr " Scheduling Strategy"
@@ -914,6 +919,10 @@ msgid "Auto"
 msgstr "Auto"
 
 #: src/components/settings/ffmpeg/TranscodeConfigVideoSettingsForm.tsx
+msgid "Auto — GPU with CPU fallback"
+msgstr "Auto — GPU with CPU fallback"
+
+#: src/components/settings/ffmpeg/TranscodeConfigVideoSettingsForm.tsx
 msgid "Auto Deinterlace Video"
 msgstr "Auto Deinterlace Video"
 
@@ -1512,6 +1521,10 @@ msgstr "Counted from the start of each program. If a stream starts partway throu
 #: src/components/channel_config/WatermarkTimingFields.tsx
 #~ msgid "Counted from the start of each program. Set to 0 for no limit."
 #~ msgstr "Counted from the start of each program. Set to 0 for no limit."
+
+#: src/components/settings/ffmpeg/TranscodeConfigVideoSettingsForm.tsx
+msgid "CPU / GPU"
+msgstr "CPU / GPU"
 
 #: src/components/smart_collections/SmartCollectionsTable.tsx
 msgid "Create"
@@ -2735,8 +2748,8 @@ msgid "Hardware Accel."
 msgstr "Hardware Accel."
 
 #: src/components/settings/ffmpeg/TranscodeConfigVideoSettingsForm.tsx
-msgid "Hardware Acceleration"
-msgstr "Hardware Acceleration"
+#~ msgid "Hardware Acceleration"
+#~ msgstr "Hardware Acceleration"
 
 #: src/pages/welcome/WelcomePage.tsx
 #~ msgid "HDHomeRun Settings"
@@ -4068,6 +4081,19 @@ msgstr "Presets"
 msgid "Proceed"
 msgstr "Proceed"
 
+#: src/components/channel_config/ChannelTranscodingConfig.tsx
+msgid "Processing: Auto — GPU with CPU fallback"
+msgstr "Processing: Auto — GPU with CPU fallback"
+
+#: src/components/channel_config/ChannelTranscodingConfig.tsx
+msgid "Processing: CPU"
+msgstr "Processing: CPU"
+
+#. placeholder {0}: transcodeConfig.hardwareAccelerationMode
+#: src/components/channel_config/ChannelTranscodingConfig.tsx
+msgid "Processing: GPU ({0})"
+msgstr "Processing: GPU ({0})"
+
 #: src/pages/system/TroubleshootPage.tsx
 #~ msgid "Profile"
 #~ msgstr "Profile"
@@ -5325,6 +5351,14 @@ msgstr "Test Playback"
 #: src/pages/system/TroubleshootPage.tsx
 msgid "Test Transcode"
 msgstr "Test Transcode"
+
+#: src/components/settings/ffmpeg/TranscodeConfigVideoSettingsForm.tsx
+#~ msgid "Tests GPU encoding before starting playback. Uses CPU if no compatible GPU works. CPU still decodes and filters video in Auto mode."
+#~ msgstr "Tests GPU encoding before starting playback. Uses CPU if no compatible GPU works. CPU still decodes and filters video in Auto mode."
+
+#: src/components/settings/ffmpeg/TranscodeConfigVideoSettingsForm.tsx
+msgid "Tests GPU encoding before starting playback. Uses CPU if no compatible GPU works. The standard backend uses CPU decoding and filters in Auto mode."
+msgstr "Tests GPU encoding before starting playback. Uses CPU if no compatible GPU works. The standard backend uses CPU decoding and filters in Auto mode."
 
 #: src/components/programming_controls/AddRestrictHoursModal.tsx
 msgid "The channel's regular programming between the specified hours. Flex time will fill up the remaining hours."

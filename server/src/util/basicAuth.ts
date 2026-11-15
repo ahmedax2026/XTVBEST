@@ -15,14 +15,23 @@ export interface BasicAuthConfig {
 export function basicAuthConfigFromEnv(): BasicAuthConfig | undefined {
   const username = getEnvVar(TUNARR_ENV_VARS.BASIC_AUTH_USER_ENV_VAR);
   const password = getEnvVar(TUNARR_ENV_VARS.BASIC_AUTH_PASSWORD_ENV_VAR);
+  if (!username && !password) return;
   if (!username || !password) {
-    return;
+    throw new Error(
+      'Set both TUNARR_BASIC_AUTH_USER and TUNARR_BASIC_AUTH_PASSWORD. Refusing to start with incomplete login credentials.',
+    );
+  }
+  if (username.includes(':')) {
+    throw new Error('The login username cannot contain a colon.');
   }
   return { username, password };
 }
 
 function unauthorized(reply: FastifyReply) {
-  reply.header('WWW-Authenticate', 'Basic realm="Tunarr"');
+  reply.header(
+    'WWW-Authenticate',
+    'Basic realm="XBest Channels Studio", charset="UTF-8"',
+  );
   return reply.status(401).send('Authentication required');
 }
 

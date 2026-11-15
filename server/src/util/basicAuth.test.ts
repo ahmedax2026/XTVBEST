@@ -1,6 +1,8 @@
+import Fastify from 'fastify';
 import type { FastifyReply, FastifyRequest } from 'fastify';
-import { describe, expect, test, vi } from 'vitest';
+import { afterEach, describe, expect, test, vi } from 'vitest';
 import {
+  basicAuthConfigFromEnv,
   createTunarrBasicAuthHook,
   isAuthorized,
   safeEqual,
@@ -109,7 +111,7 @@ describe('basicAuth', () => {
       expect(done).not.toHaveBeenCalled();
       expect(reply.header).toHaveBeenCalledWith(
         'WWW-Authenticate',
-        'Basic realm="Tunarr"',
+        'Basic realm="XBest Channels Studio", charset="UTF-8"',
       );
       expect(reply.status).toHaveBeenCalledWith(401);
       expect(reply.send).toHaveBeenCalledWith('Authentication required');
@@ -162,4 +164,76 @@ describe('isAuthorized', () => {
     expect(isAuthorized(undefined, config)).toBe(false);
     expect(isAuthorized(basicAuthHeader('admin', 'wrong'), config)).toBe(false);
   });
+});
+
+describe('login environment configuration', () => {
+  afterEach(() => vi.unstubAllEnvs());
+
+  test('keeps authentication disabled only when both variables are absent', () => {
+    vi.stubEnv('TUNARR_BASIC_AUTH_USER', '');
+    vi.stubEnv('TUNARR_BASIC_AUTH_PASSWORD', '');
+    expect(basicAuthConfigFromEnv()).toBeUndefined();
+  });
+
+  test.each([
+    ['admin', ''],
+    ['', 'secret'],
+  ])('refuses incomplete credentials', (user, password) => {
+    vi.stubEnv('TUNARR_BASIC_AUTH_USER', user);
+    vi.stubEnv('TUNARR_BASIC_AUTH_PASSWORD', password);
+    expect(() => basicAuthConfigFromEnv()).toThrow('Set both');
+  });
+
+  test('reads complete credentials without changing the password', () => {
+    vi.stubEnv('TUNARR_BASIC_AUTH_USER', 'admin');
+    vi.stubEnv('TUNARR_BASIC_AUTH_PASSWORD', 'secret:with:colons');
+    expect(basicAuthConfigFromEnv()).toEqual({
+      username: 'admin',
+      password: 'secret:with:colons',
+    });
+  });
+
+  test('refuses usernames containing the Basic Auth separator', () => {
+    vi.stubEnv('TUNARR_BASIC_AUTH_USER', 'admin:other');
+    vi.stubEnv('TUNARR_BASIC_AUTH_PASSWORD', 'secret');
+    expect(() => basicAuthConfigFromEnv()).toThrow('colon');
+  });
+});
+
+test('server rejects direct panel/API requests but allows valid login and public playback', async () => {
+  const app = Fastify();
+  app.addHook(
+    'onRequest',
+    createTunarrBasicAuthHook({ username: 'admin', password: 'secret' }),
+  );
+  app.get('/web', async () => 'panel');
+  app.get('/api/settings', async () => ({ protected: true }));
+  app.get(
+    '/stream/channel.m3u8',
+    { config: { authRequired: false } },
+    async () => '#EXTM3U',
+  );
+  try {
+    expect((await app.inject('/web')).statusCode).toBe(401);
+    expect((await app.inject('/api/settings')).statusCode).toBe(401);
+    expect(
+      (
+        await app.inject({
+          url: '/api/settings',
+          headers: { authorization: basicAuthHeader('admin', 'wrong') },
+        })
+      ).statusCode,
+    ).toBe(401);
+    expect(
+      (
+        await app.inject({
+          url: '/api/settings',
+          headers: { authorization: basicAuthHeader('admin', 'secret') },
+        })
+      ).statusCode,
+    ).toBe(200);
+    expect((await app.inject('/stream/channel.m3u8')).statusCode).toBe(200);
+  } finally {
+    await app.close();
+  }
 });

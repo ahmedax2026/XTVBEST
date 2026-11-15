@@ -1,0 +1,53 @@
+name: XBest CPU GPU and login checks
+
+on:
+  pull_request:
+    branches: [feature/xbest-studio]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    env:
+      TURBO_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - name: Enable workspace package manager
+        run: |
+          npm install -g corepack@latest
+          corepack enable
+      - run: pnpm install --frozen-lockfile
+      - name: Build shared packages
+        run: |
+          pnpm --filter @tunarr/types build
+          pnpm --filter @tunarr/shared build
+      - name: Typecheck server and web
+        run: |
+          pnpm --filter @tunarr/server typecheck
+          pnpm --filter @tunarr/web typecheck
+      - name: Test hardware selection, persistence, pipeline and authentication
+        run: pnpm --filter @tunarr/server test src/ffmpeg/AutoHardwareAcceleration.test.ts src/db/TranscodeConfigDB.test.ts src/ffmpeg/FfmpegStreamFactory.test.ts src/stream/etv/EtvNextSession.test.ts src/util/basicAuth.test.ts
+      - name: Check Arabic catalog
+        run: pnpm --filter @tunarr/web exec vitest run --project unit src/locales/catalogs.test.ts
+      - name: Build web bundle
+        run: pnpm --filter @tunarr/web bundle
+      - name: Check Linux launcher syntax
+        if: runner.os == 'Linux'
+        run: bash -n scripts/start-xbest.sh
+      - name: Check Windows launcher syntax
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $errors = $null
+          [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path scripts/start-xbest.ps1), [ref]$null, [ref]$errors) | Out-Null
+          if ($errors.Count) { throw ($errors | Out-String) }
