@@ -30,8 +30,11 @@ describe('loadCatalog', () => {
     expect(i18n._('Channels')).toBe('القنوات');
   });
 
-  it('activates Spanish locale', async () => {
-    await loadCatalog('es');
-    expect(i18n.locale).toBe('es');
-  });
+  it.each(['es', 'zh-CN', 'pseudo-LOCALE'])(
+    'uses English fallback for removed locale %s',
+    async (locale) => {
+      await loadCatalog(locale);
+      expect(i18n.locale).toBe('en');
+    },
+  );
 });

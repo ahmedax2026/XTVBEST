@@ -2,7 +2,7 @@ name: XBest CPU GPU and login checks
 
 on:
   pull_request:
-    branches: [feature/xbest-studio, feature/xbest-cpu-gpu-auth]
+    branches: [feature/xbest-studio, feature/xbest-cpu-gpu-auth, feature/xbest-live-monitor]
   workflow_dispatch:
 
 permissions:
@@ -38,7 +38,7 @@ jobs:
       - name: Test hardware selection, persistence, pipeline and authentication
         run: pnpm --filter @tunarr/server test src/ffmpeg/AutoHardwareAcceleration.test.ts src/db/TranscodeConfigDB.test.ts src/ffmpeg/FfmpegStreamFactory.test.ts src/stream/etv/EtvNextSession.test.ts src/util/basicAuth.test.ts
       - name: Test live monitor, countdown, links and Arabic catalog
-        run: pnpm --filter @tunarr/web exec vitest run --project unit src/components/channels/ChannelSessionsDialog.test.tsx src/components/channels/ChannelNowPlayingCard.test.tsx src/components/channels/ChannelMenuButton.test.tsx src/components/channels/channelSummary.test.ts src/locales/catalogs.test.ts
+        run: pnpm --filter @tunarr/web exec vitest run --project unit src/components/channels/ChannelSessionsDialog.test.tsx src/components/channels/ChannelNowPlayingCard.test.tsx src/components/channels/ChannelMenuButton.test.tsx src/components/channels/channelSummary.test.ts src/locales/catalogs.test.ts src/test/i18n.test.ts src/store/settings/store.test.ts src/components/settings/general/WebSettings.test.tsx
       - name: Build web bundle
         run: pnpm --filter @tunarr/web bundle
       - name: Install browser for Arabic monitor smoke test

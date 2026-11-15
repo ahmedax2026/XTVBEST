@@ -7,12 +7,14 @@ import { messages as enMessages } from './locales/en/messages.po';
  * Idempotent: skips loading if the locale is already active.
  */
 export async function loadCatalog(locale: string) {
-  if (i18n.locale === locale) return;
+  const supportedLocale = locale === 'ar' ? 'ar' : 'en';
+  if (i18n.locale === supportedLocale) return;
   try {
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    const { messages } = await import(`./locales/${locale}/messages.po`);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-    i18n.loadAndActivate({ locale, messages });
+    const messages =
+      supportedLocale === 'ar'
+        ? (await import('./locales/ar/messages.po')).messages
+        : enMessages;
+    i18n.loadAndActivate({ locale: supportedLocale, messages });
   } catch (e) {
     console.warn(e);
     i18n.loadAndActivate({ locale: 'en', messages: enMessages });

@@ -4,11 +4,7 @@ import useStore from '@/store/index.ts';
 import { i18n } from '@lingui/core';
 import { I18nProvider } from '@lingui/react';
 import { ThemeProvider, createTheme } from '@mui/material';
-import { esES as muiEsES, zhCN as muiZhCN } from '@mui/material/locale';
-import {
-  esES as pickersEsES,
-  zhCN as pickersZhCN,
-} from '@mui/x-date-pickers/locales';
+import { arEG as muiArEG } from '@mui/material/locale';
 import { LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { QueryClientProvider } from '@tanstack/react-query';
@@ -44,13 +40,7 @@ export const Tunarr = () => {
   const muiLocaleTheme = useMemo(() => {
     const theme = createTunarrTheme(density);
     if (locale === 'ar') {
-      return createTheme(theme, { direction: 'rtl' });
-    }
-    if (locale === 'es') {
-      return createTheme(theme, muiEsES, pickersEsES);
-    }
-    if (locale === 'zh-CN') {
-      return createTheme(theme, muiZhCN, pickersZhCN);
+      return createTheme(theme, muiArEG, { direction: 'rtl' });
     }
     return theme;
   }, [locale, density]);
@@ -64,7 +54,11 @@ export const Tunarr = () => {
               <ServerEventsProvider>
                 <QueryClientProvider client={queryClient}>
                   <SnackbarProvider maxSnack={2} autoHideDuration={5000}>
-                    <ThemeProvider theme={muiLocaleTheme} defaultMode="dark" noSsr>
+                    <ThemeProvider
+                      theme={muiLocaleTheme}
+                      defaultMode="dark"
+                      noSsr
+                    >
                       <RouterProvider basepath="/web" router={router} />
                     </ThemeProvider>
                   </SnackbarProvider>

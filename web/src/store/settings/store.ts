@@ -3,7 +3,7 @@ import type { DeepPartial } from 'ts-essentials';
 import { z } from 'zod';
 import type { StateCreator } from 'zustand';
 
-export const SupportedLocales = ['en', 'ar', 'es', 'zh-CN', 'pseudo-LOCALE'] as const;
+export const SupportedLocales = ['en', 'ar'] as const;
 export type SupportedLocales = TupleToUnion<typeof SupportedLocales>;
 export type TimeFormat = '12h' | '24h' | 'auto';
 
@@ -34,7 +34,7 @@ export const SettingsStateInternalSchema = z.object({
     channelTablePagination: PaginationStateSchema,
     channelTableColumnModel: z.record(z.string(), z.boolean()),
     i18n: z.object({
-      locale: z.enum(SupportedLocales),
+      locale: z.enum(SupportedLocales).catch('ar'),
       timeFormat: z.enum(['12h', '24h', 'auto']).default('auto'),
     }),
     tableSettings: z.record(z.string(), TableSettingsSchema),
