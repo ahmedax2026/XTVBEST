@@ -4,11 +4,18 @@ import path from 'node:path';
 import os from 'node:os';
 import { randomUUID } from 'node:crypto';
 import { expect, test } from 'vitest';
-import { acquireDesktopPipe, chooseDesktopPort, validDesktopUrl } from './DesktopStartup.ts';
+import {
+  acquireDesktopPipe,
+  chooseDesktopPort,
+  validDesktopUrl,
+} from './DesktopStartup.ts';
 
 test('reuses the same ready desktop instance instead of starting another server', async () => {
   const directory = await fs.mkdtemp(path.join(os.tmpdir(), 'XBEST-ipc-'));
-  const endpoint = process.platform === 'win32' ? '\\\\.\\pipe\\XBEST-test-' + randomUUID() : path.join(directory, 'desktop.sock');
+  const endpoint =
+    process.platform === 'win32'
+      ? '\\\\.\\pipe\\XBEST-test-' + randomUUID()
+      : path.join(directory, 'desktop.sock');
   const first = await acquireDesktopPipe(endpoint);
   if (!first.owner) throw new Error('Expected first owner');
   try {
@@ -25,7 +32,8 @@ test('chooses another free port without stopping the application occupying the p
   await new Promise<void>((resolve) => busy.listen(0, '127.0.0.1', resolve));
   try {
     const address = busy.address();
-    if (!address || typeof address === 'string') throw new Error('Expected TCP address');
+    if (!address || typeof address === 'string')
+      throw new Error('Expected TCP address');
     const chosen = await chooseDesktopPort(address.port, '127.0.0.1');
     expect(chosen).not.toBe(address.port);
     expect(chosen).toBeGreaterThan(0);

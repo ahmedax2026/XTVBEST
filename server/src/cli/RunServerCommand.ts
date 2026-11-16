@@ -1,3 +1,4 @@
+import { FfmpegSettingsSchema } from '@tunarr/types/schemas';
 import { container } from '@/container.js';
 import assert from 'node:assert';
 import { type MarkOptional } from 'ts-essentials';
@@ -8,7 +9,11 @@ import { DBAccess } from '../db/DBAccess.ts';
 import { type ISettingsDB } from '../db/interfaces/ISettingsDB.ts';
 import { globalOptions, setServerOptions } from '../globals.ts';
 import { ensureVideoTools } from '../services/desktop/videoTools.ts';
-import { chooseDesktopPort, desktopReady, desktopStartupEnabled } from '../services/desktop/DesktopStartup.ts';
+import {
+  chooseDesktopPort,
+  desktopReady,
+  desktopStartupEnabled,
+} from '../services/desktop/DesktopStartup.ts';
 import { KEYS } from '../types/inject.ts';
 import {
   getBooleanEnvVar,
@@ -65,18 +70,26 @@ export const RunServerCommand: CommandModule<GlobalArgsType, ServerArgsType> = {
     const portSetting = settings.systemSettings().server.port;
     if (desktop) {
       const oldTools = settings.ffmpegSettings();
-      const tools = await ensureVideoTools(oldTools, globalOptions().databaseDirectory);
-      if (tools.ffmpegExecutablePath !== oldTools.ffmpegExecutablePath ||
-          tools.ffprobeExecutablePath !== oldTools.ffprobeExecutablePath) {
-        await settings.updateFfmpegSettings({ ...oldTools, ...tools });
+      const tools = await ensureVideoTools(
+        oldTools,
+        globalOptions().databaseDirectory,
+      );
+      if (
+        tools.ffmpegExecutablePath !== oldTools.ffmpegExecutablePath ||
+        tools.ffprobeExecutablePath !== oldTools.ffprobeExecutablePath
+      ) {
+        await settings.updateFfmpegSettings(FfmpegSettingsSchema.parse({ ...oldTools, ...tools }));
       }
     }
     let portToUse =
       getNumericEnvVar(TUNARR_ENV_VARS.SERVER_PORT_ENV_VAR) ??
       opts.port ??
       portSetting;
-    if (desktop && opts.port === undefined &&
-        getNumericEnvVar(TUNARR_ENV_VARS.SERVER_PORT_ENV_VAR) === null) {
+    if (
+      desktop &&
+      opts.port === undefined &&
+      getNumericEnvVar(TUNARR_ENV_VARS.SERVER_PORT_ENV_VAR) === null
+    ) {
       portToUse = await chooseDesktopPort(
         portToUse,
         getEnvVar(TUNARR_ENV_VARS.BIND_ADDR_ENV_VAR) ?? '0.0.0.0',

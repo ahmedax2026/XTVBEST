@@ -64,9 +64,13 @@ yargs(hideBin(process.argv))
     ({ hide_banner }) => (hide_banner ? void 0 : printBanner()),
     (opts) => setGlobalOptions(opts),
     async (opts) => {
-      if (desktopStartupEnabled() &&
-          (opts._.length === 0 || opts._[0] === 'server')) {
-        if (!(await initializeDesktopInstance(globalOptions().databaseDirectory))) {
+      if (
+        desktopStartupEnabled() &&
+        (opts._.length === 0 || opts._[0] === 'server')
+      ) {
+        if (
+          !(await initializeDesktopInstance(globalOptions().databaseDirectory))
+        ) {
           process.exit(0);
         }
       }

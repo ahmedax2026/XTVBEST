@@ -5,17 +5,24 @@ import type { Server, Socket } from 'node:net';
 import path from 'node:path';
 
 export function desktopStartupEnabled() {
-  return process.platform === 'win32' &&
+  return (
+    process.platform === 'win32' &&
     Object.hasOwn(process, 'pkg') &&
-    process.env.XBEST_AUTOSTART !== '0';
+    process.env.XBEST_AUTOSTART !== '0'
+  );
 }
 export function openDesktopBrowser(url: string) {
   if (process.env.XBEST_NO_BROWSER === '1') return;
-  execFile('rundll32.exe', ['url.dll,FileProtocolHandler', url], {
-    windowsHide: true,
-  }, (error) => {
-    if (error) console.warn('XBEST: افتح هذا العنوان في المتصفح: ' + url);
-  });
+  execFile(
+    'rundll32.exe',
+    ['url.dll,FileProtocolHandler', url],
+    {
+      windowsHide: true,
+    },
+    (error) => {
+      if (error) console.warn('XBEST: افتح هذا العنوان في المتصفح: ' + url);
+    },
+  );
 }
 export function validDesktopUrl(value: string) {
   const match = /^http:\/\/localhost:(\d+)\/web\/$/.exec(value);
@@ -27,7 +34,9 @@ export type DesktopOwner = {
   close: () => Promise<void>;
 };
 type DesktopClient = { owner: false; url: string };
-export async function acquireDesktopPipe(endpoint: string): Promise<DesktopOwner | DesktopClient> {
+export async function acquireDesktopPipe(
+  endpoint: string,
+): Promise<DesktopOwner | DesktopClient> {
   const pending = new Set<Socket>();
   let readyUrl: string | undefined;
   const server = net.createServer((socket) => {
@@ -50,7 +59,13 @@ export async function acquireDesktopPipe(endpoint: string): Promise<DesktopOwner
       });
     });
   } catch (error) {
-    if (!error || typeof error !== 'object' || !('code' in error) || error.code !== 'EADDRINUSE') throw error;
+    if (
+      !error ||
+      typeof error !== 'object' ||
+      !('code' in error) ||
+      error.code !== 'EADDRINUSE'
+    )
+      throw error;
     const url = await new Promise<string>((resolve, reject) => {
       const socket = net.connect(endpoint);
       let buffer = '';
@@ -60,7 +75,8 @@ export async function acquireDesktopPipe(endpoint: string): Promise<DesktopOwner
       socket.once('error', reject);
       socket.on('data', (chunk: Buffer) => {
         buffer += chunk.toString('utf8');
-        if (buffer.length > 200) socket.destroy(new Error('Invalid XBEST instance response'));
+        if (buffer.length > 200)
+          socket.destroy(new Error('Invalid XBEST instance response'));
         if (buffer.includes('\n')) {
           const candidate = buffer.split('\n')[0] ?? '';
           socket.end();
@@ -68,7 +84,9 @@ export async function acquireDesktopPipe(endpoint: string): Promise<DesktopOwner
           else reject(new Error('Invalid XBEST instance URL'));
         }
       });
-      socket.once('close', () => reject(new Error('XBEST instance closed before becoming ready')));
+      socket.once('close', () =>
+        reject(new Error('XBEST instance closed before becoming ready')),
+      );
     });
     return { owner: false, url };
   }
@@ -91,7 +109,10 @@ async function closePipe(server: Server, pending: Set<Socket>) {
 }
 let desktopOwner: DesktopOwner | undefined;
 export async function initializeDesktopInstance(directory: string) {
-  const key = createHash('sha256').update(path.resolve(directory).toLowerCase()).digest('hex').slice(0, 24);
+  const key = createHash('sha256')
+    .update(path.resolve(directory).toLowerCase())
+    .digest('hex')
+    .slice(0, 24);
   const instance = await acquireDesktopPipe('\\\\.\\pipe\\XBEST-' + key);
   if (!instance.owner) {
     openDesktopBrowser(instance.url);
@@ -106,23 +127,30 @@ export function desktopReady(port: number) {
   openDesktopBrowser(url);
 }
 export async function chooseDesktopPort(preferred: number, host = '0.0.0.0') {
-  const probe = (port: number) => new Promise<number>((resolve, reject) => {
-    const server = net.createServer();
-    server.once('error', reject);
-    server.listen({ port, host, exclusive: true }, () => {
-      const address = server.address();
-      if (!address || typeof address === 'string') {
-        server.close(() => reject(new Error('Invalid XBEST port')));
-        return;
-      }
-      const chosen = address.port;
-      server.close((error) => error ? reject(error) : resolve(chosen));
+  const probe = (port: number) =>
+    new Promise<number>((resolve, reject) => {
+      const server = net.createServer();
+      server.once('error', reject);
+      server.listen({ port, host, exclusive: true }, () => {
+        const address = server.address();
+        if (!address || typeof address === 'string') {
+          server.close(() => reject(new Error('Invalid XBEST port')));
+          return;
+        }
+        const chosen = address.port;
+        server.close((error) => (error ? reject(error) : resolve(chosen)));
+      });
     });
-  });
   try {
     return await probe(preferred);
   } catch (error) {
-    if (!error || typeof error !== 'object' || !('code' in error) || error.code !== 'EADDRINUSE') throw error;
+    if (
+      !error ||
+      typeof error !== 'object' ||
+      !('code' in error) ||
+      error.code !== 'EADDRINUSE'
+    )
+      throw error;
     return probe(0);
   }
 }

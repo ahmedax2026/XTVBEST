@@ -39,6 +39,12 @@ jobs:
         run: |
           pnpm --filter @tunarr/types build
           pnpm --filter @tunarr/shared build
+      - name: Regenerate API artifacts after title schema changes
+        if: runner.os == 'Linux'
+        run: |
+          TUNARR_DATABASE_PATH="$(mktemp -d)" pnpm --filter @tunarr/server generate-openapi
+          pnpm --filter @tunarr/web generate-client
+          node --input-type=module -e 'import fs from "node:fs"; import {execFileSync} from "node:child_process"; const paths=execFileSync("git",["diff","--name-only","--","docs/generated","web/src/generated"],{encoding:"utf8"}).trim().split("\n").filter(Boolean); for (const p of paths) console.log("XBEST_GENERATED "+JSON.stringify({path:p,content:fs.readFileSync(p,"utf8")}));'
       - name: Typecheck server and web
         run: |
           pnpm --filter @tunarr/server typecheck

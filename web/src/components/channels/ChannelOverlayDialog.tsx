@@ -464,11 +464,13 @@ function OverlayControls({ channel }: { channel: Channel }) {
               })
             }
           >
-            {ChannelTitleSchema.shape.fontFamily.unwrap().options.map((font) => (
-              <MenuItem key={font} value={font}>
-                {font}
-              </MenuItem>
-            ))}
+            {ChannelTitleSchema.shape.fontFamily
+              .unwrap()
+              .options.map((font) => (
+                <MenuItem key={font} value={font}>
+                  {font}
+                </MenuItem>
+              ))}
           </TextField>
           <TextField
             fullWidth
