@@ -288,9 +288,11 @@ for (const arch of args.target) {
       }
 
       if (args.outputArchives) {
+        const targetIsWindows = osString === 'win';
+        for (const owner of targetIsWindows ? [false, true] : [false]) {
+          const distributionName = owner ? releaseName.replace(/^XBEST-/, 'XBEST-OWNER-') : releaseName;
         console.info('Creating release archive');
 
-        const targetIsWindows = osString === 'win';
         const format = targetIsWindows ? 'zip' : 'tar';
         const archive = archiver(format, { gzip: !targetIsWindows });
         const finishedPromise = new Promise<void>((resolve, reject) => {
@@ -302,31 +304,32 @@ for (const arch of args.target) {
         });
 
         const outStream = createWriteStream(
-          `./bin/${releaseName}.${format}${targetIsWindows ? '' : '.gz'}`,
+          `./bin/${distributionName}.${format}${targetIsWindows ? '' : '.gz'}`,
         );
         archive.pipe(outStream);
-        const entries = releaseArchiveEntries(releaseName, targetIsWindows, {
+        const entries = releaseArchiveEntries(distributionName, targetIsWindows, {
           tunarr: `./bin/${execName}`,
           meilisearch: `./bin/meilisearch-${arch}`,
           etvNext: etvNext.binaryPath,
           etvNextCompanions: etvNext.companionPaths,
-        });
+        }, owner);
         entries.push({
           source: '../LICENSE',
-          name: `${releaseName}/LICENSE`,
+          name: `${distributionName}/LICENSE`,
         });
         entries.push({
           source: '../docs/XBEST-START-AR.md',
-          name: `${releaseName}/XBEST-START-AR.md`,
+          name: `${distributionName}/XBEST-START-AR.md`,
         });
         const checksums = await releaseChecksums(entries);
-        await fs.writeFile(`./bin/${releaseName}.SHA256SUMS`, checksums);
-        archive.append(checksums, { name: `${releaseName}/SHA256SUMS` });
+        await fs.writeFile(`./bin/${distributionName}.SHA256SUMS`, checksums);
+        archive.append(checksums, { name: `${distributionName}/SHA256SUMS` });
         for (const { source, name } of entries) {
           archive.file(source, { name });
         }
         await archive.finalize();
         await finishedPromise;
+        }
       }
     },
     { unsafeCleanup: true, mode: 0o755 },

@@ -25,7 +25,7 @@ export function openDesktopBrowser(url: string) {
   );
 }
 export function validDesktopUrl(value: string) {
-  const match = /^http:\/\/localhost:(\d+)\/web\/$/.exec(value);
+  const match = /^http:\/\/localhost:(\d+)\/web\/(?:settings\/access\/?)?$/.exec(value);
   return !!match && Number(match[1]) > 0 && Number(match[1]) <= 65535;
 }
 export type DesktopOwner = {
@@ -122,7 +122,8 @@ export async function initializeDesktopInstance(directory: string) {
   return true;
 }
 export function desktopReady(port: number) {
-  const url = 'http://localhost:' + port + '/web/';
+  const destination = process.env.XBEST_LICENSE_ISSUER === '1' ? '/web/settings/access' : '/web/';
+  const url = 'http://localhost:' + port + destination;
   desktopOwner?.publish(url);
   openDesktopBrowser(url);
 }

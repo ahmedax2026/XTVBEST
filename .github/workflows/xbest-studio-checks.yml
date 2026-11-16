@@ -30,11 +30,11 @@ jobs:
           corepack enable
       - run: pnpm install --frozen-lockfile
       - name: Format changed XBEST source for verification
-        run: pnpm exec prettier --write server/src/services/desktop/videoTools.ts server/src/services/desktop/videoTools.test.ts server/src/services/desktop/DesktopStartup.ts server/src/services/desktop/DesktopStartup.test.ts types/src/ChannelOverlay.ts server/src/services/overlay/countdownAss.ts web/src/components/channels/ChannelOverlayDialog.tsx server/src/services/overlay/countdownAss.test.ts web/src/components/channels/ChannelOverlayDialog.test.tsx web/src/locales/catalogs.test.ts server/src/index.ts server/src/cli/RunServerCommand.ts web/index.html web/src/components/shell/XBestShell.tsx scripts/make-xbest-ico.mjs server/scripts/make-bin.ts web/src/components/TunarrLogo.tsx server/src/services/access/StudioWebLogin.ts
+        run: pnpm exec prettier --write docs/XBEST-OWNER-AR.md server/src/cli/RunServerCommand.ts server/src/services/desktop/DesktopStartup.ts server/src/services/desktop/DesktopStartup.test.ts server/scripts/releaseArchive.ts server/scripts/releaseArchive.test.ts server/scripts/make-bin.ts web/src/pages/settings/AccessSettingsPage.tsx plans/xbest-delivery-checklist.md server/src/db/nativeSqliteOptions.ts server/src/db/nativeSqliteOptions.test.ts server/src/db/DBAccess.ts
       - name: Record formatted source for the author
         if: runner.os == 'Linux'
         run: |
-          node --input-type=module -e 'import fs from "node:fs"; for (const p of ["server/src/services/desktop/videoTools.ts","server/src/services/desktop/videoTools.test.ts","server/src/services/desktop/DesktopStartup.ts","server/src/services/desktop/DesktopStartup.test.ts","types/src/ChannelOverlay.ts","server/src/services/overlay/countdownAss.ts","web/src/components/channels/ChannelOverlayDialog.tsx","server/src/services/overlay/countdownAss.test.ts","web/src/components/channels/ChannelOverlayDialog.test.tsx","web/src/locales/catalogs.test.ts","server/src/index.ts","server/src/cli/RunServerCommand.ts","web/index.html","web/src/components/shell/XBestShell.tsx","scripts/make-xbest-ico.mjs","server/scripts/make-bin.ts","web/src/components/TunarrLogo.tsx","server/src/services/access/StudioWebLogin.ts"]) console.log("XBEST_FORMATTED "+JSON.stringify({path:p,content:fs.readFileSync(p,"utf8")}));'
+          node --input-type=module -e 'import fs from "node:fs"; for (const p of ["docs/XBEST-OWNER-AR.md","server/src/cli/RunServerCommand.ts","server/src/services/desktop/DesktopStartup.ts","server/src/services/desktop/DesktopStartup.test.ts","server/scripts/releaseArchive.ts","server/scripts/releaseArchive.test.ts","server/scripts/make-bin.ts","web/src/pages/settings/AccessSettingsPage.tsx","plans/xbest-delivery-checklist.md","server/src/db/nativeSqliteOptions.ts","server/src/db/nativeSqliteOptions.test.ts","server/src/db/DBAccess.ts"]) console.log("XBEST_FORMATTED "+JSON.stringify({path:p,content:fs.readFileSync(p,"utf8")}));'
       - name: Build shared packages
         run: |
           pnpm --filter @tunarr/types build
@@ -97,6 +97,14 @@ jobs:
           [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path scripts/start-xbest.ps1), [ref]$null, [ref]$errors) | Out-Null
           if ($errors.Count) { throw ($errors | Out-String) }
 
+      - name: Check owner launcher syntax
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $errors = $null
+          [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path scripts/XBEST-OWNER.ps1), [ref]$null, [ref]$errors) | Out-Null
+          if ($errors.Count) { throw ($errors | Out-String) }
+
   package:
     needs: verify
     runs-on: ubuntu-latest
@@ -139,13 +147,24 @@ jobs:
           if-no-files-found: error
           retention-days: 14
           path: |
-            server/bin/XBEST-*.zip
-            server/bin/XBEST-*.tar.gz
-            server/bin/XBEST-*.SHA256SUMS
+            server/bin/XBEST-20*.zip
+            server/bin/XBEST-20*.tar.gz
+            server/bin/XBEST-20*.SHA256SUMS
             scripts/start-xbest.ps1
             scripts/start-xbest.sh
             docs/xbest-cpu-gpu-login.md
             LICENSE
+
+      - name: Upload owner distribution separately
+        if: matrix.target == 'win-x64'
+        uses: actions/upload-artifact@v4
+        with:
+          name: XBEST-OWNER-win-x64
+          if-no-files-found: error
+          retention-days: 14
+          path: |
+            server/bin/XBEST-OWNER-*.zip
+            server/bin/XBEST-OWNER-*.SHA256SUMS
 
   desktop-acceptance:
     needs: package

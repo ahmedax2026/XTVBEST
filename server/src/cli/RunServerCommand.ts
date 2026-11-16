@@ -68,7 +68,7 @@ export const RunServerCommand: CommandModule<GlobalArgsType, ServerArgsType> = {
     const settings = container.get<ISettingsDB>(KEYS.SettingsDB);
     const desktop = desktopStartupEnabled();
     const portSetting = settings.systemSettings().server.port;
-    if (desktop) {
+    if (desktop && process.env.XBEST_OWNER_ADMIN_ONLY !== '1') {
       const oldTools = settings.ffmpegSettings();
       const tools = await ensureVideoTools(
         oldTools,

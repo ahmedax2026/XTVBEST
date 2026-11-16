@@ -5,6 +5,7 @@ import type { Logger } from '@/util/logging/LoggerFactory.js';
 import { LoggerFactory } from '@/util/logging/LoggerFactory.js';
 import { Mutex } from 'async-mutex';
 import Sqlite from 'better-sqlite3';
+import { nativeSqliteOptions } from './nativeSqliteOptions.ts';
 import dayjs from 'dayjs';
 import { drizzle } from 'drizzle-orm/better-sqlite3';
 import {
@@ -46,6 +47,7 @@ class Connection {
       dbName: name,
     });
     this.sqlite = new Sqlite(name, {
+      ...nativeSqliteOptions(),
       timeout: 5000,
     });
 
