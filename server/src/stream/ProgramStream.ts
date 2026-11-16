@@ -1,3 +1,4 @@
+import { ChannelArchiveService } from '../services/archive/ChannelArchiveService.ts';
 import type { ISettingsDB } from '@/db/interfaces/ISettingsDB.js';
 import type { FfmpegTranscodeSession } from '@/ffmpeg/FfmpegTrancodeSession.js';
 import type { OutputFormat } from '@/ffmpeg/builder/constants.js';
@@ -57,6 +58,7 @@ export class ProgramStream extends events.EventEmitter<ProgramStreamEvents> {
     private programStreamDetails: ProgramStreamDetailsFetcher,
     @multiInjected(KEYS.ProgramStreamPlugin)
     private streamPlugins: ProgramStreamPlugin[],
+    @injected(ChannelArchiveService) private archives: ChannelArchiveService,
     @assisted public context: PlayerContext,
     @assisted protected outputFormat: OutputFormat,
     @assisted public opts?: Partial<StreamOptions>,
@@ -130,7 +132,14 @@ export class ProgramStream extends events.EventEmitter<ProgramStreamEvents> {
 
     // TODO: check if this was killed before actually starting.
 
-    const { streamDetails, streamSource } = streamDetailsResult.get();
+    const original = streamDetailsResult.get();
+    const archived = await this.archives.playback(
+      this.context.targetChannel,
+      this.context.transcodeConfig,
+      lineupItem,
+      original,
+    );
+    const { streamDetails, streamSource } = archived ?? original;
     streamDetails.duration = dayjs.duration(lineupItem.streamDuration);
 
     const start = dayjs.duration(lineupItem.startOffset ?? 0);
@@ -143,6 +152,9 @@ export class ProgramStream extends events.EventEmitter<ProgramStreamEvents> {
       streamMode: this.context.streamMode,
       encoding: this.context.encoding,
       ...(this.opts ?? {}),
+      ...(archived
+        ? { encoding: { mode: 'remux' as const }, watermark: undefined }
+        : {}),
     };
     const sessionResult = await ffmpeg.createStreamSession({
       stream: {

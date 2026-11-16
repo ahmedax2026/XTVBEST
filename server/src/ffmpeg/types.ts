@@ -90,6 +90,8 @@ export type StreamSessionCreateArgs = {
 export type StreamEncoding = { mode: 'transcode' } | { mode: 'remux' };
 
 export type StreamOptions = {
+  /** Encode a finite preparation job as fast as the selected profile allows. */
+  offlinePreparation?: boolean;
   startTime: Duration;
   duration: Duration;
   watermark?: Watermark;

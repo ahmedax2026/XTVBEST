@@ -38,9 +38,19 @@ jobs:
           pnpm --filter @tunarr/server typecheck
           pnpm --filter @tunarr/web typecheck
       - name: Test hardware selection, persistence, pipeline and authentication
-        run: pnpm --filter @tunarr/server test src/ffmpeg/AutoHardwareAcceleration.test.ts src/db/TranscodeConfigDB.test.ts src/ffmpeg/FfmpegStreamFactory.test.ts src/stream/etv/EtvNextSession.test.ts src/util/basicAuth.test.ts
+        run: pnpm --filter @tunarr/server test src/ffmpeg/AutoHardwareAcceleration.test.ts src/db/TranscodeConfigDB.test.ts src/ffmpeg/FfmpegStreamFactory.test.ts src/stream/etv/EtvNextSession.test.ts src/util/basicAuth.test.ts src/services/archive/ArchiveStore.test.ts src/services/archive/ChannelArchiveService.test.ts
+      - name: Install FFmpeg for archive acceptance tests
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+      - name: Verify real archive preparation, cancellation and playback offsets
+        if: runner.os == 'Linux'
+        env:
+          XBEST_FFMPEG_TEST: '1'
+        run: pnpm --filter @tunarr/server test src/services/archive/ArchiveStore.test.ts src/services/archive/ChannelArchiveService.test.ts
       - name: Test live monitor, countdown, links and Arabic catalog
-        run: pnpm --filter @tunarr/web exec vitest run --project unit src/components/channels/ChannelSessionsDialog.test.tsx src/components/channels/ChannelNowPlayingCard.test.tsx src/components/channels/ChannelMenuButton.test.tsx src/components/channels/channelSummary.test.ts src/locales/catalogs.test.ts src/test/i18n.test.ts src/store/settings/store.test.ts src/components/settings/general/WebSettings.test.tsx
+        run: pnpm --filter @tunarr/web exec vitest run --project unit src/components/channels/ChannelSessionsDialog.test.tsx src/components/channels/ChannelArchiveDialog.test.tsx src/components/channels/ChannelNowPlayingCard.test.tsx src/components/channels/ChannelMenuButton.test.tsx src/components/channels/channelSummary.test.ts src/locales/catalogs.test.ts src/test/i18n.test.ts src/store/settings/store.test.ts src/components/settings/general/WebSettings.test.tsx
       - name: Build web bundle
         run: pnpm --filter @tunarr/web bundle
       - name: Install browser for Arabic monitor smoke test

@@ -1,6 +1,8 @@
+import { ChannelArchiveDialog } from './ChannelArchiveDialog.tsx';
 import type { channelListOptions } from '@/types/index.ts';
 import { Trans, useLingui } from '@lingui/react/macro';
 import {
+  Archive,
   ContentCopy,
   CopyAll,
   Delete,
@@ -45,6 +47,7 @@ export const ChannelOptionsMenu = ({
   const [deleteConfirmOpen, setDeleteConfirmOpen] = useState(false);
   const { t } = useLingui();
   const [monitorOpen, setMonitorOpen] = useState(false);
+  const [archiveOpen, setArchiveOpen] = useState(false);
 
   const duplicateChannelMutation = useCreateChannel();
 
@@ -202,6 +205,20 @@ export const ChannelOptionsMenu = ({
             </ListItemText>
           </MenuItem>
         )}
+        <MenuItem
+          onClick={(e) => {
+            e.stopPropagation();
+            setArchiveOpen(true);
+            onClose();
+          }}
+        >
+          <ListItemIcon>
+            <Archive />
+          </ListItemIcon>
+          <ListItemText>
+            <Trans>Saved channel</Trans>
+          </ListItemText>
+        </MenuItem>
         {!hideItems?.includes('delete') && (
           <MenuItem
             onClick={(e) => {
@@ -218,6 +235,11 @@ export const ChannelOptionsMenu = ({
           </MenuItem>
         )}
       </Menu>
+      <ChannelArchiveDialog
+        channel={row}
+        open={archiveOpen}
+        onClose={() => setArchiveOpen(false)}
+      />
       <ChannelSessionsDialog
         open={monitorOpen}
         channel={row}

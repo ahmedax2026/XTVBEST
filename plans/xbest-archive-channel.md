@@ -1,7 +1,8 @@
 # XBest live-to-archive channel conversion
 
-Status: proposed; implementation has not started. This document is a design proposal,
-not confirmation that archive playback exists.
+Status: initial local-playlist implementation in progress, following the user’s
+request to continue the custom distribution. Full acceptance of every design
+item below is still pending. See XBEST.md for the implemented scope.
 
 ## Problem
 
@@ -58,8 +59,9 @@ does not promise zero CPU usage.
 
 - `server`: preparation jobs, manifest validation, resource limits and an archived
   playback adapter integrated with session lifecycle and program boundaries.
-- Database: persisted archive job/manifest ownership and desired channel mode;
-  migration required, with startup recovery of interrupted preparation.
+- Persistence: versioned, atomically replaced per-channel JSON manifests in the
+  configured data directory, including recovery of interrupted preparation. The
+  initial implementation needs no SQLite migration.
 - `types`: validated request/response shapes for prepare, progress, cancel,
   activate-at-boundary, return-to-live and explicit archive deletion.
 - `web`: channel controls and localized Arabic/English progress, failure and mode

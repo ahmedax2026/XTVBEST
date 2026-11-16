@@ -327,6 +327,7 @@ export class FfmpegStreamFactory {
       isFirstTranscode,
       emitEndList,
       subtitleSegmentStartNumber,
+      offlinePreparation,
     },
     lineupItem,
   }: StreamSessionCreateArgs): Promise<Maybe<TranscodeSessionResult>> {
@@ -473,6 +474,7 @@ export class FfmpegStreamFactory {
           ? 90000
           : playbackParams!.videoTrackTimeScale,
         realtime,
+        offlinePreparation: offlinePreparation ?? false,
         videoFormat: isPassthrough
           ? VideoFormats.Copy
           : playbackParams!.videoFormat,

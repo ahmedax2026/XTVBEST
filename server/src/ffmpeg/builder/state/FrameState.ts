@@ -18,6 +18,7 @@ const DefaultFrameState: Omit<
   'scaledSize' | 'paddedSize' | 'isAnamorphic'
 > = {
   realtime: false,
+  offlinePreparation: false,
   videoFormat: 'h264',
   videoPreset: null,
   videoProfile: null,
@@ -40,6 +41,7 @@ export type FrameStateOpts = MarkOptional<
 >;
 
 export class FrameState {
+  offlinePreparation: boolean = false;
   scaledSize!: FrameSize;
   paddedSize!: FrameSize;
   croppedSize?: FrameSize;

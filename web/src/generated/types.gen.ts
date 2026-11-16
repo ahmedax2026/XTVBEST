@@ -7220,6 +7220,155 @@ export type PostApiChannelsByChannelIdScheduleSlotsResponses = {
 
 export type PostApiChannelsByChannelIdScheduleSlotsResponse = PostApiChannelsByChannelIdScheduleSlotsResponses[keyof PostApiChannelsByChannelIdScheduleSlotsResponses];
 
+export type GetApiChannelsByIdArchiveData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/channels/{id}/archive';
+};
+
+export type GetApiChannelsByIdArchiveErrors = {
+    /**
+     * Default Response
+     */
+    409: {
+        error: string;
+    };
+};
+
+export type GetApiChannelsByIdArchiveError = GetApiChannelsByIdArchiveErrors[keyof GetApiChannelsByIdArchiveErrors];
+
+export type GetApiChannelsByIdArchiveResponses = {
+    /**
+     * Default Response
+     */
+    200: {
+        state: 'live' | 'preparing' | 'ready' | 'pending' | 'archived' | 'returning' | 'failed';
+        completed: number;
+        total: number;
+        bytes: number;
+        currentTitle?: string;
+        error?: string;
+    };
+};
+
+export type GetApiChannelsByIdArchiveResponse = GetApiChannelsByIdArchiveResponses[keyof GetApiChannelsByIdArchiveResponses];
+
+export type PostApiChannelsByIdArchivePrepareData = {
+    body?: {
+        threads?: number;
+        storageLimitGiB?: number;
+    };
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/channels/{id}/archive/prepare';
+};
+
+export type PostApiChannelsByIdArchivePrepareErrors = {
+    /**
+     * Default Response
+     */
+    409: {
+        error: string;
+    };
+};
+
+export type PostApiChannelsByIdArchivePrepareError = PostApiChannelsByIdArchivePrepareErrors[keyof PostApiChannelsByIdArchivePrepareErrors];
+
+export type PostApiChannelsByIdArchivePrepareResponses = {
+    /**
+     * Default Response
+     */
+    200: {
+        state: 'live' | 'preparing' | 'ready' | 'pending' | 'archived' | 'returning' | 'failed';
+        completed: number;
+        total: number;
+        bytes: number;
+        currentTitle?: string;
+        error?: string;
+    };
+};
+
+export type PostApiChannelsByIdArchivePrepareResponse = PostApiChannelsByIdArchivePrepareResponses[keyof PostApiChannelsByIdArchivePrepareResponses];
+
+export type PostApiChannelsByIdArchiveCancelData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/channels/{id}/archive/cancel';
+};
+
+export type PostApiChannelsByIdArchiveCancelErrors = {
+    /**
+     * Default Response
+     */
+    409: {
+        error: string;
+    };
+};
+
+export type PostApiChannelsByIdArchiveCancelError = PostApiChannelsByIdArchiveCancelErrors[keyof PostApiChannelsByIdArchiveCancelErrors];
+
+export type PostApiChannelsByIdArchiveCancelResponses = {
+    /**
+     * Default Response
+     */
+    200: {
+        state: 'live' | 'preparing' | 'ready' | 'pending' | 'archived' | 'returning' | 'failed';
+        completed: number;
+        total: number;
+        bytes: number;
+        currentTitle?: string;
+        error?: string;
+    };
+};
+
+export type PostApiChannelsByIdArchiveCancelResponse = PostApiChannelsByIdArchiveCancelResponses[keyof PostApiChannelsByIdArchiveCancelResponses];
+
+export type PostApiChannelsByIdArchiveModeData = {
+    body: {
+        mode: 'archive' | 'live';
+    };
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/channels/{id}/archive/mode';
+};
+
+export type PostApiChannelsByIdArchiveModeErrors = {
+    /**
+     * Default Response
+     */
+    409: {
+        error: string;
+    };
+};
+
+export type PostApiChannelsByIdArchiveModeError = PostApiChannelsByIdArchiveModeErrors[keyof PostApiChannelsByIdArchiveModeErrors];
+
+export type PostApiChannelsByIdArchiveModeResponses = {
+    /**
+     * Default Response
+     */
+    200: {
+        state: 'live' | 'preparing' | 'ready' | 'pending' | 'archived' | 'returning' | 'failed';
+        completed: number;
+        total: number;
+        bytes: number;
+        currentTitle?: string;
+        error?: string;
+    };
+};
+
+export type PostApiChannelsByIdArchiveModeResponse = PostApiChannelsByIdArchiveModeResponses[keyof PostApiChannelsByIdArchiveModeResponses];
+
 export type GetApiChannelsByIdNativePlaybackData = {
     body?: never;
     path: {

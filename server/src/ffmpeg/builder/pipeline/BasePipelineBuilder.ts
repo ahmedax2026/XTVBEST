@@ -882,6 +882,7 @@ export abstract class BasePipelineBuilder implements PipelineBuilder {
   }
 
   protected setRealtime() {
+    if (this.desiredState.offlinePreparation) return;
     const initialBurst = this.desiredState.realtime ? 0 : 60;
     const option = new ReadrateInputOption(
       this.ffmpegCapabilities,

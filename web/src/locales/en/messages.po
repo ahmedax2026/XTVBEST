@@ -799,6 +799,14 @@ msgstr "Apply to Program Types (empty = all)"
 msgid "Archive Format"
 msgstr "Archive Format"
 
+#: src/components/channels/ChannelArchiveDialog.tsx
+msgid "Archive ready"
+msgstr "Archive ready"
+
+#: src/components/channels/ChannelArchiveDialog.tsx
+msgid "Archived playback"
+msgstr "Archived playback"
+
 #. placeholder {0}: deletingSmartCollection?.name
 #: src/components/smart_collections/SmartCollectionsTable.tsx
 msgid "Are you sure you want to delete Smart Collection \"{0}\"?"
@@ -1129,6 +1137,10 @@ msgstr "Calculating Slots..."
 msgid "Cancel"
 msgstr "Cancel"
 
+#: src/components/channels/ChannelArchiveDialog.tsx
+msgid "Cancel preparation"
+msgstr "Cancel preparation"
+
 #: src/components/settings/media_source/EmbyServerEditDialog.tsx
 #: src/components/settings/media_source/JelllyfinServerEditDialog.tsx
 #: src/components/settings/media_source/PlexServerEditDialog.tsx
@@ -1315,6 +1327,7 @@ msgid "close"
 msgstr "close"
 
 #: src/components/channel_config/SelectedProgrammingList.tsx
+#: src/components/channels/ChannelArchiveDialog.tsx
 #: src/components/channels/ChannelSessionsDialog.tsx
 #: src/components/settings/media_source/EditMediaSourceLibrariesDialog.tsx
 msgid "Close"
@@ -1841,6 +1854,7 @@ msgid "Deselect All"
 msgstr "Deselect All"
 
 #: src/components/channels/ChannelNowPlayingCard.tsx
+#: src/test/i18n.test.ts
 msgid "Details"
 msgstr "Details"
 
@@ -2659,6 +2673,7 @@ msgstr "Fixed Interval"
 #: src/hooks/slot_scheduler/useSlotName.ts
 #: src/hooks/useProgramTitleFormatter.ts
 #: src/hooks/useRouteName.ts
+#: src/test/i18n.test.ts
 msgid "Flex"
 msgstr "Flex"
 
@@ -3133,6 +3148,10 @@ msgstr "Linked slots advance episode progression together sequentially."
 #: src/components/channel_config/ChannelProgrammingConfig.tsx
 msgid "List"
 msgstr "List"
+
+#: src/components/channels/ChannelArchiveDialog.tsx
+msgid "Live"
+msgstr "Live"
 
 #: src/components/channels/ChannelOptionsMenu.tsx
 msgid "Live monitor"
@@ -3773,10 +3792,12 @@ msgstr "Not synced"
 
 #: src/components/channels/ChannelCard.tsx
 #: src/components/channels/ChannelsView.tsx
+#: src/test/i18n.test.ts
 msgid "Now playing"
 msgstr "Now playing"
 
 #: src/components/channels/ChannelNowPlayingCard.tsx
+#: src/test/i18n.test.ts
 msgid "Now Playing:"
 msgstr "Now Playing:"
 
@@ -3814,6 +3835,10 @@ msgstr "On-Demand channels resume from where you left off. Programming is paused
 #: src/pages/channels/ChannelsPage.tsx
 #~ msgid "On-Demand?"
 #~ msgstr "On-Demand?"
+
+#: src/components/channels/ChannelArchiveDialog.tsx
+msgid "One preparation runs at a time. The storage limit includes older saved files; archives are never deleted automatically."
+msgstr "One preparation runs at a time. The storage limit includes older saved files; archives are never deleted automatically."
 
 #: src/pages/ErrorPage.tsx
 msgid "Oops!"
@@ -4110,6 +4135,36 @@ msgstr "Preferred languages in priority order. Type a code to add custom."
 #: src/components/profiles/StreamSelectionRuleEditor.tsx
 msgid "Preferred subtitle languages"
 msgstr "Preferred subtitle languages"
+
+#: src/components/channels/ChannelArchiveDialog.tsx
+msgid "Preparation needs attention"
+msgstr "Preparation needs attention"
+
+#: src/components/channels/ChannelArchiveDialog.tsx
+msgid "Preparation threads"
+msgstr "Preparation threads"
+
+#: src/components/channels/ChannelArchiveDialog.tsx
+msgid "Preparation was cancelled, interrupted or failed validation. Live playback remains available. Check the files, profile and available storage, then prepare again."
+msgstr "Preparation was cancelled, interrupted or failed validation. Live playback remains available. Check the files, profile and available storage, then prepare again."
+
+#: src/components/channels/ChannelArchiveDialog.tsx
+msgid "Prepare local movies once, then play the saved output using the same channel link. Original files are preserved. Switching takes effect at the next program boundary."
+msgstr "Prepare local movies once, then play the saved output using the same channel link. Original files are preserved. Switching takes effect at the next program boundary."
+
+#: src/components/channels/ChannelArchiveDialog.tsx
+msgid "Prepare saved channel"
+msgstr "Prepare saved channel"
+
+#. placeholder {0}: status.data.completed
+#. placeholder {1}: status.data.total
+#: src/components/channels/ChannelArchiveDialog.tsx
+msgid "Prepared {0} of {1} programs"
+msgstr "Prepared {0} of {1} programs"
+
+#: src/components/channels/ChannelArchiveDialog.tsx
+msgid "Preparing archive"
+msgstr "Preparing archive"
 
 #: src/components/programming_controls/AddBlockShuffleModal.tsx
 #: src/components/programming_controls/AddBlockShuffleModal.tsx
@@ -4591,6 +4646,14 @@ msgstr "Results"
 msgid "Retry"
 msgstr "Retry"
 
+#: src/components/channels/ChannelArchiveDialog.tsx
+msgid "Return to live"
+msgstr "Return to live"
+
+#: src/components/channels/ChannelArchiveDialog.tsx
+msgid "Returning to live at the next program"
+msgstr "Returning to live at the next program"
+
 #: src/components/channel_config/SelectedProgrammingActions.tsx
 msgid "Review"
 msgstr "Review"
@@ -4706,6 +4769,15 @@ msgstr "Save as Smart Collection"
 #: src/components/smart_collections/CreateSmartCollectionDialog.tsx
 msgid "Save Smart Collection"
 msgstr "Save Smart Collection"
+
+#: src/components/channels/ChannelOptionsMenu.tsx
+msgid "Saved channel"
+msgstr "Saved channel"
+
+#. placeholder {0}: channel.name
+#: src/components/channels/ChannelArchiveDialog.tsx
+msgid "Saved channel: {0}"
+msgstr "Saved channel: {0}"
 
 #: src/components/settings/ffmpeg/TranscodeConfigSettingsForm.tsx
 msgid "Saving..."
@@ -5367,6 +5439,14 @@ msgstr "Switch to dark mode"
 msgid "Switch to light mode"
 msgstr "Switch to light mode"
 
+#: src/components/channels/ChannelArchiveDialog.tsx
+msgid "Switch to saved channel"
+msgstr "Switch to saved channel"
+
+#: src/components/channels/ChannelArchiveDialog.tsx
+msgid "Switching at the next program"
+msgstr "Switching at the next program"
+
 #: src/components/MediaSourceLibraryTable.tsx
 msgid "Sync"
 msgstr "Sync"
@@ -5452,6 +5532,10 @@ msgstr "Test Transcode"
 #: src/components/settings/ffmpeg/TranscodeConfigVideoSettingsForm.tsx
 msgid "Tests GPU encoding before starting playback. Uses CPU if no compatible GPU works. The standard backend uses CPU decoding and filters in Auto mode."
 msgstr "Tests GPU encoding before starting playback. Uses CPU if no compatible GPU works. The standard backend uses CPU decoding and filters in Auto mode."
+
+#: src/components/channels/ChannelArchiveDialog.tsx
+msgid "The archive operation could not be completed. Check that the playlist uses supported local files and no other preparation is running."
+msgstr "The archive operation could not be completed. Check that the playlist uses supported local files and no other preparation is running."
 
 #: src/components/programming_controls/AddRestrictHoursModal.tsx
 msgid "The channel's regular programming between the specified hours. Flex time will fill up the remaining hours."
@@ -5680,6 +5764,14 @@ msgstr "This slot's playlist has no programs, so the slot cannot be scheduled. A
 msgid "This slot's playlist was deleted, so the slot cannot be scheduled. Choose another playlist or remove the slot."
 msgstr "This slot's playlist was deleted, so the slot cannot be scheduled. Choose another playlist or remove the slot."
 
+#: src/components/channels/ChannelArchiveDialog.tsx
+msgid "This version supports fixed local playlists with the built-in HLS or MPEG-TS engine. Disable random fillers before preparing. Channel watermarks are preserved. The channel's CPU, GPU or Auto profile is used."
+msgstr "This version supports fixed local playlists with the built-in HLS or MPEG-TS engine. Disable random fillers before preparing. Channel watermarks are preserved. The channel's CPU, GPU or Auto profile is used."
+
+#: src/components/channels/ChannelArchiveDialog.tsx
+#~ msgid "This version supports fixed local playlists with the built-in HLS or MPEG-TS engine. Disable watermarks and random fillers before preparing. The channel's CPU, GPU or Auto profile is used."
+#~ msgstr "This version supports fixed local playlists with the built-in HLS or MPEG-TS engine. Disable watermarks and random fillers before preparing. The channel's CPU, GPU or Auto profile is used."
+
 #: src/components/settings/ffmpeg/TranscodeConfigSettingsForm.tsx
 msgid "Threads"
 msgstr "Threads"
@@ -5781,6 +5873,10 @@ msgstr "Toggle visibility {label}"
 #: src/components/custom-shows/CustomShowSortToolsMenu.tsx
 msgid "Tools"
 msgstr "Tools"
+
+#: src/components/channels/ChannelArchiveDialog.tsx
+msgid "Total archive storage limit (GiB)"
+msgstr "Total archive storage limit (GiB)"
 
 #. placeholder {0}: isNonEmptyString(query.query) && totalHits >= 1000 ? '>1000' : totalHits
 #: src/components/library/LibraryProgramGrid.tsx
@@ -5943,6 +6039,10 @@ msgstr "TV shows are grouped by show"
 #: src/pages/system/TroubleshootPage.tsx
 msgid "Type"
 msgstr "Type"
+
+#: src/components/channels/ChannelArchiveDialog.tsx
+msgid "Unable to load archive status."
+msgstr "Unable to load archive status."
 
 #: src/components/channels/ChannelSessionsDialog.tsx
 msgid "Unable to refresh sessions. Previously loaded values may be out of date."

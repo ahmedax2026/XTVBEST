@@ -23,11 +23,12 @@ import { SnackbarProvider } from 'notistack';
 import { Theme } from './theme.ts';
 import { messages } from './locales/ar/messages.po';
 import { ChannelSessionsDialog } from './components/channels/ChannelSessionsDialog.tsx';
+import { ChannelArchiveDialog } from './components/channels/ChannelArchiveDialog.tsx';
 import { makeStoryChannel } from './components/channels/channelStoryFixtures.ts';
 i18n.loadAndActivate({ locale: 'ar', messages });
 const root = document.getElementById('root');
 if (!root) throw new Error('Missing preview root');
-createRoot(root).render(<I18nProvider i18n={i18n}><ThemeProvider theme={{...Theme,direction:'rtl'}} defaultMode="dark"><CssBaseline/><QueryClientProvider client={new QueryClient()}><SnackbarProvider><ChannelSessionsDialog open onClose={()=>{}} channel={makeStoryChannel({id:'${id}',name:'إكس بيست أفلام'})}/></SnackbarProvider></QueryClientProvider></ThemeProvider></I18nProvider>);
+createRoot(root).render(<I18nProvider i18n={i18n}><ThemeProvider theme={{...Theme,direction:'rtl'}} defaultMode="dark"><CssBaseline/><QueryClientProvider client={new QueryClient()}><SnackbarProvider>{location.search.includes('archive') ? <ChannelArchiveDialog open onClose={()=>{}} channel={makeStoryChannel({id:'${id}',name:'إكس بيست أفلام'})}/> : <ChannelSessionsDialog open onClose={()=>{}} channel={makeStoryChannel({id:'${id}',name:'إكس بيست أفلام'})}/>}</SnackbarProvider></QueryClientProvider></ThemeProvider></I18nProvider>);
 `;
 let server;
 let browser;
@@ -55,7 +56,12 @@ try {
     await new Promise((resolve) => setTimeout(resolve, 500));
   }
   assert(ready, 'Preview server did not start');
-  browser = await chromium.launch({ headless: true });
+  browser = await chromium.launch({
+    headless: true,
+    ...(process.env.XBEST_CHROMIUM_PATH
+      ? { executablePath: process.env.XBEST_CHROMIUM_PATH }
+      : {}),
+  });
   const page = await browser.newPage({
     viewport: { width: 1000, height: 1000 },
   });
@@ -148,9 +154,57 @@ try {
     .getByRole('button', { name: 'إيقاف الجلسات', exact: true })
     .click();
   await page.getByText('لا توجد جلسات نشطة لهذه القناة.').waitFor();
+  let archiveState = 'ready';
+  await page.route(`**/api/channels/${id}/archive**`, async (route) => {
+    const headers = {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+      'Access-Control-Allow-Headers': 'content-type',
+    };
+    if (route.request().method() === 'OPTIONS')
+      return route.fulfill({ status: 204, headers });
+    if (route.request().method() === 'POST') {
+      const body = route.request().postDataJSON();
+      assert.equal(body.mode, 'archive');
+      archiveState = 'pending';
+    }
+    return route.fulfill({
+      contentType: 'application/json',
+      headers,
+      body: JSON.stringify({
+        state: archiveState,
+        total: 3,
+        completed: 3,
+        bytes: 1024 ** 3,
+      }),
+    });
+  });
+  await page.goto(url + '?archive');
+  await page.getByText('القناة المحفوظة جاهزة', { exact: true }).waitFor();
+  assert(
+    await page
+      .locator('.MuiDialog-paper')
+      .evaluate((element) => element.scrollWidth <= element.clientWidth),
+    'Archive dialog overflows mobile viewport',
+  );
+  await page.screenshot({
+    path: path.join(output, 'archive-mobile.png'),
+    fullPage: true,
+  });
+  await page.setViewportSize({ width: 1000, height: 1000 });
+  await page.screenshot({
+    path: path.join(output, 'archive-desktop.png'),
+    fullPage: true,
+  });
+  await page
+    .getByRole('button', { name: 'التحويل للقناة المحفوظة', exact: true })
+    .click();
+  await page
+    .getByText('التحويل مع بداية الفيلم التالي', { exact: true })
+    .waitFor();
   assert.deepEqual(errors, [], 'Browser raised runtime errors');
   console.log(
-    'Arabic desktop/mobile monitor, stable link and stop action passed',
+    'Arabic desktop/mobile monitor and archive controls, stable link and actions passed',
   );
 } finally {
   await browser?.close();
