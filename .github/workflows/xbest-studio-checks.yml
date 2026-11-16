@@ -1,6 +1,8 @@
 name: XBest CPU GPU and login checks
 
 on:
+  push:
+    branches: [feature/xbest-studio]
   pull_request:
     branches: [feature/xbest-studio, feature/xbest-cpu-gpu-auth, feature/xbest-live-monitor]
   workflow_dispatch:
@@ -64,3 +66,50 @@ jobs:
           $errors = $null
           [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path scripts/start-xbest.ps1), [ref]$null, [ref]$errors) | Out-Null
           if ($errors.Count) { throw ($errors | Out-String) }
+
+  package:
+    needs: verify
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [linux-x64, win-x64]
+    env:
+      TURBO_TELEMETRY_DISABLED: '1'
+      NODE_ENV: production
+      TUNARR_VERSION: 2026.11.0-xbest-preview
+      TUNARR_BUILD: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - uses: ilammy/setup-nasm@v1
+      - name: Enable workspace package manager
+        run: |
+          npm install -g corepack@latest
+          corepack enable
+      - run: pnpm install --frozen-lockfile
+        env:
+          NODE_ENV: development
+      - name: Build application
+        run: |
+          pnpm --filter @tunarr/types build
+          pnpm --filter @tunarr/shared build
+          pnpm --filter @tunarr/web bundle
+          pnpm --filter @tunarr/server bundle
+      - name: Package executable and companion tools
+        run: pnpm --filter @tunarr/server make-bin --target ${{ matrix.target }} --output-archives
+      - name: Upload preview and protected launchers
+        uses: actions/upload-artifact@v4
+        with:
+          name: xbest-preview-${{ matrix.target }}
+          if-no-files-found: error
+          retention-days: 14
+          path: |
+            server/bin/tunarr-*.zip
+            server/bin/tunarr-*.tar.gz
+            scripts/start-xbest.ps1
+            scripts/start-xbest.sh
+            docs/xbest-cpu-gpu-login.md
+            LICENSE
