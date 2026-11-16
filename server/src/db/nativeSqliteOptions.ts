@@ -2,8 +2,13 @@ import path from 'node:path';
 import { filename } from '../util/index.js';
 
 function packagedEntrypoint() {
-  if ('pkg' in process && process.pkg && typeof process.pkg === 'object' &&
-      'entrypoint' in process.pkg && typeof process.pkg.entrypoint === 'string') {
+  if (
+    'pkg' in process &&
+    process.pkg &&
+    typeof process.pkg === 'object' &&
+    'entrypoint' in process.pkg &&
+    typeof process.pkg.entrypoint === 'string'
+  ) {
     return process.pkg.entrypoint;
   }
   return filename(import.meta.url);
@@ -15,6 +20,10 @@ export function nativeSqliteOptions(
 ) {
   if (!packaged) return {};
   return {
-    nativeBinding: path.join(path.dirname(entrypoint), 'build', 'better_sqlite3.node'),
+    nativeBinding: path.join(
+      path.dirname(entrypoint),
+      'build',
+      'better_sqlite3.node',
+    ),
   };
 }

@@ -67,6 +67,11 @@ jobs:
         run: pnpm --filter @tunarr/server test src/services/archive/ArchiveStore.test.ts src/services/archive/ChannelArchiveService.test.ts src/services/overlay/countdownAss.test.ts
       - name: Test live monitor, countdown, links and Arabic catalog
         run: pnpm --filter @tunarr/web exec vitest run --project unit src/components/channels/ChannelSessionsDialog.test.tsx src/components/channels/ChannelArchiveDialog.test.tsx src/components/channels/ChannelOverlayDialog.test.tsx src/components/channels/ChannelNowPlayingCard.test.tsx src/components/channels/ChannelMenuButton.test.tsx src/components/channels/channelSummary.test.ts src/locales/catalogs.test.ts src/test/i18n.test.ts src/store/settings/store.test.ts src/components/settings/general/WebSettings.test.tsx src/pages/settings/AccessSettingsPage.test.tsx src/pages/studio/StudioDashboard.test.tsx src/components/shell/XBestShell.test.tsx src/components/channels/ChannelCard.test.tsx src/components/channels/ChannelsView.test.tsx
+      - name: Generate Arabic broadcast artwork using the original server logo
+        if: runner.os == 'Linux'
+        run: |
+          python3 -m pip install --disable-pip-version-check Pillow==11.3.0
+          python3 scripts/generate-xbest-art.py
       - name: Build web bundle
         run: pnpm --filter @tunarr/web bundle
       - name: Install browser for Arabic monitor smoke test
@@ -130,6 +135,10 @@ jobs:
       - run: pnpm install --frozen-lockfile
         env:
           NODE_ENV: development
+      - name: Generate Arabic broadcast artwork using the original server logo
+        run: |
+          python3 -m pip install --disable-pip-version-check Pillow==11.3.0
+          python3 scripts/generate-xbest-art.py
       - name: Build application
         run: |
           pnpm --filter @tunarr/types build
@@ -240,4 +249,73 @@ jobs:
         with:
           name: XBEST-Windows-startup-evidence
           path: acceptance
+          if-no-files-found: ignore
+
+  owner-acceptance:
+    needs: package
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: XBEST-OWNER-win-x64
+          path: owner-preview
+      - name: Test owner login, email-named account and offline license issuance
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $zip = Get-ChildItem owner-preview -Recurse -Filter 'XBEST-OWNER-*.zip' | Select-Object -First 1
+          if (-not $zip) { throw 'Owner archive missing' }
+          Expand-Archive -LiteralPath $zip.FullName -DestinationPath owner-app
+          $exe = Get-ChildItem owner-app -Recurse -Filter XBEST.exe | Select-Object -First 1
+          $launcher = Join-Path $exe.Directory.FullName 'XBEST-OWNER.ps1'
+          $dataDirectory = Join-Path $env:RUNNER_TEMP ('XBEST-OWNER-test-' + [guid]::NewGuid())
+          $env:TUNARR_BASIC_AUTH_USER = 'owner@example.test'
+          $env:TUNARR_BASIC_AUTH_PASSWORD = [guid]::NewGuid().ToString('N')
+          $env:XBEST_NO_BROWSER = '1'
+          $authorization = 'Basic ' + [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($env:TUNARR_BASIC_AUTH_USER + ':' + $env:TUNARR_BASIC_AUTH_PASSWORD))
+          $headers = @{ Authorization = $authorization }
+          New-Item -ItemType Directory -Path owner-evidence -Force | Out-Null
+          $stdout = Join-Path $PWD 'owner-evidence\startup.log'
+          $stderr = Join-Path $PWD 'owner-evidence\startup-errors.log'
+          $owner = $null
+          try {
+            $arguments = '-NoProfile -ExecutionPolicy Bypass -File "' + $launcher + '" -Executable "' + $exe.FullName + '" -DataDirectory "' + $dataDirectory + '"'
+            $owner = Start-Process powershell.exe -ArgumentList $arguments -PassThru -RedirectStandardOutput $stdout -RedirectStandardError $stderr
+            $ready = $false
+            for ($i = 0; $i -lt 120; $i++) {
+              if ($owner.HasExited) { throw 'Owner launcher exited before becoming ready' }
+              $settingsFile = Join-Path $dataDirectory 'settings.json'
+              if (Test-Path $settingsFile) {
+                try {
+                  $settings = Get-Content $settingsFile -Raw | ConvertFrom-Json
+                  $port = [int]$settings.system.server.port
+                  $status = Invoke-RestMethod -Uri "http://localhost:$port/api/access/status" -Headers $headers -TimeoutSec 2
+                  if ($status.owner -and $status.issuer -and $status.configured) { $ready = $true; break }
+                } catch {}
+              }
+              Start-Sleep -Seconds 2
+            }
+            if (-not $ready) { throw 'Owner issuer did not become ready' }
+            $account = @{ username = 'customer@example.test'; password = [guid]::NewGuid().ToString('N') } | ConvertTo-Json
+            Invoke-RestMethod -Method Post -Uri "http://localhost:$port/api/access/users" -Headers $headers -ContentType 'application/json' -Body $account | Out-Null
+            $users = Invoke-RestMethod -Uri "http://localhost:$port/api/access/users" -Headers $headers
+            if (-not ($users | Where-Object username -eq 'customer@example.test')) { throw 'Email-named account was not persisted' }
+            $licenseRequest = @{ customer = 'Acceptance Customer'; installation = ('a' * 64); expiresAt = [DateTime]::UtcNow.AddDays(7).ToString('yyyy-MM-ddTHH:mm:ss.fffZ'); validation = 'offline' } | ConvertTo-Json
+            $issued = Invoke-RestMethod -Method Post -Uri "http://localhost:$port/api/access/licenses" -Headers $headers -ContentType 'application/json' -Body $licenseRequest
+            if (-not $issued.token) { throw 'Offline signed license was not issued' }
+            $verified = Invoke-RestMethod -Method Post -Uri "http://localhost:$port/api/access/verify" -ContentType 'application/json' -Body (@{ token = $issued.token } | ConvertTo-Json)
+            if (-not $verified.valid) { throw 'Owner license signature verification failed' }
+            Write-Host 'XBEST owner login, email account and offline issuance passed'
+          } finally {
+            if (Test-Path $stdout) { Get-Content $stdout }
+            if (Test-Path $stderr) { Get-Content $stderr }
+            if ($owner -and -not $owner.HasExited) { taskkill /PID $owner.Id /T /F }
+            Remove-Item Env:TUNARR_BASIC_AUTH_PASSWORD -ErrorAction SilentlyContinue
+          }
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: XBEST-owner-startup-evidence
+          path: owner-evidence
           if-no-files-found: ignore

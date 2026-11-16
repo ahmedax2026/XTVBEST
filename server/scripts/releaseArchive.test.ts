@@ -56,13 +56,21 @@ describe('releaseArchiveEntries', () => {
 
 test('owner archives contain launchers while customer archives do not', () => {
   const files = {
-    tunarr: './XBEST.exe', meilisearch: './meilisearch.exe',
-    etvNext: './ersatztv-channel.exe', etvNextCompanions: [],
+    tunarr: './XBEST.exe',
+    meilisearch: './meilisearch.exe',
+    etvNext: './ersatztv-channel.exe',
+    etvNextCompanions: [],
   };
   const customer = releaseArchiveEntries('XBEST-customer', true, files);
   const owner = releaseArchiveEntries('XBEST-OWNER', true, files, true);
   expect(customer.some((file) => file.name.includes('OWNER'))).toBe(false);
-  expect(owner.map((file) => file.name)).toContain('XBEST-OWNER/XBEST-OWNER.cmd');
-  expect(owner.map((file) => file.name)).toContain('XBEST-OWNER/XBEST-OWNER.ps1');
-  expect(owner.some((file) => /private|credentials|state\.json/.test(file.name))).toBe(false);
+  expect(owner.map((file) => file.name)).toContain(
+    'XBEST-OWNER/XBEST-OWNER.cmd',
+  );
+  expect(owner.map((file) => file.name)).toContain(
+    'XBEST-OWNER/XBEST-OWNER.ps1',
+  );
+  expect(
+    owner.some((file) => /private|credentials|state\.json/.test(file.name)),
+  ).toBe(false);
 });

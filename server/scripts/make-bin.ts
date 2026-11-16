@@ -290,45 +290,52 @@ for (const arch of args.target) {
       if (args.outputArchives) {
         const targetIsWindows = osString === 'win';
         for (const owner of targetIsWindows ? [false, true] : [false]) {
-          const distributionName = owner ? releaseName.replace(/^XBEST-/, 'XBEST-OWNER-') : releaseName;
-        console.info('Creating release archive');
+          const distributionName = owner
+            ? releaseName.replace(/^XBEST-/, 'XBEST-OWNER-')
+            : releaseName;
+          console.info('Creating release archive');
 
-        const format = targetIsWindows ? 'zip' : 'tar';
-        const archive = archiver(format, { gzip: !targetIsWindows });
-        const finishedPromise = new Promise<void>((resolve, reject) => {
-          archive.on('end', () => resolve(void 0));
-          archive.on('error', reject);
-          archive.on('entry', (entry) => {
-            console.debug('Added entry to backup: %s', entry.name);
+          const format = targetIsWindows ? 'zip' : 'tar';
+          const archive = archiver(format, { gzip: !targetIsWindows });
+          const finishedPromise = new Promise<void>((resolve, reject) => {
+            archive.on('end', () => resolve(void 0));
+            archive.on('error', reject);
+            archive.on('entry', (entry) => {
+              console.debug('Added entry to backup: %s', entry.name);
+            });
           });
-        });
 
-        const outStream = createWriteStream(
-          `./bin/${distributionName}.${format}${targetIsWindows ? '' : '.gz'}`,
-        );
-        archive.pipe(outStream);
-        const entries = releaseArchiveEntries(distributionName, targetIsWindows, {
-          tunarr: `./bin/${execName}`,
-          meilisearch: `./bin/meilisearch-${arch}`,
-          etvNext: etvNext.binaryPath,
-          etvNextCompanions: etvNext.companionPaths,
-        }, owner);
-        entries.push({
-          source: '../LICENSE',
-          name: `${distributionName}/LICENSE`,
-        });
-        entries.push({
-          source: '../docs/XBEST-START-AR.md',
-          name: `${distributionName}/XBEST-START-AR.md`,
-        });
-        const checksums = await releaseChecksums(entries);
-        await fs.writeFile(`./bin/${distributionName}.SHA256SUMS`, checksums);
-        archive.append(checksums, { name: `${distributionName}/SHA256SUMS` });
-        for (const { source, name } of entries) {
-          archive.file(source, { name });
-        }
-        await archive.finalize();
-        await finishedPromise;
+          const outStream = createWriteStream(
+            `./bin/${distributionName}.${format}${targetIsWindows ? '' : '.gz'}`,
+          );
+          archive.pipe(outStream);
+          const entries = releaseArchiveEntries(
+            distributionName,
+            targetIsWindows,
+            {
+              tunarr: `./bin/${execName}`,
+              meilisearch: `./bin/meilisearch-${arch}`,
+              etvNext: etvNext.binaryPath,
+              etvNextCompanions: etvNext.companionPaths,
+            },
+            owner,
+          );
+          entries.push({
+            source: '../LICENSE',
+            name: `${distributionName}/LICENSE`,
+          });
+          entries.push({
+            source: '../docs/XBEST-START-AR.md',
+            name: `${distributionName}/XBEST-START-AR.md`,
+          });
+          const checksums = await releaseChecksums(entries);
+          await fs.writeFile(`./bin/${distributionName}.SHA256SUMS`, checksums);
+          archive.append(checksums, { name: `${distributionName}/SHA256SUMS` });
+          for (const { source, name } of entries) {
+            archive.file(source, { name });
+          }
+          await archive.finalize();
+          await finishedPromise;
         }
       }
     },

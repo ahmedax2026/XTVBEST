@@ -170,7 +170,10 @@ export default function AccessSettingsPage() {
             <TextField
               required
               label={label('الإيميل أو اسم المستخدم', 'Username')}
-              helperText={label('يمكن استخدام الإيميل كاسم حساب؛ لا يتم إرسال رسائل بريد.', 'An email address can be used as the username; this does not send email.')}
+              helperText={label(
+                'يمكن استخدام الإيميل كاسم حساب؛ لا يتم إرسال رسائل بريد.',
+                'An email address can be used as the username; this does not send email.',
+              )}
               value={username}
               onChange={(e) => setUsername(e.target.value)}
               inputProps={{ maxLength: 80 }}

@@ -44,7 +44,9 @@ test('chooses another free port without stopping the application occupying the p
 });
 test('only accepts local browser URLs and valid ports from the desktop pipe', () => {
   expect(validDesktopUrl('http://localhost:8017/web/')).toBe(true);
-  expect(validDesktopUrl('http://localhost:8017/web/settings/access')).toBe(true);
+  expect(validDesktopUrl('http://localhost:8017/web/settings/access')).toBe(
+    true,
+  );
   expect(validDesktopUrl('http://localhost:0/web/')).toBe(false);
   expect(validDesktopUrl('http://localhost:65536/web/')).toBe(false);
   expect(validDesktopUrl('https://evil.example/web/')).toBe(false);
