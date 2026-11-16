@@ -19,6 +19,11 @@ import 'reflect-metadata';
 import { hideBin } from 'yargs/helpers';
 import yargs from 'yargs/yargs';
 import { commands } from './cli/commands.ts';
+import {
+  desktopStartupEnabled,
+  initializeDesktopInstance,
+} from './services/desktop/DesktopStartup.ts';
+import { globalOptions } from './globals.ts';
 
 // Extend this here once so we don't have to worry about
 // it elsewhere in the app.
@@ -58,6 +63,14 @@ yargs(hideBin(process.argv))
   .middleware([
     ({ hide_banner }) => (hide_banner ? void 0 : printBanner()),
     (opts) => setGlobalOptions(opts),
+    async (opts) => {
+      if (desktopStartupEnabled() &&
+          (opts._.length === 0 || opts._[0] === 'server')) {
+        if (!(await initializeDesktopInstance(globalOptions().databaseDirectory))) {
+          process.exit(0);
+        }
+      }
+    },
     (opts) => {
       if ((opts._ as string[])[0] !== 'generate-openapi') {
         return bootstrapTunarr();

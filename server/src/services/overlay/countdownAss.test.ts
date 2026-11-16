@@ -246,16 +246,26 @@ test('clamps title margins and rejects font-name injection or invalid sizes', ()
     }),
   };
   expect(overlayTitleGeometry(config, 320, 180)).toMatchObject({
-    x: 160, y: 90, alignment: 3,
+    x: 160,
+    y: 90,
+    alignment: 3,
   });
-  expect(ChannelTitleSchema.safeParse({ fontFamily: 'Arial,evil' }).success).toBe(false);
+  expect(
+    ChannelTitleSchema.safeParse({ fontFamily: 'Arial,evil' }).success,
+  ).toBe(false);
   expect(ChannelTitleSchema.safeParse({ fontSize: -1 }).success).toBe(false);
-  expect(ChannelTitleSchema.safeParse({ text: 'x'.repeat(121) }).success).toBe(false);
+  expect(ChannelTitleSchema.safeParse({ text: 'x'.repeat(121) }).success).toBe(
+    false,
+  );
 });
 
 test('keeps the old automatic title appearance when no title options were saved', () => {
   expect(overlayTitleGeometry(presentation.config, 1920, 1080)).toMatchObject({
-    fontFamily: 'Arial', fontSize: 36, opacity: 0.9,
-    x: 960, y: 1048, alignment: 2,
+    fontFamily: 'Arial',
+    fontSize: 36,
+    opacity: 0.9,
+    x: 960,
+    y: 1048,
+    alignment: 2,
   });
 });

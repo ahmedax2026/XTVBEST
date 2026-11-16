@@ -280,6 +280,10 @@ for (const arch of args.target) {
           source: '../LICENSE',
           name: `${releaseName}/LICENSE`,
         });
+        entries.push({
+          source: '../docs/XBEST-START-AR.md',
+          name: `${releaseName}/XBEST-START-AR.md`,
+        });
         const checksums = await releaseChecksums(entries);
         await fs.writeFile(`./bin/${releaseName}.SHA256SUMS`, checksums);
         archive.append(checksums, { name: `${releaseName}/SHA256SUMS` });

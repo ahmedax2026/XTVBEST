@@ -16,7 +16,11 @@ import {
   Typography,
 } from '@mui/material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-import { ChannelOverlaySchema, DefaultChannelOverlay, ChannelTitleSchema } from '@tunarr/types';
+import {
+  ChannelOverlaySchema,
+  DefaultChannelOverlay,
+  ChannelTitleSchema,
+} from '@tunarr/types';
 import type { Channel, ChannelOverlay, ChannelTitle } from '@tunarr/types';
 import { useSettings } from '../../store/settings/selectors.ts';
 import { useEffect, useState } from 'react';
@@ -44,12 +48,14 @@ export function OverlayPreview({
   const y = value.position.startsWith('bottom')
     ? height - h - Math.min(value.verticalMargin, height - h)
     : Math.min(value.verticalMargin, height - h);
-  const title = value.title ?? ChannelTitleSchema.parse({
-    fontSize: Math.min(200, Math.max(12, Math.round(height / 30))),
-    opacity: value.opacity,
-    horizontalMargin: Math.min(500, Math.round(width * 0.08)),
-    verticalMargin: Math.min(500, Math.round(height * 0.03)),
-  });
+  const title =
+    value.title ??
+    ChannelTitleSchema.parse({
+      fontSize: Math.min(200, Math.max(12, Math.round(height / 30))),
+      opacity: value.opacity,
+      horizontalMargin: Math.min(500, Math.round(width * 0.08)),
+      verticalMargin: Math.min(500, Math.round(height * 0.03)),
+    });
   const [row, column] = title.position.split('-');
   const marginX = Math.min(title.horizontalMargin, width / 2);
   const marginY = Math.min(title.verticalMargin, height / 2);
@@ -127,10 +133,26 @@ export function OverlayPreview({
       )}
       {value.enabled && value.showTitle && (
         <text
-          x={column === 'left' ? marginX : column === 'right' ? width - marginX : width / 2}
-          y={row === 'top' ? marginY : row === 'middle' ? height / 2 : height - marginY}
-          textAnchor={column === 'left' ? 'start' : column === 'right' ? 'end' : 'middle'}
-          dominantBaseline={row === 'top' ? 'hanging' : row === 'middle' ? 'central' : 'auto'}
+          x={
+            column === 'left'
+              ? marginX
+              : column === 'right'
+                ? width - marginX
+                : width / 2
+          }
+          y={
+            row === 'top'
+              ? marginY
+              : row === 'middle'
+                ? height / 2
+                : height - marginY
+          }
+          textAnchor={
+            column === 'left' ? 'start' : column === 'right' ? 'end' : 'middle'
+          }
+          dominantBaseline={
+            row === 'top' ? 'hanging' : row === 'middle' ? 'central' : 'auto'
+          }
           fill={title.color}
           opacity={title.opacity}
           fontFamily={title.fontFamily}
@@ -149,7 +171,7 @@ export function OverlayPreview({
 function OverlayControls({ channel }: { channel: Channel }) {
   const { t } = useLingui();
   const ar = useSettings().ui.i18n.locale === 'ar';
-  const label = (arabic: string, english: string) => ar ? arabic : english;
+  const label = (arabic: string, english: string) => (ar ? arabic : english);
   const queryClient = useQueryClient();
   const queryKey = ['channel-overlay', channel.id];
   const endpoint = `/api/channels/${encodeURIComponent(channel.id)}/overlay`;
@@ -205,12 +227,17 @@ function OverlayControls({ channel }: { channel: Channel }) {
     'bottom-left': t`Bottom left`,
     'bottom-right': t`Bottom right`,
   };
-  const title = value.title ?? ChannelTitleSchema.parse({
-    fontSize: Math.min(200, Math.max(12, Math.round((profile.data?.heightPx ?? 1080) / 30))),
-    opacity: value.opacity,
-    horizontalMargin: Math.round((profile.data?.widthPx ?? 1920) * 0.08),
-    verticalMargin: Math.round((profile.data?.heightPx ?? 1080) * 0.03),
-  });
+  const title =
+    value.title ??
+    ChannelTitleSchema.parse({
+      fontSize: Math.min(
+        200,
+        Math.max(12, Math.round((profile.data?.heightPx ?? 1080) / 30)),
+      ),
+      opacity: value.opacity,
+      horizontalMargin: Math.round((profile.data?.widthPx ?? 1920) * 0.08),
+      verticalMargin: Math.round((profile.data?.heightPx ?? 1080) * 0.03),
+    });
   const updateTitle = (change: Partial<ChannelTitle>) =>
     setValue({ ...value, title: { ...title, ...change } });
   const busy = query.isPending || save.isPending;
@@ -376,7 +403,10 @@ function OverlayControls({ channel }: { channel: Channel }) {
           </Typography>
           <TextField
             fullWidth
-            label={label('النص المعروض بدل الاسم التلقائي', 'Custom title text')}
+            label={label(
+              'النص المعروض بدل الاسم التلقائي',
+              'Custom title text',
+            )}
             value={title.text}
             disabled={busy}
             helperText={label(
@@ -387,15 +417,20 @@ function OverlayControls({ channel }: { channel: Channel }) {
             slotProps={{ htmlInput: { maxLength: 120 } }}
           />
           <TextField
-            select fullWidth
+            select
+            fullWidth
             label={label('مكان اسم الفيلم', 'Title position')}
             value={title.position}
             disabled={busy}
-            onChange={(e) => updateTitle({
-              position: ChannelTitleSchema.shape.position.parse(e.target.value),
-            })}
+            onChange={(e) =>
+              updateTitle({
+                position: ChannelTitleSchema.shape.position.parse(
+                  e.target.value,
+                ),
+              })
+            }
           >
-            {([
+            {[
               ['top-left', 'أعلى اليسار', 'Top left'],
               ['top-center', 'أعلى المنتصف', 'Top center'],
               ['top-right', 'أعلى اليمين', 'Top right'],
@@ -405,72 +440,114 @@ function OverlayControls({ channel }: { channel: Channel }) {
               ['bottom-left', 'أسفل اليسار', 'Bottom left'],
               ['bottom-center', 'أسفل المنتصف', 'Bottom center'],
               ['bottom-right', 'أسفل اليمين', 'Bottom right'],
-            ]).map(([position, arabic, english]) => (
+            ].map(([position, arabic, english]) => (
               <MenuItem key={position} value={position}>
                 {ar ? arabic : english}
               </MenuItem>
             ))}
           </TextField>
           <TextField
-            select fullWidth
+            select
+            fullWidth
             label={label('نوع الخط', 'Title font')}
             value={title.fontFamily}
             disabled={busy}
-            helperText={label('يجب توفر الخط على جهاز البث؛ قد يختلف خط المعاينة إذا لم يتوفر.', 'The font must be installed on the streaming server; preview fallback may differ.')}
-            onChange={(e) => updateTitle({
-              fontFamily: ChannelTitleSchema.shape.fontFamily.parse(e.target.value),
-            })}
+            helperText={label(
+              'يجب توفر الخط على جهاز البث؛ قد يختلف خط المعاينة إذا لم يتوفر.',
+              'The font must be installed on the streaming server; preview fallback may differ.',
+            )}
+            onChange={(e) =>
+              updateTitle({
+                fontFamily: ChannelTitleSchema.shape.fontFamily.parse(
+                  e.target.value,
+                ),
+              })
+            }
           >
-            {ChannelTitleSchema.shape.fontFamily.options.map((font) => (
-              <MenuItem key={font} value={font}>{font}</MenuItem>
+            {ChannelTitleSchema.shape.fontFamily.unwrap().options.map((font) => (
+              <MenuItem key={font} value={font}>
+                {font}
+              </MenuItem>
             ))}
           </TextField>
           <TextField
-            fullWidth type="number"
+            fullWidth
+            type="number"
             label={label('حجم خط الاسم بالبكسل', 'Title font size')}
-            value={title.fontSize} disabled={busy}
+            value={title.fontSize}
+            disabled={busy}
             onChange={(e) => updateTitle({ fontSize: Number(e.target.value) })}
             slotProps={{ htmlInput: { min: 12, max: 200 } }}
           />
           <TextField
-            fullWidth type="color"
+            fullWidth
+            type="color"
             label={label('لون اسم الفيلم', 'Title color')}
-            value={title.color} disabled={busy}
+            value={title.color}
+            disabled={busy}
             onChange={(e) => updateTitle({ color: e.target.value })}
             slotProps={{ inputLabel: { shrink: true } }}
           />
           <TextField
-            fullWidth type="number"
-            label={label('الهامش الأفقي للاسم بالبكسل', 'Title horizontal margin')}
-            value={title.horizontalMargin} disabled={busy}
-            onChange={(e) => updateTitle({ horizontalMargin: Number(e.target.value) })}
+            fullWidth
+            type="number"
+            label={label(
+              'الهامش الأفقي للاسم بالبكسل',
+              'Title horizontal margin',
+            )}
+            value={title.horizontalMargin}
+            disabled={busy}
+            onChange={(e) =>
+              updateTitle({ horizontalMargin: Number(e.target.value) })
+            }
             slotProps={{ htmlInput: { min: 0, max: 500 } }}
           />
           <TextField
-            fullWidth type="number"
-            label={label('الهامش الرأسي للاسم بالبكسل', 'Title vertical margin')}
-            value={title.verticalMargin} disabled={busy}
-            onChange={(e) => updateTitle({ verticalMargin: Number(e.target.value) })}
+            fullWidth
+            type="number"
+            label={label(
+              'الهامش الرأسي للاسم بالبكسل',
+              'Title vertical margin',
+            )}
+            value={title.verticalMargin}
+            disabled={busy}
+            onChange={(e) =>
+              updateTitle({ verticalMargin: Number(e.target.value) })
+            }
             slotProps={{ htmlInput: { min: 0, max: 500 } }}
           />
           <TextField
-            fullWidth type="number"
-            label={label('وضوح اسم الفيلم بالنسبة المئوية', 'Title opacity (%)')}
-            value={Math.round(title.opacity * 100)} disabled={busy}
-            onChange={(e) => updateTitle({ opacity: Number(e.target.value) / 100 })}
+            fullWidth
+            type="number"
+            label={label(
+              'وضوح اسم الفيلم بالنسبة المئوية',
+              'Title opacity (%)',
+            )}
+            value={Math.round(title.opacity * 100)}
+            disabled={busy}
+            onChange={(e) =>
+              updateTitle({ opacity: Number(e.target.value) / 100 })
+            }
             slotProps={{ htmlInput: { min: 0, max: 100 } }}
           />
           <TextField
-            fullWidth type="number"
+            fullWidth
+            type="number"
             label={label('سُمك حدود الخط', 'Title outline width')}
-            value={title.outline} disabled={busy}
+            value={title.outline}
+            disabled={busy}
             onChange={(e) => updateTitle({ outline: Number(e.target.value) })}
             slotProps={{ htmlInput: { min: 0, max: 10 } }}
           />
           <FormControlLabel
             label={label('خط عريض', 'Bold title')}
-            control={<Switch checked={title.bold} disabled={busy}
-              onChange={(_, bold) => updateTitle({ bold })} />}
+            control={
+              <Switch
+                checked={title.bold}
+                disabled={busy}
+                onChange={(_, bold) => updateTitle({ bold })}
+              />
+            }
           />
         </Stack>
       )}

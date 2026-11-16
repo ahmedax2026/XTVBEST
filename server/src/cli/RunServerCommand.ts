@@ -6,7 +6,9 @@ import z from 'zod';
 import { App } from '../App.ts';
 import { DBAccess } from '../db/DBAccess.ts';
 import { type ISettingsDB } from '../db/interfaces/ISettingsDB.ts';
-import { setServerOptions } from '../globals.ts';
+import { globalOptions, setServerOptions } from '../globals.ts';
+import { ensureVideoTools } from '../services/desktop/videoTools.ts';
+import { chooseDesktopPort, desktopReady, desktopStartupEnabled } from '../services/desktop/DesktopStartup.ts';
 import { KEYS } from '../types/inject.ts';
 import {
   getBooleanEnvVar,
@@ -28,12 +30,12 @@ export type ServerArgsType = GlobalArgsType & {
 
 export const RunServerCommand: CommandModule<GlobalArgsType, ServerArgsType> = {
   command: ['server', '$0'],
-  describe: 'Run the Tunarr server',
+  describe: 'تشغيل خادم XBEST',
   builder: {
     port: {
       alias: 'p',
       type: 'number',
-      desc: 'Override the Tunarr server listen port',
+      desc: 'تحديد بورت خادم XBEST',
     },
     printRoutes: {
       type: 'boolean',
@@ -58,14 +60,29 @@ export const RunServerCommand: CommandModule<GlobalArgsType, ServerArgsType> = {
   handler: async (
     opts: ArgumentsCamelCase<MarkOptional<ServerArgsType, 'port'>>,
   ) => {
-    const portSetting = container
-      .get<ISettingsDB>(KEYS.SettingsDB)
-      .systemSettings().server.port;
-    const portToUse =
+    const settings = container.get<ISettingsDB>(KEYS.SettingsDB);
+    const desktop = desktopStartupEnabled();
+    const portSetting = settings.systemSettings().server.port;
+    if (desktop) {
+      const oldTools = settings.ffmpegSettings();
+      const tools = await ensureVideoTools(oldTools, globalOptions().databaseDirectory);
+      if (tools.ffmpegExecutablePath !== oldTools.ffmpegExecutablePath ||
+          tools.ffprobeExecutablePath !== oldTools.ffprobeExecutablePath) {
+        await settings.updateFfmpegSettings({ ...oldTools, ...tools });
+      }
+    }
+    let portToUse =
       getNumericEnvVar(TUNARR_ENV_VARS.SERVER_PORT_ENV_VAR) ??
       opts.port ??
       portSetting;
-    // port precedence - env var -> argument -> settings
+    if (desktop && opts.port === undefined &&
+        getNumericEnvVar(TUNARR_ENV_VARS.SERVER_PORT_ENV_VAR) === null) {
+      portToUse = await chooseDesktopPort(
+        portToUse,
+        getEnvVar(TUNARR_ENV_VARS.BIND_ADDR_ENV_VAR) ?? '0.0.0.0',
+      );
+    }
+    // Explicit CLI/environment ports are respected; automatic startup can choose a free port.
     setServerOptions({ ...opts, port: portToUse });
 
     process.on('uncaughtException', (err) => {
@@ -81,5 +98,11 @@ export const RunServerCommand: CommandModule<GlobalArgsType, ServerArgsType> = {
     // Hard fail without database connection.
     assert(!!container.get<DBAccess>(DBAccess).db);
     await container.get(App).start();
+    if (desktop) {
+      await settings.updateBaseSettings('system', {
+        server: { ...settings.systemSettings().server, port: portToUse },
+      });
+      desktopReady(portToUse);
+    }
   },
 };

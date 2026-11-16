@@ -30,11 +30,11 @@ jobs:
           corepack enable
       - run: pnpm install --frozen-lockfile
       - name: Format changed XBEST source for verification
-        run: pnpm exec prettier --write types/src/ChannelOverlay.ts server/src/services/overlay/countdownAss.ts web/src/components/channels/ChannelOverlayDialog.tsx server/src/services/overlay/countdownAss.test.ts web/src/components/channels/ChannelOverlayDialog.test.tsx web/src/locales/catalogs.test.ts server/src/index.ts
+        run: pnpm exec prettier --write server/src/services/desktop/videoTools.ts server/src/services/desktop/videoTools.test.ts server/src/services/desktop/DesktopStartup.ts server/src/services/desktop/DesktopStartup.test.ts types/src/ChannelOverlay.ts server/src/services/overlay/countdownAss.ts web/src/components/channels/ChannelOverlayDialog.tsx server/src/services/overlay/countdownAss.test.ts web/src/components/channels/ChannelOverlayDialog.test.tsx web/src/locales/catalogs.test.ts server/src/index.ts server/src/cli/RunServerCommand.ts
       - name: Record formatted source for the author
         if: runner.os == 'Linux'
         run: |
-          node --input-type=module -e 'import fs from "node:fs"; for (const p of ["types/src/ChannelOverlay.ts","server/src/services/overlay/countdownAss.ts","web/src/components/channels/ChannelOverlayDialog.tsx","server/src/services/overlay/countdownAss.test.ts","web/src/components/channels/ChannelOverlayDialog.test.tsx","web/src/locales/catalogs.test.ts","server/src/index.ts"]) console.log("XBEST_FORMATTED " + JSON.stringify({path:p,content:fs.readFileSync(p,"utf8")}));'
+          node --input-type=module -e 'import fs from "node:fs"; for (const p of ["server/src/services/desktop/videoTools.ts","server/src/services/desktop/videoTools.test.ts","server/src/services/desktop/DesktopStartup.ts","server/src/services/desktop/DesktopStartup.test.ts","types/src/ChannelOverlay.ts","server/src/services/overlay/countdownAss.ts","web/src/components/channels/ChannelOverlayDialog.tsx","server/src/services/overlay/countdownAss.test.ts","web/src/components/channels/ChannelOverlayDialog.test.tsx","web/src/locales/catalogs.test.ts","server/src/index.ts","server/src/cli/RunServerCommand.ts"]) console.log("XBEST_FORMATTED " + JSON.stringify({path:p,content:fs.readFileSync(p,"utf8")}));'
       - name: Build shared packages
         run: |
           pnpm --filter @tunarr/types build
@@ -46,7 +46,7 @@ jobs:
       - name: Test hardware selection, persistence, pipeline and authentication
         env:
           XBEST_CAPTURE_LOGIN: '1'
-        run: pnpm --filter @tunarr/server test src/ffmpeg/AutoHardwareAcceleration.test.ts src/db/TranscodeConfigDB.test.ts src/ffmpeg/FfmpegStreamFactory.test.ts src/stream/etv/EtvNextSession.test.ts src/util/basicAuth.test.ts src/services/access/AccessControl.test.ts src/services/access/StudioWebLogin.test.ts scripts/releaseArchive.test.ts scripts/customerAssets.test.ts scripts/releaseChecksums.test.ts src/services/archive/ArchiveStore.test.ts src/services/archive/ChannelArchiveService.test.ts src/services/overlay/countdownAss.test.ts src/services/overlay/ChannelOverlayService.test.ts src/ffmpeg/FfmpegTrancodeSession.test.ts src/ffmpeg/builder/pipeline/ProgramOverlayPipeline.test.ts
+        run: pnpm --filter @tunarr/server test src/services/desktop/videoTools.test.ts src/services/desktop/DesktopStartup.test.ts src/ffmpeg/AutoHardwareAcceleration.test.ts src/db/TranscodeConfigDB.test.ts src/ffmpeg/FfmpegStreamFactory.test.ts src/stream/etv/EtvNextSession.test.ts src/util/basicAuth.test.ts src/services/access/AccessControl.test.ts src/services/access/StudioWebLogin.test.ts scripts/releaseArchive.test.ts scripts/customerAssets.test.ts scripts/releaseChecksums.test.ts src/services/archive/ArchiveStore.test.ts src/services/archive/ChannelArchiveService.test.ts src/services/overlay/countdownAss.test.ts src/services/overlay/ChannelOverlayService.test.ts src/ffmpeg/FfmpegTrancodeSession.test.ts src/ffmpeg/builder/pipeline/ProgramOverlayPipeline.test.ts
       - name: Typecheck owner access and packaging tests
         run: pnpm --filter @tunarr/server exec tsc --noEmit -p tsconfig.access-test.json
       - name: Install FFmpeg for archive acceptance tests

@@ -104,12 +104,14 @@ export function overlayTitleGeometry(
   width: number,
   height: number,
 ) {
-  const style = ChannelTitleSchema.parse(config.title ?? {
-    fontSize: Math.min(200, Math.max(12, Math.round(height / 30))),
-    opacity: config.opacity,
-    horizontalMargin: Math.min(500, Math.round(width * 0.08)),
-    verticalMargin: Math.min(500, Math.round(height * 0.03)),
-  });
+  const style = ChannelTitleSchema.parse(
+    config.title ?? {
+      fontSize: Math.min(200, Math.max(12, Math.round(height / 30))),
+      opacity: config.opacity,
+      horizontalMargin: Math.min(500, Math.round(width * 0.08)),
+      verticalMargin: Math.min(500, Math.round(height * 0.03)),
+    },
+  );
   const [row, column] = style.position.split('-');
   const marginX = Math.min(style.horizontalMargin, Math.max(0, width / 2));
   const marginY = Math.min(style.verticalMargin, Math.max(0, height / 2));
@@ -121,8 +123,18 @@ export function overlayTitleGeometry(
     alignment,
     marginX,
     marginY,
-    x: column === 'left' ? marginX : column === 'right' ? width - marginX : width / 2,
-    y: row === 'top' ? marginY : row === 'middle' ? height / 2 : height - marginY,
+    x:
+      column === 'left'
+        ? marginX
+        : column === 'right'
+          ? width - marginX
+          : width / 2,
+    y:
+      row === 'top'
+        ? marginY
+        : row === 'middle'
+          ? height / 2
+          : height - marginY,
   };
 }
 export function buildCountdownAss(

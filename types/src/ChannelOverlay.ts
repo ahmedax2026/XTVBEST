@@ -14,13 +14,22 @@ export const ChannelTitleSchema = z.object({
     .enum(['Arial', 'Tahoma', 'Verdana', 'DejaVu Sans', 'Noto Sans Arabic'])
     .default('Arial'),
   fontSize: z.number().int().min(12).max(200).default(36),
-  color: z.string().regex(/^#[0-9a-fA-F]{6}$/).default('#ffffff'),
+  color: z
+    .string()
+    .regex(/^#[0-9a-fA-F]{6}$/)
+    .default('#ffffff'),
   opacity: z.number().min(0).max(1).default(0.9),
   position: z
     .enum([
-      'top-left', 'top-center', 'top-right',
-      'middle-left', 'middle-center', 'middle-right',
-      'bottom-left', 'bottom-center', 'bottom-right',
+      'top-left',
+      'top-center',
+      'top-right',
+      'middle-left',
+      'middle-center',
+      'middle-right',
+      'bottom-left',
+      'bottom-center',
+      'bottom-right',
     ])
     .default('bottom-center'),
   horizontalMargin: z.number().int().min(0).max(500).default(30),
