@@ -162,9 +162,8 @@ export function XBestShell({
                     ? (t) => alpha(t.palette.primary.main, 0.14)
                     : 'transparent',
                   borderInlineStart: '3px solid',
-                  borderInlineStartColor: current
-                    ? 'primary.main'
-                    : 'transparent',
+                  borderInlineStartColor: (theme) =>
+                    current ? theme.palette.primary.main : 'transparent',
                   '&:hover': { bgcolor: 'action.hover' },
                 }}
               >
@@ -238,6 +237,33 @@ export function XBestShell({
           );
         })}
       </Box>
+      <Stack
+        direction="row"
+        gap={1}
+        sx={{ display: { xs: 'flex', sm: 'none' }, px: 2.5, pt: 2 }}
+      >
+        <Button
+          size="small"
+          disabled={localeBusy}
+          onClick={async () => {
+            setLocaleBusy(true);
+            try {
+              await setUiLocale(ar ? 'en' : 'ar');
+            } finally {
+              setLocaleBusy(false);
+            }
+          }}
+          sx={{ flex: 1, border: '1px solid', borderColor: 'divider' }}
+        >
+          {ar ? 'English' : 'العربية'}
+        </Button>
+        <IconButton
+          aria-label={text('تغيير المظهر', 'Toggle appearance')}
+          onClick={onToggleColorScheme}
+        >
+          {isDark ? <LightModeOutlined /> : <DarkModeOutlined />}
+        </IconButton>
+      </Stack>
       <Box sx={{ p: 2, mt: 4 }}>
         <Box
           sx={{
@@ -313,8 +339,18 @@ export function XBestShell({
       <Drawer
         open={open}
         onClose={() => setOpen(false)}
-        anchor={ar ? 'right' : 'left'}
-        slotProps={{ paper: { sx: { width: 280 }, dir: ar ? 'rtl' : 'ltr' } }}
+        anchor="left"
+        slotProps={{
+          paper: {
+            sx: {
+              width: 280,
+              left: 'auto',
+              right: 'auto',
+              insetInlineStart: 0,
+            },
+            dir: ar ? 'rtl' : 'ltr',
+          },
+        }}
       >
         <IconButton
           aria-label={text('إغلاق القائمة', 'Close navigation')}
@@ -413,7 +449,11 @@ export function XBestShell({
               }
             }}
             aria-label={text('Switch to English', 'التبديل للعربية')}
-            sx={{ minWidth: 36, fontSize: 11 }}
+            sx={{
+              minWidth: 36,
+              fontSize: 11,
+              display: { xs: 'none', sm: 'inline-flex' },
+            }}
           >
             {ar ? 'EN' : 'عربي'}
           </Button>
@@ -439,6 +479,7 @@ export function XBestShell({
             aria-label={text('تغيير المظهر', 'Toggle appearance')}
             onClick={onToggleColorScheme}
             size="small"
+            sx={{ display: { xs: 'none', sm: 'inline-flex' } }}
           >
             {isDark ? (
               <LightModeOutlined fontSize="small" />

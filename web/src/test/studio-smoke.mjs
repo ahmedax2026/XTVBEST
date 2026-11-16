@@ -119,9 +119,17 @@ try {
       })
       .click();
     await page.getByRole('navigation').waitFor();
+    await page.waitForFunction((ar) => {
+      const panel = document.querySelector('.MuiDrawer-paper');
+      if (!panel) return false;
+      const rect = panel.getBoundingClientRect();
+      return ar
+        ? Math.abs(rect.right - innerWidth) < 1
+        : Math.abs(rect.left) < 1;
+    }, lang === 'ar');
     await page.screenshot({
       path: path.join(output, `studio-${lang}-navigation.png`),
-      fullPage: true,
+      fullPage: false,
     });
     await page
       .getByRole('button', {

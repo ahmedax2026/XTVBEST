@@ -28,7 +28,7 @@ export const PageHeader = ({
         border: '1px solid',
         borderColor: 'divider',
         borderInlineStart: '3px solid',
-        borderInlineStartColor: 'primary.main',
+        borderInlineStartColor: (theme) => theme.palette.primary.main,
         borderRadius: '14px',
         bgcolor: 'background.paper',
       }}

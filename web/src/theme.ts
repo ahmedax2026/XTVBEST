@@ -150,7 +150,9 @@ export const createTunarrTheme = (density: Density = 'comfortable') => {
       MuiButton: {
         defaultProps: { disableElevation: true, size: small },
         styleOverrides: {
-          root: { borderRadius: 10, paddingInline: 16 },
+          root: { borderRadius: 10, paddingInline: 16, columnGap: 8 },
+          startIcon: { margin: 0 },
+          endIcon: { margin: 0 },
           sizeSmall: { minHeight: s.controlHeightSmall, paddingInline: 12 },
           sizeMedium: { minHeight: s.controlHeight },
           outlined: ({ theme }) => ({

@@ -312,8 +312,10 @@ function ChecklistStep({
         p: 3,
         borderRadius: '14px',
         borderInlineStart: '3px solid',
-        borderInlineStartColor:
-          status === 'done' ? 'success.main' : 'primary.main',
+        borderInlineStartColor: (theme) =>
+          status === 'done'
+            ? theme.palette.success.main
+            : theme.palette.primary.main,
       }}
     >
       <Stack direction="row" spacing={2}>
