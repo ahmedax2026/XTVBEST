@@ -15,6 +15,7 @@ import type { ProgramType } from '../schema/Program.ts';
 type BaseStreamLineupItem = {
   streamDuration: number;
   startOffset?: number;
+  scheduleElapsedMs?: number;
   programBeginMs: number;
   duration: number;
 };

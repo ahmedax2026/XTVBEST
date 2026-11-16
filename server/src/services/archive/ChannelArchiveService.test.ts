@@ -1,3 +1,5 @@
+import type { ChannelOverlay } from '@tunarr/types';
+import { DefaultChannelOverlay } from '@tunarr/types';
 import { createWriteStream } from 'node:fs';
 import { pipeline } from 'node:stream/promises';
 import { MpegTsOutputFormat } from '../../ffmpeg/builder/constants.ts';
@@ -68,7 +70,10 @@ let source: string;
 let slow = false;
 let invalid = false;
 type Deps = ConstructorParameters<typeof ChannelArchiveService>;
-async function fixture(useProduction = false) {
+async function fixture(
+  useProduction = false,
+  overlay: ChannelOverlay = DefaultChannelOverlay,
+) {
   source = path.join(root, 'source.mkv');
   await execFileAsync('ffmpeg', [
     '-v',
@@ -236,6 +241,7 @@ async function fixture(useProduction = false) {
     } as unknown as Deps[5],
     { resolve: vi.fn(async () => undefined) } as unknown as Deps[6],
     (useProduction ? productionFactory : factory) as unknown as Deps[7],
+    { get: async () => overlay } as unknown as Deps[8],
   );
   service = instance;
   const item = {
@@ -257,6 +263,18 @@ test('activation uses the next fixed-lineup boundary, including cycle wrap and a
   expect(nextArchiveBoundary(1000, [2000, 3000], 6000)).toBe(8000);
   expect(nextArchiveBoundary(1000, [2000], 999)).toBe(1000);
   expect(() => nextArchiveBoundary(0, [], 0)).toThrow();
+});
+
+test('overlay changes invalidate saved renditions while disabled settings preserve existing archives', () => {
+  expect(archiveChannelKey(channel, config, DefaultChannelOverlay)).toBe(
+    archiveChannelKey(channel, config),
+  );
+  expect(
+    archiveChannelKey(channel, config, {
+      ...DefaultChannelOverlay,
+      enabled: true,
+    }),
+  ).not.toBe(archiveChannelKey(channel, config));
 });
 
 test('archive identity follows output settings but ignores worker counts', () => {
@@ -342,19 +360,33 @@ describe.skipIf(process.env.XBEST_FFMPEG_TEST !== '1')(
     }, 20000);
     test('prepares through the production FFmpeg stream factory and software pipeline', async () => {
       const processStart = vi.spyOn(FfmpegProcess.prototype, 'start');
-      const { instance, item, original, productionFactory } =
-        await fixture(true);
+      const { instance, item, original, productionFactory } = await fixture(
+        true,
+        {
+          ...DefaultChannelOverlay,
+          enabled: true,
+          size: 96,
+          horizontalMargin: 8,
+          verticalMargin: 8,
+          showTitle: true,
+        },
+      );
       await instance.prepare(id, options);
       await vi.waitFor(
         async () => expect((await instance.status(id)).state).toBe('ready'),
         { timeout: 15000 },
       );
-      expect(processStart.mock.contexts[0].args).not.toContain('-readrate');
+      const preparationProcess = processStart.mock.contexts.find(
+        (context): context is FfmpegProcess => context instanceof FfmpegProcess,
+      );
+      if (!preparationProcess)
+        throw new Error('Preparation process was not started');
+      expect(preparationProcess.args).not.toContain('-readrate');
       const saved = await new ArchiveStore(
         path.join(root, 'channel-archives'),
       ).read(id);
       expect(
-        saved?.entries[0].probe.streams.some((s) => s.codec_name === 'h264'),
+        saved?.entries[0]?.probe.streams.some((s) => s.codec_name === 'h264'),
       ).toBe(true);
       await instance.setMode(id, 'archive');
       const activated = await new ArchiveStore(
@@ -401,6 +433,41 @@ describe.skipIf(process.env.XBEST_FFMPEG_TEST !== '1')(
       const playback = await probeArchive('ffprobe', playbackFile);
       expect(playback.format.duration).toBeGreaterThan(1);
       expect(playback.format.duration).toBeLessThan(3.6);
+    }, 20000);
+
+    test('refuses clipped saved countdowns and invalidates an archive after overlay edits', async () => {
+      const overlay = { ...DefaultChannelOverlay, enabled: true };
+      const { instance, channels, item, original } = await fixture(
+        false,
+        overlay,
+      );
+      channels.loadLineup.mockResolvedValueOnce({
+        items: [{ type: 'content', id: programId, durationMs: 2000 }],
+      });
+      await expect(instance.prepare(id, options)).rejects.toThrow(
+        'full-length',
+      );
+      await instance.prepare(id, options);
+      await vi.waitFor(
+        async () => expect((await instance.status(id)).state).toBe('ready'),
+        { timeout: 15000 },
+      );
+      await instance.setMode(id, 'archive');
+      const manifest = await new ArchiveStore(
+        path.join(root, 'channel-archives'),
+      ).read(id);
+      if (manifest?.activeFrom === undefined)
+        throw new Error('No activation time');
+      overlay.style = 'pill';
+      expect((await instance.status(id)).state).toBe('failed');
+      expect(
+        await instance.playback(
+          channel,
+          config,
+          { ...item, programBeginMs: manifest.activeFrom },
+          original,
+        ),
+      ).toBeUndefined();
     }, 20000);
 
     test('cancels preparation, rejects concurrent work and preserves original media', async () => {

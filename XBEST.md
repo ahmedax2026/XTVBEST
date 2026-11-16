@@ -16,7 +16,7 @@ Protected startup scripts for Windows and Linux prompt for credentials; server-s
 
 The session window polls the existing server API every five seconds while open, shows session state, connection counts and client activity, and stops sessions with server confirmation and error feedback. It is available from every channel menu, including idle channels. Counts represent connections, not unique viewers. Reconnecting players may restart a stopped session; persistent offline/standby remains pending.
 
-Copied HLS links now use channel UUIDs and survive renaming/renumbering. The summary card counts down in HH:MM:SS every second and refreshes after a program ends. Failed end-of-program refreshes retry every minute and resume normal updates after recovery. The now-playing labels and detail controls are translated into Arabic. This countdown is in the administration panel; the burned-in countdown and its visual styles remain pending.
+Copied HLS links now use channel UUIDs and survive renaming/renumbering. The summary card counts down in HH:MM:SS every second and refreshes after a program ends. Failed end-of-program refreshes retry every minute and resume normal updates after recovery. The now-playing labels and detail controls are translated into Arabic. The panel countdown is separate from the configurable video countdown below.
 
 ## Saved channels (local fixed playlists)
 
@@ -47,11 +47,36 @@ schedules, remote-only media and the experimental ErsatzTV engine are rejected.
 One profile/rendition is prepared per channel; adaptive multi-quality archives,
 configurable concurrent job counts and an archive cleanup UI remain pending.
 
+## Countdown inside the video
+
+The channel menu now has **Video countdown / عداد داخل البث**. It is disabled by
+default. Enable it to burn a scheduled HH:MM:SS countdown into transcoded output;
+choose digital, pill, square, progress bar, circle or ring. Configure corner,
+size and margins in output pixels, color and opacity. The preview uses the
+channel profile's resolution. The optional current title supports Arabic through
+FFmpeg/libass shaping. Fillers are hidden by default.
+
+Time comes from the scheduled program's duration and elapsed position, including
+seeking and HLS process restarts. Source clip offsets are distinct from scheduled
+elapsed time. Graphics are added after scale/pad, subtitles and the logo, before
+final encoder pixel-format conversion. Hardware frames are downloaded when
+necessary for text rendering; the selected encoder is retained. This still uses
+CPU for graphics even with GPU encoding. Actual GPU-device verification remains
+required. Direct-copy and ErsatzTV output are not supported; enabling settings is
+rejected for incompatible channel engines or missing subtitle-filter support.
+
+Saved channels bake the graphic once and reuse it without re-encoding. Changing
+an enabled overlay or a burned title invalidates that prepared output and falls
+back to live. Saved countdowns currently require full-length standard programs,
+without source clip offsets or tagged filler entries. Unmodified older archives
+keep their identity while the new graphic is disabled. Temporary ASS scripts are
+removed after encoder exit or cancellation, including cancellation before start.
+
 ## Remaining acceptance criteria
 
 - Arabic locale and RTL layout; preserve English fallback.
-- Per-channel countdown based on scheduled program duration and playback offset, HH:MM:SS; circular, ring, square, pill, bar and digital styles; adjustable placement, margins, size, opacity and color; hide on fillers.
-- Burn current and next titles into actual output, including Arabic shaping; next title on five-second bumper.
+- Verify video countdown playback on actual GPU hardware and an external IPTV panel; extend saved countdowns to edited excerpts and filler variants.
+- Add the next-title graphic and a real five-second inter-program bumper; the optional current-title graphic is implemented.
 - Live, direct, hybrid, archived and standby modes; explicit preparation progress and limits on concurrent jobs, threads and storage.
 - Extend the local saved-channel implementation to remote sources, random fillers and additional playback engines; verify complete HLS playback on Windows and actual GPU hardware.
 - Preserve schedule and permit switching back to live. Provide start, stop, skip, restart and scheduled content replacement.

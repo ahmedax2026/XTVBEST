@@ -28,6 +28,7 @@ export const ArchiveProbeSchema = z.object({
 export type ArchiveProbe = z.infer<typeof ArchiveProbeSchema>;
 const EntrySchema = z.object({
   programId: z.uuid(),
+  title: z.string().optional(),
   key: z.string().regex(/^[a-f0-9]{64}$/),
   sourcePath: z.string(),
   sourceStamp: z.string(),

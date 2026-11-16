@@ -19,6 +19,7 @@ const DefaultFrameState: Omit<
 > = {
   realtime: false,
   offlinePreparation: false,
+  programOverlayFile: null,
   videoFormat: 'h264',
   videoPreset: null,
   videoProfile: null,
@@ -42,6 +43,7 @@ export type FrameStateOpts = MarkOptional<
 
 export class FrameState {
   offlinePreparation: boolean = false;
+  programOverlayFile: string | null = null;
   scaledSize!: FrameSize;
   paddedSize!: FrameSize;
   croppedSize?: FrameSize;

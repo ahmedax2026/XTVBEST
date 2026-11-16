@@ -1029,6 +1029,14 @@ msgstr "Block"
 msgid "Block Shuffle"
 msgstr "Block Shuffle"
 
+#: src/components/channels/ChannelOverlayDialog.tsx
+msgid "Bottom left"
+msgstr "أسفل اليسار"
+
+#: src/components/channels/ChannelOverlayDialog.tsx
+msgid "Bottom right"
+msgstr "أسفل اليمين"
+
 #: src/components/slot_scheduler/MidRollConfigPanel.tsx
 msgid "Break Duration"
 msgstr "Break Duration"
@@ -1225,6 +1233,10 @@ msgstr "Channel name is required"
 msgid "Channel Number"
 msgstr "Channel Number"
 
+#: src/components/channels/ChannelOverlayDialog.tsx
+msgid "Channel preview"
+msgstr "معاينة القناة"
+
 #: src/components/channel_config/ChannelEditActions.tsx
 msgid "Channel settings saved!"
 msgstr "Channel settings saved!"
@@ -1294,6 +1306,10 @@ msgstr "Chooses audio and subtitle streams for programs scheduled from this play
 msgid "Chooses audio and subtitle streams when programs from this list play as filler."
 msgstr "Chooses audio and subtitle streams when programs from this list play as filler."
 
+#: src/components/channels/ChannelOverlayDialog.tsx
+msgid "Circle"
+msgstr "دائري"
+
 #: src/components/channel_config/SelectedProgrammingActions.tsx
 #: src/components/search/SearchFieldRestrictMenu.tsx
 #: src/components/ui/patterns/CollectionView/SelectionBar.tsx
@@ -1328,6 +1344,7 @@ msgstr "close"
 
 #: src/components/channel_config/SelectedProgrammingList.tsx
 #: src/components/channels/ChannelArchiveDialog.tsx
+#: src/components/channels/ChannelOverlayDialog.tsx
 #: src/components/channels/ChannelSessionsDialog.tsx
 #: src/components/settings/media_source/EditMediaSourceLibrariesDialog.tsx
 msgid "Close"
@@ -1549,6 +1566,34 @@ msgstr "Could not parse this filter expression. Check the <0>documentation</0> f
 msgid "Could not save setup progress. {message}"
 msgstr "Could not save setup progress. {message}"
 
+#: src/components/channels/ChannelOverlayDialog.tsx
+msgid "Countdown color"
+msgstr "لون العداد"
+
+#: src/components/channels/ChannelOverlayDialog.tsx
+msgid "Countdown opacity"
+msgstr "شفافية العداد"
+
+#: src/components/channels/ChannelOverlayDialog.tsx
+msgid "Countdown position"
+msgstr "مكان العداد"
+
+#: src/components/channels/ChannelOverlayDialog.tsx
+msgid "Countdown preview"
+msgstr "معاينة العداد"
+
+#: src/components/channels/ChannelOverlayDialog.tsx
+msgid "Countdown settings saved."
+msgstr "تم حفظ إعدادات العداد."
+
+#: src/components/channels/ChannelOverlayDialog.tsx
+msgid "Countdown size (pixels)"
+msgstr "حجم العداد بالبكسل"
+
+#: src/components/channels/ChannelOverlayDialog.tsx
+msgid "Countdown style"
+msgstr "شكل العداد"
+
 #: src/components/channel_config/WatermarkTimingFields.tsx
 msgid "Counted from the start of each program. If a stream starts partway through a program, it counts from that point. Set to 0 for no limit."
 msgstr "Counted from the start of each program. If a stream starts partway through a program, it counts from that point. Set to 0 for no limit."
@@ -1589,6 +1634,10 @@ msgstr "Create Rerun Block"
 #: src/components/smart_collections/CreateSmartCollectionDialog.tsx
 msgid "Creates a new collection"
 msgstr "Creates a new collection"
+
+#: src/components/channels/ChannelOverlayDialog.tsx
+msgid "Current movie title"
+msgstr "اسم الفيلم الحالي"
 
 #: src/components/guide/TvGuide.tsx
 msgid "Custom Program"
@@ -1861,6 +1910,10 @@ msgstr "التفاصيل"
 #: src/components/settings/media_source/JelllyfinServerEditDialog.tsx
 msgid "Did not receive an accessToken or userId from Jellyfin server."
 msgstr "Did not receive an accessToken or userId from Jellyfin server."
+
+#: src/components/channels/ChannelOverlayDialog.tsx
+msgid "Digital"
+msgstr "رقمي"
 
 #: src/components/profiles/StreamSelectionRuleEditor.tsx
 msgid "Disable"
@@ -2821,6 +2874,10 @@ msgstr "Help and links"
 msgid "Hide Advanced"
 msgstr "Hide Advanced"
 
+#: src/components/channels/ChannelOverlayDialog.tsx
+msgid "Hide during fillers"
+msgstr "إخفاء أثناء الفواصل"
+
 #: src/components/channel_config/WatermarkTimingFields.tsx
 msgid "Hide Watermark After (minutes)"
 msgstr "Hide Watermark After (minutes)"
@@ -2841,6 +2898,10 @@ msgstr "HLS Direct Output Format"
 #: src/components/Video.tsx
 msgid "HLS not supported in this browser!"
 msgstr "HLS not supported in this browser!"
+
+#: src/components/channels/ChannelOverlayDialog.tsx
+msgid "Horizontal margin (pixels)"
+msgstr "الهامش الأفقي بالبكسل"
 
 #: src/pages/channels/TimeSlotEditorPage.tsx
 msgid "How far past its boundary can a slot's content extend? 'One extra item' allows exactly one more program that crosses the boundary."
@@ -4018,6 +4079,10 @@ msgstr "Period"
 msgid "Pick specific programming to remove from the channel."
 msgstr "Pick specific programming to remove from the channel."
 
+#: src/components/channels/ChannelOverlayDialog.tsx
+msgid "Pill"
+msgstr "كبسولة"
+
 #: src/pages/system/TroubleshootPage.tsx
 msgid "Pipeline"
 msgstr "Pipeline"
@@ -4307,6 +4372,10 @@ msgstr ""
 #: src/components/slot_scheduler/SlotProgrammingTooLongWarningDetails.tsx
 msgid "Programs Too Long"
 msgstr "Programs Too Long"
+
+#: src/components/channels/ChannelOverlayDialog.tsx
+msgid "Progress bar"
+msgstr "شريط تقدّم"
 
 #: src/components/channel_config/EditChannelForm.tsx
 msgid "Properties"
@@ -4662,6 +4731,10 @@ msgstr "Review"
 msgid "Review Selections"
 msgstr "Review Selections"
 
+#: src/components/channels/ChannelOverlayDialog.tsx
+msgid "Ring"
+msgstr "حلقي"
+
 #: src/components/settings/general/LogRollForm.tsx
 msgid "Roll based on size"
 msgstr "Roll based on size"
@@ -4765,6 +4838,10 @@ msgstr "Save as new collection…"
 #: src/components/search/SearchInput.tsx
 msgid "Save as Smart Collection"
 msgstr "Save as Smart Collection"
+
+#: src/components/channels/ChannelOverlayDialog.tsx
+msgid "Save countdown settings"
+msgstr "حفظ إعدادات العداد"
 
 #: src/components/smart_collections/CreateSmartCollectionDialog.tsx
 msgid "Save Smart Collection"
@@ -5004,6 +5081,14 @@ msgstr "Show Advanced"
 msgid "Show all channels"
 msgstr "Show all channels"
 
+#: src/components/channels/ChannelOverlayDialog.tsx
+msgid "Show countdown in video"
+msgstr "إظهار العداد داخل الفيديو"
+
+#: src/components/channels/ChannelOverlayDialog.tsx
+msgid "Show current title in video"
+msgstr "إظهار اسم الفيلم داخل الفيديو"
+
 #: src/components/MediaSourceLibraryTable.tsx
 msgid "Show disabled libraries"
 msgstr "Show disabled libraries"
@@ -5228,6 +5313,10 @@ msgstr "المصادر"
 #: src/components/channel_config/ChannelProgrammingDeleteOptions.tsx
 msgid "Specials"
 msgstr "Specials"
+
+#: src/components/channels/ChannelOverlayDialog.tsx
+msgid "Square"
+msgstr "مربع"
 
 #: src/components/channels/ChannelSessionsDialog.tsx
 msgid "Stable HLS URL"
@@ -5540,6 +5629,10 @@ msgstr "تعذّر إكمال العملية. تأكد أن القائمة تح�
 #: src/components/programming_controls/AddRestrictHoursModal.tsx
 msgid "The channel's regular programming between the specified hours. Flex time will fill up the remaining hours."
 msgstr "The channel's regular programming between the specified hours. Flex time will fill up the remaining hours."
+
+#: src/components/channels/ChannelOverlayDialog.tsx
+msgid "The countdown appears inside the encoded video. Saved channels need preparation again after changing these settings. Only the built-in transcoded HLS and MPEG-TS engine is supported."
+msgstr "يظهر العداد داخل فيديو القناة. القنوات المحفوظة تحتاج إعادة التجهيز بعد تغيير الإعدادات. الميزة متاحة مع محرك التحويل المدمج HLS وMPEG-TS."
 
 #: src/components/channel_config/MediaItemGrid.tsx
 msgid "The End."
@@ -5874,6 +5967,14 @@ msgstr "Toggle visibility {label}"
 msgid "Tools"
 msgstr "Tools"
 
+#: src/components/channels/ChannelOverlayDialog.tsx
+msgid "Top left"
+msgstr "أعلى اليسار"
+
+#: src/components/channels/ChannelOverlayDialog.tsx
+msgid "Top right"
+msgstr "أعلى اليمين"
+
 #: src/components/channels/ChannelArchiveDialog.tsx
 msgid "Total archive storage limit (GiB)"
 msgstr "إجمالي حد تخزين القنوات المحفوظة (GiB)"
@@ -6044,9 +6145,17 @@ msgstr "Type"
 msgid "Unable to load archive status."
 msgstr "تعذّر تحميل حالة القناة المحفوظة."
 
+#: src/components/channels/ChannelOverlayDialog.tsx
+msgid "Unable to load countdown settings."
+msgstr "تعذّر تحميل إعدادات العداد."
+
 #: src/components/channels/ChannelSessionsDialog.tsx
 msgid "Unable to refresh sessions. Previously loaded values may be out of date."
 msgstr "تعذّر تحديث الجلسات. قد تكون البيانات المعروضة من آخر تحديث ناجح."
+
+#: src/components/channels/ChannelOverlayDialog.tsx
+msgid "Unable to save. Check the playback engine and FFmpeg subtitle-filter support."
+msgstr "تعذّر الحفظ. راجع محرك البث ودعم FFmpeg لعرض النصوص."
 
 #: src/components/channels/ChannelSessionsDialog.tsx
 msgid "Unable to stop sessions. Try again."
@@ -6170,6 +6279,10 @@ msgstr "Version unknown"
 #~ msgid "Version: unknown"
 #~ msgstr "Version: unknown"
 
+#: src/components/channels/ChannelOverlayDialog.tsx
+msgid "Vertical margin (pixels)"
+msgstr "الهامش الرأسي بالبكسل"
+
 #: src/pages/system/TroubleshootPage.tsx
 msgid "Video"
 msgstr "Video"
@@ -6181,6 +6294,15 @@ msgstr "معدل بت الفيديو"
 #: src/components/settings/ffmpeg/TranscodeConfigVideoSettingsForm.tsx
 msgid "Video Buffer Size"
 msgstr "Video Buffer Size"
+
+#: src/components/channels/ChannelOptionsMenu.tsx
+msgid "Video countdown"
+msgstr "عداد داخل البث"
+
+#. placeholder {0}: channel.name
+#: src/components/channels/ChannelOverlayDialog.tsx
+msgid "Video countdown: {0}"
+msgstr "عداد داخل البث: {0}"
 
 #: src/components/settings/ffmpeg/TranscodeConfigsTable.tsx
 #: src/components/settings/ffmpeg/TranscodeConfigVideoSettingsForm.tsx

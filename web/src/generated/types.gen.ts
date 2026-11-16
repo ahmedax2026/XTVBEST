@@ -7369,6 +7369,97 @@ export type PostApiChannelsByIdArchiveModeResponses = {
 
 export type PostApiChannelsByIdArchiveModeResponse = PostApiChannelsByIdArchiveModeResponses[keyof PostApiChannelsByIdArchiveModeResponses];
 
+export type GetApiChannelsByIdOverlayData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/channels/{id}/overlay';
+};
+
+export type GetApiChannelsByIdOverlayErrors = {
+    /**
+     * Default Response
+     */
+    409: {
+        error: string;
+    };
+};
+
+export type GetApiChannelsByIdOverlayError = GetApiChannelsByIdOverlayErrors[keyof GetApiChannelsByIdOverlayErrors];
+
+export type GetApiChannelsByIdOverlayResponses = {
+    /**
+     * Default Response
+     */
+    200: {
+        enabled: boolean;
+        style: 'digital' | 'pill' | 'square' | 'bar' | 'circle' | 'ring';
+        position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+        size: number;
+        horizontalMargin: number;
+        verticalMargin: number;
+        opacity: number;
+        color: string;
+        hideOnFillers: boolean;
+        showTitle: boolean;
+    };
+};
+
+export type GetApiChannelsByIdOverlayResponse = GetApiChannelsByIdOverlayResponses[keyof GetApiChannelsByIdOverlayResponses];
+
+export type PutApiChannelsByIdOverlayData = {
+    body?: {
+        enabled?: boolean;
+        style?: 'digital' | 'pill' | 'square' | 'bar' | 'circle' | 'ring';
+        position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+        size?: number;
+        horizontalMargin?: number;
+        verticalMargin?: number;
+        opacity?: number;
+        color?: string;
+        hideOnFillers?: boolean;
+        showTitle?: boolean;
+    };
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/channels/{id}/overlay';
+};
+
+export type PutApiChannelsByIdOverlayErrors = {
+    /**
+     * Default Response
+     */
+    409: {
+        error: string;
+    };
+};
+
+export type PutApiChannelsByIdOverlayError = PutApiChannelsByIdOverlayErrors[keyof PutApiChannelsByIdOverlayErrors];
+
+export type PutApiChannelsByIdOverlayResponses = {
+    /**
+     * Default Response
+     */
+    200: {
+        enabled: boolean;
+        style: 'digital' | 'pill' | 'square' | 'bar' | 'circle' | 'ring';
+        position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+        size: number;
+        horizontalMargin: number;
+        verticalMargin: number;
+        opacity: number;
+        color: string;
+        hideOnFillers: boolean;
+        showTitle: boolean;
+    };
+};
+
+export type PutApiChannelsByIdOverlayResponse = PutApiChannelsByIdOverlayResponses[keyof PutApiChannelsByIdOverlayResponses];
+
 export type GetApiChannelsByIdNativePlaybackData = {
     body?: never;
     path: {

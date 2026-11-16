@@ -320,6 +320,7 @@ export class NvidiaPipelineBuilder extends SoftwarePipelineBuilder {
     }
 
     currentState = this.setWatermark(currentState);
+    currentState = this.setProgramOverlay(currentState);
 
     let encoder: Nullable<VideoEncoder> = null;
     if (ffmpegState.encoderHwAccelMode === HardwareAccelerationMode.Cuda) {

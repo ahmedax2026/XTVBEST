@@ -54,6 +54,7 @@ export class SoftwarePipelineBuilder extends BasePipelineBuilder {
       currentState = this.setPad(currentState);
       currentState = this.addSubtitles(currentState);
       currentState = this.setWatermark(currentState);
+      currentState = this.setProgramOverlay(currentState);
     }
 
     if (!this.hasVideoEncoderPipelineStep()) {

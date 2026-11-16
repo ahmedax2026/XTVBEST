@@ -24,11 +24,12 @@ import { Theme } from './theme.ts';
 import { messages } from './locales/ar/messages.po';
 import { ChannelSessionsDialog } from './components/channels/ChannelSessionsDialog.tsx';
 import { ChannelArchiveDialog } from './components/channels/ChannelArchiveDialog.tsx';
+import { ChannelOverlayDialog } from './components/channels/ChannelOverlayDialog.tsx';
 import { makeStoryChannel } from './components/channels/channelStoryFixtures.ts';
 i18n.loadAndActivate({ locale: 'ar', messages });
 const root = document.getElementById('root');
 if (!root) throw new Error('Missing preview root');
-createRoot(root).render(<I18nProvider i18n={i18n}><ThemeProvider theme={{...Theme,direction:'rtl'}} defaultMode="dark"><CssBaseline/><QueryClientProvider client={new QueryClient()}><SnackbarProvider>{location.search.includes('archive') ? <ChannelArchiveDialog open onClose={()=>{}} channel={makeStoryChannel({id:'${id}',name:'إكس بيست أفلام'})}/> : <ChannelSessionsDialog open onClose={()=>{}} channel={makeStoryChannel({id:'${id}',name:'إكس بيست أفلام'})}/>}</SnackbarProvider></QueryClientProvider></ThemeProvider></I18nProvider>);
+createRoot(root).render(<I18nProvider i18n={i18n}><ThemeProvider theme={{...Theme,direction:'rtl'}} defaultMode="dark"><CssBaseline/><QueryClientProvider client={new QueryClient()}><SnackbarProvider>{location.search.includes('overlay') ? <ChannelOverlayDialog open onClose={()=>{}} channel={makeStoryChannel({id:'${id}',name:'إكس بيست أفلام'})}/> : location.search.includes('archive') ? <ChannelArchiveDialog open onClose={()=>{}} channel={makeStoryChannel({id:'${id}',name:'إكس بيست أفلام'})}/> : <ChannelSessionsDialog open onClose={()=>{}} channel={makeStoryChannel({id:'${id}',name:'إكس بيست أفلام'})}/>}</SnackbarProvider></QueryClientProvider></ThemeProvider></I18nProvider>);
 `;
 let server;
 let browser;
@@ -202,6 +203,64 @@ try {
   await page
     .getByText('التحويل مع بداية الفيلم التالي', { exact: true })
     .waitFor();
+  let overlay = {
+    enabled: false,
+    style: 'ring',
+    position: 'top-right',
+    size: 160,
+    horizontalMargin: 30,
+    verticalMargin: 30,
+    opacity: 0.9,
+    color: '#ffcc66',
+    hideOnFillers: true,
+    showTitle: false,
+  };
+  const overlayHeaders = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Allow-Methods': 'GET, PUT, OPTIONS',
+    'Access-Control-Allow-Headers': 'content-type',
+  };
+  await page.route(`**/api/channels/${id}/transcode_config`, (route) =>
+    route.fulfill({
+      contentType: 'application/json',
+      headers: overlayHeaders,
+      body: JSON.stringify({ resolution: { widthPx: 1920, heightPx: 1080 } }),
+    }),
+  );
+  await page.route(`**/api/channels/${id}/overlay`, (route) => {
+    if (route.request().method() === 'OPTIONS')
+      return route.fulfill({ status: 204, headers: overlayHeaders });
+    if (route.request().method() === 'PUT') {
+      overlay = route.request().postDataJSON();
+      assert.equal(overlay.enabled, true);
+    }
+    return route.fulfill({
+      contentType: 'application/json',
+      headers: overlayHeaders,
+      body: JSON.stringify(overlay),
+    });
+  });
+  await page.goto(url + '?overlay');
+  await page
+    .getByRole('button', { name: 'حفظ إعدادات العداد', exact: true })
+    .waitFor();
+  await page.getByLabel('إظهار العداد داخل الفيديو', { exact: true }).check();
+  await page.getByText('00:12:34', { exact: true }).waitFor();
+  await page.setViewportSize({ width: 390, height: 844 });
+  assert(
+    await page
+      .locator('.MuiDialog-paper')
+      .evaluate((element) => element.scrollWidth <= element.clientWidth),
+    'Countdown dialog overflows mobile viewport',
+  );
+  await page.screenshot({
+    path: path.join(output, 'overlay-mobile.png'),
+    fullPage: true,
+  });
+  await page
+    .getByRole('button', { name: 'حفظ إعدادات العداد', exact: true })
+    .click();
+  await page.getByText('تم حفظ إعدادات العداد.', { exact: true }).waitFor();
   assert.deepEqual(errors, [], 'Browser raised runtime errors');
   console.log(
     'Arabic desktop/mobile monitor and archive controls, stable link and actions passed',

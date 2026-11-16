@@ -1,7 +1,9 @@
+import { ChannelOverlayDialog } from './ChannelOverlayDialog.tsx';
 import { ChannelArchiveDialog } from './ChannelArchiveDialog.tsx';
 import type { channelListOptions } from '@/types/index.ts';
 import { Trans, useLingui } from '@lingui/react/macro';
 import {
+  Timer,
   Archive,
   ContentCopy,
   CopyAll,
@@ -48,6 +50,7 @@ export const ChannelOptionsMenu = ({
   const { t } = useLingui();
   const [monitorOpen, setMonitorOpen] = useState(false);
   const [archiveOpen, setArchiveOpen] = useState(false);
+  const [overlayOpen, setOverlayOpen] = useState(false);
 
   const duplicateChannelMutation = useCreateChannel();
 
@@ -219,6 +222,20 @@ export const ChannelOptionsMenu = ({
             <Trans>Saved channel</Trans>
           </ListItemText>
         </MenuItem>
+        <MenuItem
+          onClick={(e) => {
+            e.stopPropagation();
+            setOverlayOpen(true);
+            onClose();
+          }}
+        >
+          <ListItemIcon>
+            <Timer />
+          </ListItemIcon>
+          <ListItemText>
+            <Trans>Video countdown</Trans>
+          </ListItemText>
+        </MenuItem>
         {!hideItems?.includes('delete') && (
           <MenuItem
             onClick={(e) => {
@@ -235,6 +252,11 @@ export const ChannelOptionsMenu = ({
           </MenuItem>
         )}
       </Menu>
+      <ChannelOverlayDialog
+        channel={row}
+        open={overlayOpen}
+        onClose={() => setOverlayOpen(false)}
+      />
       <ChannelArchiveDialog
         channel={row}
         open={archiveOpen}

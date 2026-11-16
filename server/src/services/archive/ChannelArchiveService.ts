@@ -1,3 +1,5 @@
+import { ChannelOverlayService } from '../overlay/ChannelOverlayService.ts';
+import type { ChannelOverlay } from '@tunarr/types';
 import { InjectLogger } from '../../util/inject.ts';
 import type { Logger } from '../../util/logging/LoggerFactory.ts';
 import { inject, injectable } from 'inversify';
@@ -51,8 +53,10 @@ const liveStatus: ChannelArchiveStatus = {
 export function archiveChannelKey(
   channel: ChannelOrm,
   config: TranscodeConfigOrm,
+  overlay?: ChannelOverlay,
 ) {
   return archiveKey({
+    ...(overlay?.enabled ? { overlay } : {}),
     channel: {
       watermark: channel.watermark,
       icon: channel.icon,
@@ -109,11 +113,19 @@ export class ChannelArchiveService {
     private details: ProgramStreamDetailsFetcher,
     @inject(WatermarkResolver) private watermarks: WatermarkResolver,
     @inject(KEYS.FFmpegFactory) private ffmpeg: FFmpegAssistedFactory,
+    @inject(ChannelOverlayService) private overlays: ChannelOverlayService,
   ) {}
   private get archiveStore() {
     return (this.store ??= new ArchiveStore(
       path.join(globalOptions().databaseDirectory, 'channel-archives'),
     ));
+  }
+  private async channelKey(channel: ChannelOrm, config: TranscodeConfigOrm) {
+    return archiveChannelKey(
+      channel,
+      config,
+      await this.overlays.get(channel.uuid),
+    );
   }
   private async channelConfig(channelId: string) {
     const channel = await this.channels.getChannelOrm(channelId);
@@ -142,7 +154,7 @@ export class ChannelArchiveService {
     if (state === 'ready' || state === 'pending' || state === 'archived') {
       try {
         const { channel, config } = await this.channelConfig(channelId);
-        if (archiveChannelKey(channel, config) !== manifest.channelKey)
+        if ((await this.channelKey(channel, config)) !== manifest.channelKey)
           throw new Error('Settings changed');
         for (const entry of manifest.entries)
           await this.validateEntry(channelId, manifest, entry);
@@ -201,6 +213,23 @@ export class ChannelArchiveService {
           'Archive preparation requires a fixed content lineup without redirects or random fillers',
         );
       }
+      const overlay = await this.overlays.get(channelId);
+      if (overlay.enabled) {
+        for (const item of lineup.items) {
+          if (item.type !== 'content') continue;
+          const program = await this.programs.getProgramById(item.id);
+          if (
+            !program ||
+            item.fillerListId ||
+            (item.startOffsetMs ?? 0) !== 0 ||
+            item.durationMs !== program.duration
+          ) {
+            throw new Error(
+              'Saved countdowns require full-length programs without clip offsets',
+            );
+          }
+        }
+      }
       const ids = [
         ...new Set(
           lineup.items
@@ -211,7 +240,7 @@ export class ChannelArchiveService {
       const manifest: ArchiveManifest = {
         version: 1,
         generation: randomUUID(),
-        channelKey: archiveChannelKey(channel, config),
+        channelKey: await this.channelKey(channel, config),
         entries: [],
         status: {
           state: 'preparing',
@@ -264,6 +293,7 @@ export class ChannelArchiveService {
     manifest: ArchiveManifest,
     signal: AbortSignal,
   ) {
+    const overlay = await this.overlays.get(channelId);
     const directory = this.archiveStore.directory(
       channelId,
       manifest.generation,
@@ -327,6 +357,16 @@ export class ChannelArchiveService {
             offlinePreparation: true,
             streamMode: channel.streamMode,
             watermark,
+            ...(overlay.enabled
+              ? {
+                  programOverlay: {
+                    config: overlay,
+                    durationMs: program.duration,
+                    elapsedMs: 0,
+                    title: program.title,
+                  },
+                }
+              : {}),
           },
         });
         if (!result) throw new Error('Could not create preparation process');
@@ -382,6 +422,8 @@ export class ChannelArchiveService {
         used += bytes;
         manifest.entries.push({
           programId: id,
+          title:
+            overlay.enabled && overlay.showTitle ? program.title : undefined,
           key,
           sourcePath,
           sourceStamp: stamp,
@@ -400,7 +442,8 @@ export class ChannelArchiveService {
     signal.throwIfAborted();
     const current = await this.channelConfig(channelId);
     if (
-      archiveChannelKey(current.channel, current.config) !== manifest.channelKey
+      (await this.channelKey(current.channel, current.config)) !==
+      manifest.channelKey
     )
       throw new Error('Channel settings changed');
     manifest.status.state = 'ready';
@@ -432,7 +475,7 @@ export class ChannelArchiveService {
         if (currentStatus.state !== 'ready' && currentStatus.state !== 'live')
           throw new Error('Archive is not ready');
         const { channel, config } = await this.channelConfig(channelId);
-        if (archiveChannelKey(channel, config) !== manifest.channelKey)
+        if ((await this.channelKey(channel, config)) !== manifest.channelKey)
           throw new Error('Settings changed. Prepare again.');
         const lineup = await this.channels.loadLineup(channelId);
         for (const item of lineup.items) {
@@ -470,6 +513,13 @@ export class ChannelArchiveService {
     manifest: ArchiveManifest,
     entry: ArchiveEntry,
   ) {
+    if (
+      entry.title !== undefined &&
+      (await this.programs.getProgramById(entry.programId))?.title !==
+        entry.title
+    ) {
+      throw new Error('Program title changed. Prepare again.');
+    }
     if ((await sourceStamp(entry.sourcePath)) !== entry.sourceStamp)
       throw new Error('Source changed. Prepare again.');
     const file = this.archiveStore.file(channelId, manifest, entry);
@@ -490,7 +540,7 @@ export class ChannelArchiveService {
       if (!manifest) return;
       if (!archiveApplies(manifest, item.programBeginMs)) return;
       if (
-        archiveChannelKey(channel, config) !== manifest.channelKey ||
+        (await this.channelKey(channel, config)) !== manifest.channelKey ||
         original.streamSource.type !== 'file'
       )
         return;
