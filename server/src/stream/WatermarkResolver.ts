@@ -64,12 +64,12 @@ export class WatermarkResolver {
         icon =
           isSuccess(cached) && isNonEmptyString(cached?.path)
             ? cached.path
-            : makeLocalUrl('/images/tunarr.png');
+            : makeLocalUrl('/images/xbest-logo.png');
       }
     } else {
       const resolvedIcon = resolveIconUrl(
         channel.icon,
-        makeLocalUrl('/images/tunarr.png'),
+        makeLocalUrl('/images/xbest-logo.png'),
       );
       if (!resolvedIcon) {
         return;

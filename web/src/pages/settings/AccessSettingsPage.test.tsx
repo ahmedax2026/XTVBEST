@@ -222,9 +222,13 @@ test('offline license card prevents presenting remote revocation as effective', 
   );
   renderWithProviders(<AccessSettingsPage />);
   expect(
-    await screen.findByRole('button', { name: 'Disable license' }),
-  ).toBeDisabled();
-  expect(
-    screen.getByText(/This license cannot be revoked remotely/),
+    await screen.findByText(
+      /This license cannot be revoked remotely/,
+      {},
+      { timeout: 5000 },
+    ),
   ).toBeInTheDocument();
+  expect(
+    screen.getByRole('button', { name: 'Disable license' }),
+  ).toBeDisabled();
 });

@@ -181,7 +181,7 @@ export class FfmpegState {
     return this.create({
       version,
       stripMetadata: true,
-      metadataServiceProvider: 'Tunarr',
+      metadataServiceProvider: 'XBest',
       metadataServiceName: channelName,
       outputFormat,
       ptsOffset: 0,

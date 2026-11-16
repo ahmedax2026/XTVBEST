@@ -59,7 +59,7 @@ export const PhoneHeader = ({
     >
       <LinkButtonBase
         to="/guide"
-        aria-label={t`Tunarr home`}
+        aria-label={t`XBest home`}
         sx={{ gap: '8px', borderRadius: 2, color: 'inherit' }}
       >
         <TunarrLogo style={{ width: 36, height: 29 }} />

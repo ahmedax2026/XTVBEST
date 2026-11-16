@@ -233,8 +233,8 @@ export default function FfmpegSettingsPage() {
                 <Trans>
                   Enable ffmpeg logging to different sinks. Outputting to a file
                   will create a new log file for every spawned ffmpeg process in
-                  the Tunarr log directory. These files are automatically
-                  cleaned up by a background process.
+                  the XBest log directory. These files are automatically cleaned
+                  up by a background process.
                 </Trans>
               </FormHelperText>
             </FormControl>
@@ -316,8 +316,8 @@ export default function FfmpegSettingsPage() {
                 helperText={
                   <Trans>
                     <span>
-                      Configure the directory where Tunarr writes HLS segment
-                      files when transcoding. Tunarr will create the target
+                      Configure the directory where XBest writes HLS segment
+                      files when transcoding. XBest will create the target
                       directory (but not intermediate directories) if it doesn't
                       exist.
                       <br />
@@ -326,7 +326,7 @@ export default function FfmpegSettingsPage() {
                       setting, but will clean out segments when the segment
                       ends.
                       <br />
-                      When unset, Tunarr will write segments to its current
+                      When unset, XBest will write segments to its current
                       working directory.
                     </span>
                   </Trans>
@@ -399,7 +399,7 @@ export default function FfmpegSettingsPage() {
       </Typography>
       <Typography variant="subtitle1">
         <Trans>
-          Configure transcoding settings for Tunarr's streams. Each channel is
+          Configure transcoding settings for XBest's streams. Each channel is
           assigned one transcode configuration.
         </Trans>
       </Typography>

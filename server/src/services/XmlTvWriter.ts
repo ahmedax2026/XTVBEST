@@ -208,7 +208,10 @@ export class XmlTvWriter {
       ],
     };
 
-    const iconSrc = resolveIconUrl(channel.icon, '{{host}}/images/tunarr.png');
+    const iconSrc = resolveIconUrl(
+      channel.icon,
+      '{{host}}/images/xbest-logo.png',
+    );
     if (iconSrc) {
       partial.icon = [
         {

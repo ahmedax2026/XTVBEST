@@ -1,5 +1,5 @@
+import { XBestShell } from './XBestShell.tsx';
 import {
-  AppShell,
   resolveActiveNav,
   shortcutLabel,
 } from '@/components/ui/patterns/AppShell';
@@ -7,7 +7,6 @@ import { useColorScheme } from '@mui/material';
 import { useRouterState } from '@tanstack/react-router';
 import { type ReactNode, useEffect, useMemo, useState } from 'react';
 import { CommandPaletteContainer } from './CommandPaletteContainer.tsx';
-import { HelpMenuContainer } from './HelpMenuContainer.tsx';
 import { useShellNav } from './useShellNav.tsx';
 
 const isMac =
@@ -22,7 +21,7 @@ export const AppShellContainer = ({ children }: { children?: ReactNode }) => {
     [nav, pathname],
   );
   const { colorScheme, setMode } = useColorScheme();
-  const isDark = colorScheme === 'dark';
+  const isDark = colorScheme !== 'light';
   const [paletteOpen, setPaletteOpen] = useState(false);
 
   useEffect(() => {
@@ -42,17 +41,16 @@ export const AppShellContainer = ({ children }: { children?: ReactNode }) => {
 
   return (
     <>
-      <AppShell
+      <XBestShell
         nav={nav}
         active={active}
         isDark={isDark}
         onToggleColorScheme={() => setMode(isDark ? 'light' : 'dark')}
         onOpenSearch={() => setPaletteOpen(true)}
         searchShortcut={shortcutLabel(isMac)}
-        renderHelpMenu={(variant) => <HelpMenuContainer variant={variant} />}
       >
         {children}
-      </AppShell>
+      </XBestShell>
       <CommandPaletteContainer
         open={paletteOpen}
         onClose={() => setPaletteOpen(false)}

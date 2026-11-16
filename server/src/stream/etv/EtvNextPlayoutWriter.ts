@@ -344,7 +344,7 @@ export class EtvNextPlayoutWriter {
       errorScreenAudio,
       errorPicture:
         errorScreen === 'pic'
-          ? makeLocalUrl('/images/generic-error-screen.png')
+          ? makeLocalUrl('/images/xbest-error.png')
           : undefined,
       offlinePicture: channel.offline?.picture,
       offlineSoundtrack: channel.offline?.soundtrack,

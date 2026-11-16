@@ -34,19 +34,19 @@ export class FfmpegVersionHealthCheck implements HealthCheck {
       .with([false, true], () =>
         healthCheckResult({
           type: 'error',
-          context: `ffmpeg doesn't exist at configured path ${settings.ffmpegExecutablePath}. Tunarr requires ffmpeg to function. The path can be configured in Settings > FFMPEG`,
+          context: `ffmpeg doesn't exist at configured path ${settings.ffmpegExecutablePath}. XBest requires ffmpeg to function. The path can be configured in Settings > FFMPEG`,
         }),
       )
       .with([true, false], () =>
         healthCheckResult({
           type: 'error',
-          context: `ffprobe doesn't exist at configured path ${settings.ffprobeExecutablePath}. Tunarr requires ffprobe to function. The path can be configured in Settings > FFMPEG`,
+          context: `ffprobe doesn't exist at configured path ${settings.ffprobeExecutablePath}. XBest requires ffprobe to function. The path can be configured in Settings > FFMPEG`,
         }),
       )
       .with([false, false], () =>
         healthCheckResult({
           type: 'error',
-          context: `Neither ffmpeg nor ffprobe exists at configured paths (ffmpeg=${settings.ffmpegExecutablePath}, ffprobe=${settings.ffprobeExecutablePath}). Tunarr requires both programs to function. The paths can be configured in Settings > FFMPEG`,
+          context: `Neither ffmpeg nor ffprobe exists at configured paths (ffmpeg=${settings.ffmpegExecutablePath}, ffprobe=${settings.ffprobeExecutablePath}). XBest requires both programs to function. The paths can be configured in Settings > FFMPEG`,
         }),
       )
       .otherwise(() => null);

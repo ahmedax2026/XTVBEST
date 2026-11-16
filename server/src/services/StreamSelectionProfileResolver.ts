@@ -35,7 +35,7 @@ export type ResolvedStreamSelectionProfile = {
 // the resolution chain always ends with a profile that matches.
 export const BuiltInStreamSelectionProfile: StreamSelectionProfile = {
   uuid: BuiltInStreamSelectionProfileId,
-  name: 'Tunarr Default',
+  name: 'XBest Default',
   locked: true,
   rules: [
     {

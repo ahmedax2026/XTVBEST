@@ -274,8 +274,8 @@ export function StreamSelectionProfilePage({ isNew }: Props) {
           }
         >
           <Trans>
-            This profile is built into Tunarr and cannot be changed. Duplicate
-            it to make a version you can edit.
+            This profile is built into XBest and cannot be changed. Duplicate it
+            to make a version you can edit.
           </Trans>
         </Alert>
       )}

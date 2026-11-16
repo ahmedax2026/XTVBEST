@@ -1,3 +1,4 @@
+import { useSettings } from '../../store/settings/selectors.ts';
 import { betterHumanize } from '@/helpers/dayjs.ts';
 import { useThemeTokens } from '@/hooks/useTunarrTheme.ts';
 import { Plural, Trans, useLingui } from '@lingui/react/macro';
@@ -9,9 +10,14 @@ import {
   Edit,
   PlaylistAdd,
   SettingsRemote,
+  Search,
+  ViewModule,
+  TableRows,
 } from '@mui/icons-material';
 import {
   Box,
+  InputAdornment,
+  TextField,
   Button,
   LinearProgress,
   Stack,
@@ -97,6 +103,9 @@ export const ChannelsView = ({
   layout,
 }: ChannelsViewProps) => {
   const { t } = useLingui();
+  const ar = useSettings().ui.i18n.locale === 'ar';
+  const [studioLayout, setStudioLayout] = useState<CollectionLayout>('cards');
+  const [search, setSearch] = useState('');
   const { tokens } = useThemeTokens();
   const tableState = useStoreBackedTableSettings('Channels');
   const [statusFilter, setStatusFilter] = useState<ChannelStatusFilter>('all');
@@ -104,8 +113,15 @@ export const ChannelsView = ({
   const [pendingDelete, setPendingDelete] = useState<Channel[] | null>(null);
 
   const visibleChannels = useMemo(
-    () => channels.filter((c) => matchesStatusFilter(c, statusFilter)),
-    [channels, statusFilter],
+    () =>
+      channels.filter(
+        (c) =>
+          matchesStatusFilter(c, statusFilter) &&
+          `${c.name} ${c.number}`
+            .toLocaleLowerCase()
+            .includes(search.trim().toLocaleLowerCase()),
+      ),
+    [channels, statusFilter, search],
   );
 
   // Selection only counts channels that pass the status filter, so deleted or
@@ -401,9 +417,53 @@ export const ChannelsView = ({
           </Stack>
         }
       />
+      <Stack direction="row" gap={1.5} sx={{ mb: 2.5 }}>
+        <TextField
+          size="small"
+          value={search}
+          onChange={(e) => setSearch(e.target.value)}
+          placeholder={
+            ar
+              ? 'ابحث باسم القناة أو رقمها…'
+              : 'Find a channel by name or number…'
+          }
+          inputProps={{
+            'aria-label': ar ? 'البحث في القنوات' : 'Search channels',
+          }}
+          sx={{ flex: 1, minWidth: 0 }}
+          slotProps={{
+            input: {
+              startAdornment: (
+                <InputAdornment position="start">
+                  <Search fontSize="small" />
+                </InputAdornment>
+              ),
+            },
+          }}
+        />
+        {!layout && (
+          <Segmented
+            value={studioLayout}
+            onChange={setStudioLayout}
+            aria-label={ar ? 'طريقة عرض القنوات' : 'Channel layout'}
+            options={[
+              {
+                value: 'cards',
+                label: ar ? 'كروت' : 'Cards',
+                icon: <ViewModule />,
+              },
+              {
+                value: 'table',
+                label: ar ? 'جدول' : 'Table',
+                icon: <TableRows />,
+              },
+            ]}
+          />
+        )}
+      </Stack>
       <CollectionView
         aria-label={t`Channels`}
-        layout={layout}
+        layout={layout ?? studioLayout}
         items={visibleChannels}
         getItemKey={(channel) => channel.id}
         empty={empty}

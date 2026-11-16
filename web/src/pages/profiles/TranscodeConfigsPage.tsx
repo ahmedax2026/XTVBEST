@@ -10,7 +10,7 @@ export default function TranscodeConfigsPage() {
       </Typography>
       <Typography variant="body1">
         <Trans>
-          Configure transcoding settings for Tunarr's streams. Each channel is
+          Configure transcoding settings for XBest's streams. Each channel is
           assigned one transcode configuration.
         </Trans>
       </Typography>

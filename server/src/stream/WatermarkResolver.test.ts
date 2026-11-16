@@ -27,7 +27,7 @@ const channel: Pick<ChannelOrm, 'watermark' | 'icon' | 'disableFillerOverlay'> =
     disableFillerOverlay: false,
   };
 
-const tunarrLogo = 'http://localhost:8000/images/tunarr.png';
+const tunarrLogo = 'http://localhost:8000/images/xbest-logo.png';
 
 function makeResolver(cached: { path: string } | Error = { path: '/cache/a' }) {
   const cacheImageService = {

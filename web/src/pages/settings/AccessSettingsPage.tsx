@@ -135,8 +135,8 @@ export default function AccessSettingsPage() {
       {!data.configured && (
         <Alert severity="warning">
           {label(
-            'فعّل حساب المالك أولًا باستخدام إعدادات دخول السيرفر TUNARR_BASIC_AUTH_USER وTUNARR_BASIC_AUTH_PASSWORD ثم أعد التشغيل.',
-            'Set TUNARR_BASIC_AUTH_USER and TUNARR_BASIC_AUTH_PASSWORD on the server and restart to enable the owner account.',
+            'شغّل نسخة المالك باستخدام ملف التشغيل المحمي وحدد اسم المستخدم وكلمة السر، ثم أعد فتح هذه الصفحة.',
+            'Start the owner installation with the protected launcher, set its username and password, then reopen this page.',
           )}
         </Alert>
       )}

@@ -1,4 +1,3 @@
-import DiscordIcon from '@/assets/icon_clyde_black_RGB.svg?react';
 import { Trans, useLingui } from '@lingui/react/macro';
 import {
   ContentCopy,
@@ -13,7 +12,6 @@ import {
   ListItemText,
   Menu,
   MenuItem,
-  SvgIcon,
   Tooltip,
 } from '@mui/material';
 import { useId, useState } from 'react';
@@ -32,21 +30,8 @@ export type HelpMenuProps = {
 };
 
 const externalLinks = [
-  { key: 'docs', href: 'https://tunarr.com/', icon: <TextSnippet /> },
-  {
-    key: 'github',
-    href: 'https://github.com/chrisbenincasa/tunarr',
-    icon: <GitHub />,
-  },
-  {
-    key: 'discord',
-    href: 'https://discord.gg/svgSBYkEK5',
-    icon: (
-      <SvgIcon>
-        <DiscordIcon />
-      </SvgIcon>
-    ),
-  },
+  { key: 'docs', href: '/web/settings/general', icon: <TextSnippet /> },
+  { key: 'github', href: '/web/settings/access', icon: <GitHub /> },
 ] as const;
 
 export const HelpMenu = ({
@@ -62,7 +47,7 @@ export const HelpMenu = ({
 
   const linkLabels = {
     docs: t`Documentation`,
-    github: 'GitHub',
+    github: t`Users and licenses`,
     discord: 'Discord',
   };
 
@@ -138,7 +123,7 @@ export const HelpMenu = ({
             }}
             primary={
               version.state === 'loaded' ? (
-                <Trans>Tunarr {version.tunarr}</Trans>
+                <Trans>XBest {version.tunarr}</Trans>
               ) : version.state === 'error' ? (
                 <Trans>Version unknown</Trans>
               ) : (

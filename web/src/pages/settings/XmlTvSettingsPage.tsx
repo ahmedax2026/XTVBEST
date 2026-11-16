@@ -97,11 +97,11 @@ export default function XmlTvSettingsPage() {
                 <Trans>
                   <span>
                     You can edit this location in your settings.json within your
-                    Tunarr data directory
+                    XBest data directory
                     <br />
                     <strong>NOTE:</strong> When manually adding the XMLTV
                     location to a client like Plex, do not use this file
-                    directly. Instead, use the generated XMLTV from the Tunarr
+                    directly. Instead, use the generated XMLTV from the XBest
                     API endpoint:{' '}
                     {
                       new URL(

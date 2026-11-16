@@ -8,6 +8,7 @@ import { useSystemHealthChecks } from '@/hooks/useSystemHealthChecks.ts';
 import { useLingui } from '@lingui/react/macro';
 import {
   Computer,
+  DashboardOutlined,
   Home,
   Settings,
   SettingsRemote,
@@ -46,6 +47,13 @@ export const useShellNav = (): ShellNav => {
     () => ({
       sections: [
         {
+          id: 'dashboard',
+          label: ar ? 'لوحة الاستوديو' : 'Studio overview',
+          to: '/',
+          icon: <DashboardOutlined />,
+          pages: [],
+        },
+        {
           id: 'welcome',
           label: t`Welcome`,
           to: '/welcome',
@@ -59,7 +67,6 @@ export const useShellNav = (): ShellNav => {
           to: '/guide',
           icon: <Tv />,
           pages: [],
-          alsoMatches: ['/'],
         },
         {
           id: 'channels',

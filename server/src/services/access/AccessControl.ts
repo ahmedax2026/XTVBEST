@@ -511,6 +511,7 @@ export function createLicenseHook(
     const route = req.routeOptions.url ?? '';
     if (
       route.startsWith('/api/access/') ||
+      route.startsWith('/auth/') ||
       route.startsWith('/web') ||
       route === '/' ||
       route.startsWith('/favicon')

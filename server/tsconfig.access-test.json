@@ -5,7 +5,8 @@
     "src/util/basicAuth.test.ts",
     "scripts/customerAssets.test.ts",
     "scripts/releaseChecksums.test.ts",
-    "src/types/**/*.d.ts"
+    "src/types/**/*.d.ts",
+    "src/services/access/StudioWebLogin.test.ts"
   ],
   "compilerOptions": {
     "incremental": false

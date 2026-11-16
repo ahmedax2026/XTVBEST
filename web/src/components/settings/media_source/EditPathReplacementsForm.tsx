@@ -38,9 +38,9 @@ export const EditPathReplacementsForm = () => {
         <Box sx={{ width: '100%' }} />
         <Typography variant="subtitle2">
           <Trans>
-            When file paths on the remote server differ from the paths Tunarr
-            can see, use Path Replacements to instruct Tunarr how to stream
-            media from disk.
+            When file paths on the remote server differ from the paths XBest can
+            see, use Path Replacements to instruct XBest how to stream media
+            from disk.
           </Trans>
         </Typography>
       </Stack>

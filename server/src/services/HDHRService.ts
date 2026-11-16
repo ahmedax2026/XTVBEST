@@ -35,9 +35,9 @@ export class HdhrService {
 
   getHdhrDevice(host: string) {
     return {
-      FriendlyName: 'Tunarr',
-      Manufacturer: 'Tunarr - Silicondust',
-      ManufacturerURL: 'https://github.com/chrisbenincasa/tunarr',
+      FriendlyName: 'XBest',
+      Manufacturer: 'XBest',
+      ManufacturerURL: host,
       ModelNumber: 'HDTC-2US',
       FirmwareName: 'hdhomeruntc_atsc',
       TunerCount: this.db.hdhrSettings().tunerCount,

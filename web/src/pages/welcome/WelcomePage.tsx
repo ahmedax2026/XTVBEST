@@ -32,7 +32,6 @@ import { useNavigate } from '@tanstack/react-router';
 import { useSnackbar } from 'notistack';
 import type { ReactNode } from 'react';
 import TunarrLogo from '../../components/TunarrLogo.tsx';
-import PaddedPaper from '../../components/base/PaddedPaper.tsx';
 import { RouterButtonLink } from '../../components/base/RouterButtonLink.tsx';
 import ConnectMediaSources from '../../components/settings/ConnectMediaSources.tsx';
 import { getApiMediaSourcesOptions } from '../../generated/@tanstack/react-query.gen.ts';
@@ -45,7 +44,18 @@ import {
 
 type StepStatus = 'done' | 'todo' | 'attention' | 'optional';
 
-const docsLink = (path: string) => `https://tunarr.com/${path}`;
+const docsLink = (path: string) => {
+  const page = path.includes('media_sources')
+    ? 'settings/sources'
+    : path.includes('ffmpeg')
+      ? 'settings/ffmpeg'
+      : path.includes('channels')
+        ? 'channels'
+        : path.includes('clients')
+          ? 'settings/hdhr'
+          : 'settings/general';
+  return `${import.meta.env.BASE_URL}${page}`;
+};
 
 export default function WelcomePage() {
   const navigate = useNavigate();
@@ -79,7 +89,7 @@ export default function WelcomePage() {
       { body: { complete: true } },
       {
         onSuccess: () => {
-          navigate({ to: '/guide' }).catch(console.warn);
+          navigate({ to: '/' }).catch(console.warn);
         },
         onError: (error) => {
           const message = getApiErrorMessage(error) ?? error.message;
@@ -95,12 +105,28 @@ export default function WelcomePage() {
   };
 
   return (
-    <PaddedPaper>
-      <Box sx={{ maxWidth: 750, mx: 'auto', py: 6 }}>
-        <Box sx={{ textAlign: 'center', mb: 4 }}>
+    <Box
+      sx={{
+        border: '1px solid',
+        borderColor: 'divider',
+        borderRadius: '20px',
+        bgcolor: 'background.paper',
+        overflow: 'hidden',
+      }}
+    >
+      <Box sx={{ maxWidth: 1180, mx: 'auto', p: { xs: 2.5, md: 5 } }}>
+        <Box
+          sx={{
+            textAlign: 'start',
+            mb: 4,
+            borderBottom: '1px solid',
+            borderColor: 'divider',
+            pb: 3,
+          }}
+        >
           <TunarrLogo style={{ width: '4rem', height: '4rem' }} />
           <Typography variant="h3">
-            <Trans>Welcome to Tunarr!</Trans>
+            <Trans>Welcome to XBest!</Trans>
           </Typography>
           <Typography variant="body1" sx={{ mt: 1 }}>
             <Trans>
@@ -119,14 +145,14 @@ export default function WelcomePage() {
           >
             <Typography>
               <Trans>
-                Media sources provide the content for your channels. Tunarr
+                Media sources provide the content for your channels. XBest
                 supports Plex, Jellyfin, Emby, and local folders.
               </Trans>
             </Typography>
             {hasSource && !hasLibrary && (
               <Alert severity="warning">
                 <Trans>
-                  No libraries are enabled yet. Tunarr only syncs content from
+                  No libraries are enabled yet. XBest only syncs content from
                   enabled libraries, so choose at least one below.
                 </Trans>
               </Alert>
@@ -148,8 +174,8 @@ export default function WelcomePage() {
           >
             <Typography>
               <Trans>
-                Tunarr scans enabled libraries in the background. Channels can
-                only use programs that have been scanned by Tunarr.
+                XBest scans enabled libraries in the background. Channels can
+                only use programs that have been scanned by XBest.
               </Trans>
             </Typography>
             {hasLibrary && !hasScan && (
@@ -171,12 +197,12 @@ export default function WelcomePage() {
               <Typography>
                 {systemState.isInContainer ? (
                   <Trans>
-                    Tunarr uses FFmpeg to transcode streams. Your container
-                    image includes it, but Tunarr could not use it.
+                    XBest uses FFmpeg to transcode streams. Your container image
+                    includes it, but XBest could not use it.
                   </Trans>
                 ) : (
                   <Trans>
-                    Tunarr uses FFmpeg 6.1 or newer to transcode streams.
+                    XBest uses FFmpeg 6.1 or newer to transcode streams.
                   </Trans>
                 )}
               </Typography>
@@ -228,8 +254,8 @@ export default function WelcomePage() {
             <Typography>
               <Trans>
                 Add these links to an IPTV client. Jellyfin and Emby can use
-                Tunarr as either an M3U source or an HDHomeRun tuner. Plex can
-                add Tunarr as an HDHomeRun tuner.
+                XBest as either an M3U source or an HDHomeRun tuner. Plex can
+                add XBest as an HDHomeRun tuner.
               </Trans>
             </Typography>
             <ClientLink label={<Trans>M3U playlist</Trans>} url={m3uLink} />
@@ -255,7 +281,7 @@ export default function WelcomePage() {
           </Button>
         </Box>
       </Box>
-    </PaddedPaper>
+    </Box>
   );
 }
 
@@ -280,7 +306,16 @@ function ChecklistStep({
   }[status];
 
   return (
-    <Paper variant="outlined" sx={{ p: 2 }}>
+    <Paper
+      variant="outlined"
+      sx={{
+        p: 3,
+        borderRadius: '14px',
+        borderInlineStart: '3px solid',
+        borderInlineStartColor:
+          status === 'done' ? 'success.main' : 'primary.main',
+      }}
+    >
       <Stack direction="row" spacing={2}>
         <Box sx={{ pt: 0.25 }}>{icon}</Box>
         <Stack spacing={1.5} sx={{ flex: 1, minWidth: 0 }}>

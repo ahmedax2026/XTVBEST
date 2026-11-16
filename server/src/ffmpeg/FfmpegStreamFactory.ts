@@ -661,7 +661,8 @@ export class FfmpegStreamFactory {
 
     let watermarkSource: Nullable<WatermarkInputSource> = null;
     if (watermark?.enabled) {
-      const watermarkUrl = watermark.url ?? makeLocalUrl('/images/tunarr.png');
+      const watermarkUrl =
+        watermark.url ?? makeLocalUrl('/images/xbest-logo.png');
       watermarkSource = new WatermarkInputSource(
         new HttpStreamSource(watermarkUrl),
         StillImageStream.create({
@@ -873,9 +874,7 @@ export class FfmpegStreamFactory {
           FrameSize.fromResolution(this.transcodeConfig.resolution),
         );
         errorInput = VideoInputSource.withStream(
-          new HttpStreamSource(
-            makeLocalUrl('/images/generic-error-screen.png'),
-          ),
+          new HttpStreamSource(makeLocalUrl('/images/xbest-error.png')),
           stream,
         );
         break;
@@ -965,7 +964,7 @@ export class FfmpegStreamFactory {
       new HttpStreamSource(
         isNonEmptyString(this.channel.offline?.picture)
           ? this.channel.offline?.picture
-          : makeLocalUrl('/images/generic-offline-screen.png'),
+          : makeLocalUrl('/images/xbest-offline.png'),
       ),
       VideoStream.create({
         inputKind: 'stillimage',

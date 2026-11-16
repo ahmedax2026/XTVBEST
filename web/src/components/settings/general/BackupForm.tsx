@@ -75,7 +75,7 @@ export const BackupForm = () => {
               fullWidth
               label={t`Output Path`}
               {...field}
-              helperText={t`By default, saves backups in the server's run directory, or, if running in Docker, to /config/tunarr/backups`}
+              helperText={t`By default, saves backups in the server's run directory, or, if running in Docker, to the configured application data directory's backups folder`}
             />
           )}
         />

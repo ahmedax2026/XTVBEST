@@ -86,6 +86,10 @@ export function isAuthorized(
 export function createTunarrBasicAuthHook(
   config: BasicAuthConfig,
   authenticate?: (header?: string) => Promise<boolean>,
+  onUnauthorized?: (
+    request: FastifyRequest,
+    reply: FastifyReply,
+  ) => FastifyReply,
 ): onRequestAsyncHookHandler {
   const failures = new Map<string, { count: number; reset: number }>();
   return async (request: FastifyRequest, reply: FastifyReply) => {
@@ -111,7 +115,9 @@ export function createTunarrBasicAuthHook(
           ? { ...previous, count: previous.count + 1 }
           : { count: 1, reset: now + 60_000 },
       );
-      return unauthorized(reply);
+      return onUnauthorized
+        ? onUnauthorized(request, reply)
+        : unauthorized(reply);
     }
     failures.delete(request.ip);
   };

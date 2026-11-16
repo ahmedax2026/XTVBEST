@@ -266,8 +266,7 @@ export function GeneralSettingsForm({
             />
             <FormHelperText>
               <Trans>
-                When enabling, Tunarr will generate an initial backup
-                immediately
+                When enabling, XBest will generate an initial backup immediately
               </Trans>
             </FormHelperText>
           </FormControl>
@@ -296,7 +295,7 @@ export function GeneralSettingsForm({
                     sx: {
                       width: { sm: '100%', md: '50%' },
                     },
-                    helperText: t`Select the port the Tunarr server will listen on. This requires a server restart to take effect.`,
+                    helperText: t`Select the port the XBest server will listen on. This requires a server restart to take effect.`,
                   }}
                 />
               )}
@@ -310,7 +309,7 @@ export function GeneralSettingsForm({
                       width: { sm: '100%', md: '50%' },
                     }}
                     fullWidth
-                    label={t`Tunarr Backend URL`}
+                    label={t`XBest Backend URL`}
                     slotProps={{
                       input: {
                         endAdornment: (
@@ -330,7 +329,7 @@ export function GeneralSettingsForm({
                     helperText={
                       error?.type === 'isValidUrl'
                         ? t`Must use a valid URL, or empty.`
-                        : t`Set the host of your Tunarr backend. When empty, the web UI will use the current host/port to communicate with the backend.`
+                        : t`Set the host of your XBest backend. When empty, the web UI will use the current host/port to communicate with the backend.`
                     }
                   />
                 )}
@@ -371,7 +370,7 @@ export function GeneralSettingsForm({
                   />
                   <FormHelperText>
                     <Trans>
-                      Set the log level for the Tunarr server.
+                      Set the log level for the XBest server.
                       <br />
                       Selecting <strong>"Use environment settings"</strong> will
                       instruct the server to use the <code>LOG_LEVEL</code>{' '}

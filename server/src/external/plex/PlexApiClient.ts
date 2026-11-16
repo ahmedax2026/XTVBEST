@@ -126,7 +126,7 @@ import { MediaSourceApiClient } from '../MediaSourceApiClient.ts';
 import { PlexRequestRedacter } from './PlexRequestRedacter.ts';
 
 const PlexHeaders = {
-  'X-Plex-Product': 'Tunarr',
+  'X-Plex-Product': 'XBest',
   'X-Plex-Client-Identifier': PlexClientIdentifier,
 };
 

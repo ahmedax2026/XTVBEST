@@ -38,7 +38,9 @@ jobs:
           pnpm --filter @tunarr/server typecheck
           pnpm --filter @tunarr/web typecheck
       - name: Test hardware selection, persistence, pipeline and authentication
-        run: pnpm --filter @tunarr/server test src/ffmpeg/AutoHardwareAcceleration.test.ts src/db/TranscodeConfigDB.test.ts src/ffmpeg/FfmpegStreamFactory.test.ts src/stream/etv/EtvNextSession.test.ts src/util/basicAuth.test.ts src/services/access/AccessControl.test.ts scripts/customerAssets.test.ts scripts/releaseChecksums.test.ts src/services/archive/ArchiveStore.test.ts src/services/archive/ChannelArchiveService.test.ts src/services/overlay/countdownAss.test.ts src/services/overlay/ChannelOverlayService.test.ts src/ffmpeg/FfmpegTrancodeSession.test.ts src/ffmpeg/builder/pipeline/ProgramOverlayPipeline.test.ts
+        env:
+          XBEST_CAPTURE_LOGIN: '1'
+        run: pnpm --filter @tunarr/server test src/ffmpeg/AutoHardwareAcceleration.test.ts src/db/TranscodeConfigDB.test.ts src/ffmpeg/FfmpegStreamFactory.test.ts src/stream/etv/EtvNextSession.test.ts src/util/basicAuth.test.ts src/services/access/AccessControl.test.ts src/services/access/StudioWebLogin.test.ts scripts/customerAssets.test.ts scripts/releaseChecksums.test.ts src/services/archive/ArchiveStore.test.ts src/services/archive/ChannelArchiveService.test.ts src/services/overlay/countdownAss.test.ts src/services/overlay/ChannelOverlayService.test.ts src/ffmpeg/FfmpegTrancodeSession.test.ts src/ffmpeg/builder/pipeline/ProgramOverlayPipeline.test.ts
       - name: Typecheck owner access and packaging tests
         run: pnpm --filter @tunarr/server exec tsc --noEmit -p tsconfig.access-test.json
       - name: Install FFmpeg for archive acceptance tests
@@ -52,7 +54,7 @@ jobs:
           XBEST_FFMPEG_TEST: '1'
         run: pnpm --filter @tunarr/server test src/services/archive/ArchiveStore.test.ts src/services/archive/ChannelArchiveService.test.ts src/services/overlay/countdownAss.test.ts
       - name: Test live monitor, countdown, links and Arabic catalog
-        run: pnpm --filter @tunarr/web exec vitest run --project unit src/components/channels/ChannelSessionsDialog.test.tsx src/components/channels/ChannelArchiveDialog.test.tsx src/components/channels/ChannelOverlayDialog.test.tsx src/components/channels/ChannelNowPlayingCard.test.tsx src/components/channels/ChannelMenuButton.test.tsx src/components/channels/channelSummary.test.ts src/locales/catalogs.test.ts src/test/i18n.test.ts src/store/settings/store.test.ts src/components/settings/general/WebSettings.test.tsx src/pages/settings/AccessSettingsPage.test.tsx
+        run: pnpm --filter @tunarr/web exec vitest run --project unit src/components/channels/ChannelSessionsDialog.test.tsx src/components/channels/ChannelArchiveDialog.test.tsx src/components/channels/ChannelOverlayDialog.test.tsx src/components/channels/ChannelNowPlayingCard.test.tsx src/components/channels/ChannelMenuButton.test.tsx src/components/channels/channelSummary.test.ts src/locales/catalogs.test.ts src/test/i18n.test.ts src/store/settings/store.test.ts src/components/settings/general/WebSettings.test.tsx src/pages/settings/AccessSettingsPage.test.tsx src/pages/studio/StudioDashboard.test.tsx src/components/shell/XBestShell.test.tsx src/components/channels/ChannelCard.test.tsx src/components/channels/ChannelsView.test.tsx
       - name: Build web bundle
         run: pnpm --filter @tunarr/web bundle
       - name: Install browser for Arabic monitor smoke test
@@ -60,13 +62,17 @@ jobs:
         run: pnpm --filter @tunarr/web exec playwright install --with-deps chromium
       - name: Check Arabic monitor in a real browser
         if: runner.os == 'Linux'
-        run: pnpm --filter @tunarr/web exec node src/test/live-monitor-smoke.mjs
+        run: |
+          pnpm --filter @tunarr/web exec node src/test/live-monitor-smoke.mjs
+          pnpm --filter @tunarr/web exec node src/test/studio-smoke.mjs
       - name: Upload monitor screenshots
         if: always() && runner.os == 'Linux'
         uses: actions/upload-artifact@v4
         with:
           name: xbest-live-monitor-screenshots
-          path: web/test-results/live-monitor/
+          path: |
+            web/test-results/live-monitor/
+            web/test-results/studio/
           if-no-files-found: ignore
       - name: Check Linux launcher syntax
         if: runner.os == 'Linux'

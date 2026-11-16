@@ -69,7 +69,7 @@ export function ChannelProgrammingOrganizeOptions({ onClose }: Props) {
         </MenuItem>
       </ElevatedTooltip>
       <ElevatedTooltip
-        title={t`Makes multiple copies of the schedule and plays them in sequence. Normally this isn't necessary, because Tunarr will always play the schedule back from the beginning when it finishes. But creating replicas is a useful intermediary step sometimes before applying other transformations. Note that because very large channels can be problematic, the number of replicas will be limited to avoid creating really large channels.`}
+        title={t`Makes multiple copies of the schedule and plays them in sequence. Normally this isn't necessary, because XBest will always play the schedule back from the beginning when it finishes. But creating replicas is a useful intermediary step sometimes before applying other transformations. Note that because very large channels can be problematic, the number of replicas will be limited to avoid creating really large channels.`}
         placement="right"
         elevation={10}
       >

@@ -23,7 +23,7 @@ import { createTunarrTheme } from './theme.ts';
 // always has text (no blank flash or message IDs).
 i18n.loadAndActivate({ locale: 'en', messages: enMessages });
 
-export const Tunarr = () => {
+export const XBestApp = () => {
   const locale = useStore((store) => store.settings.ui.i18n.locale);
 
   // On mount and whenever the stored locale changes, load the catalog and

@@ -17,7 +17,6 @@ import { useSettings } from '../store/settings/selectors.ts';
 let apiClient = createClient({
   baseURL: useStore.getState().settings.backendUri,
 });
-console.log(apiClient.getConfig());
 // Gotta be careful using this... we're only exposing this
 // for the preloaders. All other usages should come from the
 // context API and related hooks.

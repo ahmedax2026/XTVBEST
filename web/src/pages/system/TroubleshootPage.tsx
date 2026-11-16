@@ -259,7 +259,7 @@ export const TroubleshootPage = ({
     const url = URL.createObjectURL(blob);
     const a = document.createElement('a');
     a.href = url;
-    a.download = `tunarr-troubleshoot-${new Date().toISOString().replace(/[:.]/g, '-')}.json`;
+    a.download = `xbest-troubleshoot-${new Date().toISOString().replace(/[:.]/g, '-')}.json`;
     a.click();
     URL.revokeObjectURL(url);
   };
@@ -469,7 +469,7 @@ export const TroubleshootPage = ({
                     <TableBody>
                       <TableRow>
                         <TableCell>
-                          <strong>Tunarr</strong>
+                          <strong>XBest</strong>
                         </TableCell>
                         <TableCell>{result.systemInfo.tunarrVersion}</TableCell>
                       </TableRow>

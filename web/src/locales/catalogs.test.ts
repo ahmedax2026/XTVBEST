@@ -28,3 +28,13 @@ describe('lingui catalogs', () => {
     },
   );
 });
+
+test('active product copy has no previous product branding in either language', () => {
+  for (const contents of Object.values(catalogs)) {
+    const active = contents
+      .split('\n')
+      .filter((line) => !line.startsWith('#'))
+      .join('\n');
+    expect(active).not.toMatch(/\bTunarr\b|تونار/i);
+  }
+});

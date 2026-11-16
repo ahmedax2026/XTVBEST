@@ -6,6 +6,31 @@ Modified distribution based on Tunarr. The original zlib license and copyright n
 
 Initial branding: red and black theme, dark default, studio wordmark. The interface supports Arabic and English only; Arabic is the default and uses RTL. Removed saved locale choices fall back to Arabic without resetting the server URL or other settings.
 
+## Custom studio interface
+
+The application now mounts XBest's own desktop sidebar/mobile drawer, studio
+header, home dashboard and channel-card presentation. The previous top navigation
+and phone bottom bar are not mounted. Dashboard metrics come from channel/session
+responses and distinguish API failure from genuine zero counts. Search, channel
+creation, watch/manage links, card/table mode, the guide and command palette remain
+functional. Settings panels, shared page headers, welcome and error states share
+the new identity; existing media/scheduling logic is retained.
+
+Browser sign-in now has XBest's Arabic/English screen, not a native Basic Auth
+prompt for HTML navigation. Sessions use opaque HttpOnly/SameSite=Strict cookies,
+expire after 8 hours and are cleared on process restart or sign-out. Accounts
+are revalidated on protected requests. HTTPS sessions use Secure cookies when
+HTTPS is correctly detected; configure trusted proxy/Host forwarding when using
+TLS termination. Cookie access is same-origin; external tools can keep using
+HTTP Basic. For older browser-cached Basic credentials, clear the browser's
+HTTP-auth cache to test a complete logout.
+
+Visible product text, marks, favicons, stream placeholder artwork, friendly names
+and metadata use XBest. Stable wire keys, storage identifiers and mandatory
+copyright/license notices remain compatible. Old default-artwork URLs serve the
+new graphics. The new UI is a custom frontend on the existing modified media
+engine; detailed editor logic is reused. See [interface scope](plans/xbest-studio-interface.md).
+
 ## CPU/GPU and protected startup
 
 CPU and manual GPU profiles use the existing FFmpeg pipeline. Auto now probes an actual encoder before each new session (cached for one minute), uses software decoding/filtering with GPU encoding, and falls back to CPU if every probe fails. Each channel chooses its transcode profile. Configuration changes apply to new playback sessions. See [setup and limitations](docs/xbest-cpu-gpu-login.md).

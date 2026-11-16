@@ -291,9 +291,7 @@ export class ProgramStreamDetailsFetcher {
       }
     }
 
-    return new HttpStreamSource(
-      makeLocalUrl('/images/generic-music-screen.png'),
-    );
+    return new HttpStreamSource(makeLocalUrl('/images/xbest-music.png'));
   }
 
   private async resolveReachableArtwork(
