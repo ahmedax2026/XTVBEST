@@ -1,3 +1,8 @@
+import {
+  AccessControl,
+  createLicenseHook,
+} from './services/access/AccessControl.ts';
+import { accessApi } from './api/accessApi.ts';
 import { container } from '@/container.js';
 import { KEYS } from '@/types/inject.js';
 import type { ServerType } from '@/types/serverType.js';
@@ -118,9 +123,24 @@ export class Server {
       .withTypeProvider<ZodTypeProvider>();
 
     const basicAuth = basicAuthConfigFromEnv();
+    const access = await AccessControl.open({
+      directory: this.serverOptions.databaseDirectory,
+      owner: basicAuth,
+      issuer: process.env.XBEST_LICENSE_ISSUER === '1',
+      publicKeyFile: process.env.XBEST_LICENSE_PUBLIC_KEY_FILE,
+      licenseServer: process.env.XBEST_LICENSE_SERVER_URL,
+    });
     if (basicAuth) {
-      this.app.addHook('onRequest', createTunarrBasicAuthHook(basicAuth));
+      this.app.addHook(
+        'onRequest',
+        createTunarrBasicAuthHook(basicAuth, (header) =>
+          access.authenticate(header),
+        ),
+      );
     }
+
+    this.app.addHook('onRequest', createLicenseHook(access));
+    await this.app.register(accessApi(access), { prefix: '/api/access' });
 
     if (serverOptions().printRoutes) {
       await this.app.register(

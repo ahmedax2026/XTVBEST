@@ -81,7 +81,7 @@ removed after encoder exit or cancellation, including cancellation before start.
 - Extend the local saved-channel implementation to remote sources, random fillers and additional playback engines; verify complete HLS playback on Windows and actual GPU hardware.
 - Preserve schedule and permit switching back to live. Provide start, stop, skip, restart and scheduled content replacement.
 - Per-channel quality profiles and optional adaptive HLS; verify actual output URLs with IPTV panel.
-- Authentication, authorization and HTTPS deployment; no hardcoded credentials. Existing basic authentication is not a substitute for stream authorization.
+- Verify the new owner/operator controls and central license issuer on real customer installations; provision HTTPS. Basic authentication is not a substitute for stream authorization.
 - Windows and Linux build and playback verification before a release.
 
 ## Customer distribution and licensing status
@@ -93,9 +93,59 @@ SQL migrations, public verification keys and license notices are retained. This
 reduces accidental disclosure; minification and executable packaging do not
 prevent a server administrator from extracting or modifying local software.
 
-User management, per-installation activation and owner-issued licenses are still
-pending. Their signing private key must stay on an owner-controlled issuer, never
-in customer executables or repository files. Customer installations should carry
-only public verification material. Offline validation cannot promise immediate
-remote revocation. The existing public repository already exposes application
-source; future proprietary licensing components need a private delivery path.
+The application now includes **Settings > Users and licenses** (Arabic/English):
+owner-only user creation, disable/enable and deletion; signed license issuance,
+expiry, server binding, renewal, disable/enable, and customer activation. On the issuer, fill the optional **User server ID** when adding an account to
+bind it to that customer installation. Customer copies verify those credentials
+online with the issuer; these accounts cannot log in to another customer's
+installation or the issuer itself. Disable/delete from the issuer takes effect
+after a maximum 30-second successful-login cache. Central account verification
+requires an active customer license. Leave the field empty for a local account;
+local account disable/delete is checked on each new login request. Ordinary users cannot call owner
+management endpoints. They otherwise retain access to application operations and
+must be trusted with that installation. Owner credentials remain the existing
+`TUNARR_BASIC_AUTH_USER` / `TUNARR_BASIC_AUTH_PASSWORD` bootstrap configuration;
+they cannot be deleted through the operator list. Added passwords require at
+least 12 characters and are stored using salted scrypt.
+
+### Owner issuer installation
+
+Start your own installation with both owner login variables and
+`XBEST_LICENSE_ISSUER=1`. Open `/web/settings/access` and copy the **public key**
+for customer deployment. The runtime-generated private key is stored under the
+configured database directory at `access/issuer.private.pem`; keep it only on
+your issuer, back it up privately, and restrict its filesystem permissions.
+The public-key endpoint never exports the private key. Do not give customers a
+copy of your issuer database directory. Windows deployments should restrict the
+access directory to the service account using NTFS permissions.
+
+### Customer installation
+
+Configure its owner login and set:
+
+- `XBEST_LICENSE_PUBLIC_KEY_FILE`: absolute path to a PEM file containing the
+  issuer public key copied from your panel.
+- `XBEST_LICENSE_SERVER_URL`: HTTPS address of your reachable issuer (for example
+  `https://licenses.example.com`). Plain HTTP is accepted only for localhost tests.
+- Leave `XBEST_LICENSE_ISSUER` unset. Never include an issuer private key.
+
+Open `/web/settings/access`, copy the installation ID into your owner panel,
+issue a license, then paste the returned activation code into the customer panel.
+Renewing generates a new activation code and invalidates the old one. Disabled
+licenses fail the next online check, with up to a 60-second success cache.
+After the cache expires, an unreachable issuer also blocks new protected
+requests. Expired/unactivated clients retain access to the activation page.
+Already-open continuous streams are not forcibly terminated; no files are erased.
+Use HTTPS for the entire application, including Basic Auth; the application does
+not provision TLS certificates or deploy your issuer service automatically.
+
+Unconfigured existing installations keep their previous behavior and do not
+require a license. A server administrator can change flags or patch the binary:
+these checks cannot guarantee anti-tamper protection on a customer-controlled
+host. Host identity/installation UUID binding also cannot prevent an administrator
+from cloning or spoofing a machine. Source in this public repository remains
+visible. Future private code needs a private delivery path.
+
+Release packaging now includes an external and in-archive SHA-256 manifest for
+comparison with a trusted published release. It detects different downloaded
+bytes; it is not an unpatchable runtime integrity check or a code-signing certificate.

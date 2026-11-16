@@ -1,3 +1,4 @@
+import { releaseChecksums } from './releaseChecksums.ts';
 import { copyCustomerAssets } from './customerAssets.ts';
 import dotenv from '@dotenvx/dotenvx';
 dotenv.config({ debug: false, quiet: true, ignore: ['MISSING_ENV_FILE'] });
@@ -275,6 +276,9 @@ for (const arch of args.target) {
           etvNext: etvNext.binaryPath,
           etvNextCompanions: etvNext.companionPaths,
         });
+        const checksums = await releaseChecksums(entries);
+        await fs.writeFile(`./bin/${releaseName}.SHA256SUMS`, checksums);
+        archive.append(checksums, { name: `${releaseName}/SHA256SUMS` });
         for (const { source, name } of entries) {
           archive.file(source, { name });
         }

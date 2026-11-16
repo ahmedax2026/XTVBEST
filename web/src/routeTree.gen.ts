@@ -30,6 +30,7 @@ import { Route as SettingsHdhrRouteImport } from './routes/settings/hdhr';
 import { Route as SettingsGeneralRouteImport } from './routes/settings/general';
 import { Route as SettingsFfmpegRouteImport } from './routes/settings/ffmpeg';
 import { Route as SettingsFeaturesRouteImport } from './routes/settings/features';
+import { Route as SettingsAccessRouteImport } from './routes/settings/access';
 import { Route as ProfilesTranscodeRouteImport } from './routes/profiles/transcode';
 import { Route as ProfilesStreamSelectionRouteImport } from './routes/profiles/stream-selection';
 import { Route as LibraryPlaylistsRouteImport } from './routes/library/playlists';
@@ -174,6 +175,11 @@ const SettingsFfmpegRoute = SettingsFfmpegRouteImport.update({
 const SettingsFeaturesRoute = SettingsFeaturesRouteImport.update({
   id: '/features',
   path: '/features',
+  getParentRoute: () => SettingsRoute,
+} as any);
+const SettingsAccessRoute = SettingsAccessRouteImport.update({
+  id: '/access',
+  path: '/access',
   getParentRoute: () => SettingsRoute,
 } as any);
 const ProfilesTranscodeRoute = ProfilesTranscodeRouteImport.update({
@@ -415,6 +421,7 @@ export interface FileRoutesByFullPath {
   '/library/playlists': typeof LibraryPlaylistsRoute;
   '/profiles/stream-selection': typeof ProfilesStreamSelectionRoute;
   '/profiles/transcode': typeof ProfilesTranscodeRoute;
+  '/settings/access': typeof SettingsAccessRoute;
   '/settings/features': typeof SettingsFeaturesRoute;
   '/settings/ffmpeg': typeof SettingsFfmpegRoute;
   '/settings/general': typeof SettingsGeneralRoute;
@@ -476,6 +483,7 @@ export interface FileRoutesByTo {
   '/library/playlists': typeof LibraryPlaylistsRoute;
   '/profiles/stream-selection': typeof ProfilesStreamSelectionRoute;
   '/profiles/transcode': typeof ProfilesTranscodeRoute;
+  '/settings/access': typeof SettingsAccessRoute;
   '/settings/features': typeof SettingsFeaturesRoute;
   '/settings/ffmpeg': typeof SettingsFfmpegRoute;
   '/settings/general': typeof SettingsGeneralRoute;
@@ -538,6 +546,7 @@ export interface FileRoutesById {
   '/library/playlists': typeof LibraryPlaylistsRoute;
   '/profiles/stream-selection': typeof ProfilesStreamSelectionRoute;
   '/profiles/transcode': typeof ProfilesTranscodeRoute;
+  '/settings/access': typeof SettingsAccessRoute;
   '/settings/features': typeof SettingsFeaturesRoute;
   '/settings/ffmpeg': typeof SettingsFfmpegRoute;
   '/settings/general': typeof SettingsGeneralRoute;
@@ -603,6 +612,7 @@ export interface FileRouteTypes {
     | '/library/playlists'
     | '/profiles/stream-selection'
     | '/profiles/transcode'
+    | '/settings/access'
     | '/settings/features'
     | '/settings/ffmpeg'
     | '/settings/general'
@@ -664,6 +674,7 @@ export interface FileRouteTypes {
     | '/library/playlists'
     | '/profiles/stream-selection'
     | '/profiles/transcode'
+    | '/settings/access'
     | '/settings/features'
     | '/settings/ffmpeg'
     | '/settings/general'
@@ -725,6 +736,7 @@ export interface FileRouteTypes {
     | '/library/playlists'
     | '/profiles/stream-selection'
     | '/profiles/transcode'
+    | '/settings/access'
     | '/settings/features'
     | '/settings/ffmpeg'
     | '/settings/general'
@@ -956,6 +968,13 @@ declare module '@tanstack/react-router' {
       path: '/features';
       fullPath: '/settings/features';
       preLoaderRoute: typeof SettingsFeaturesRouteImport;
+      parentRoute: typeof SettingsRoute;
+    };
+    '/settings/access': {
+      id: '/settings/access';
+      path: '/access';
+      fullPath: '/settings/access';
+      preLoaderRoute: typeof SettingsAccessRouteImport;
       parentRoute: typeof SettingsRoute;
     };
     '/profiles/transcode': {
@@ -1242,6 +1261,7 @@ declare module '@tanstack/react-router' {
 }
 
 interface SettingsRouteChildren {
+  SettingsAccessRoute: typeof SettingsAccessRoute;
   SettingsFeaturesRoute: typeof SettingsFeaturesRoute;
   SettingsFfmpegRoute: typeof SettingsFfmpegRoute;
   SettingsGeneralRoute: typeof SettingsGeneralRoute;
@@ -1254,6 +1274,7 @@ interface SettingsRouteChildren {
 }
 
 const SettingsRouteChildren: SettingsRouteChildren = {
+  SettingsAccessRoute: SettingsAccessRoute,
   SettingsFeaturesRoute: SettingsFeaturesRoute,
   SettingsFfmpegRoute: SettingsFfmpegRoute,
   SettingsGeneralRoute: SettingsGeneralRoute,
