@@ -15,7 +15,7 @@ export type ReleaseArchiveFiles = {
 /**
  * Places every file in one top-level folder named for the release. The folder
  * carries the version and the binaries inside do not, so a user's shortcut or
- * service path to `tunarr.exe` survives an upgrade.
+ * service path to `XBEST.exe` survives an upgrade.
  */
 export function releaseArchiveEntries(
   folderName: string,
@@ -26,7 +26,7 @@ export function releaseArchiveEntries(
   const inFolder = (name: string) => path.posix.join(folderName, name);
 
   return [
-    { source: files.tunarr, name: inFolder(`tunarr${exe}`) },
+    { source: files.tunarr, name: inFolder(`XBEST${exe}`) },
     { source: files.meilisearch, name: inFolder(`meilisearch${exe}`) },
     { source: files.etvNext, name: inFolder(`ersatztv-channel${exe}`) },
     ...files.etvNextCompanions.map((source) => ({

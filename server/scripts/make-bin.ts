@@ -100,7 +100,7 @@ const args = await yargs(hideBin(process.argv))
 !(await fileExists('./bin')) && (await fs.mkdir('./bin'));
 
 if (args.clean) {
-  await rimraf('./bin/tunarr*', { glob: true });
+  await rimraf('./bin/XBEST*', { glob: true });
 }
 
 (await fileExists('./dist/web')) &&
@@ -209,7 +209,7 @@ for (const arch of args.target) {
       );
       console.debug(`Wrote config`);
 
-      let execName = `tunarr`;
+      let execName = `XBEST`;
       if (args.includeVersion && !isEdgeBuild) {
         const version = process.env.TUNARR_VERSION ?? serverPackage.version;
         execName += `-${version}`;
@@ -275,6 +275,10 @@ for (const arch of args.target) {
           meilisearch: `./bin/meilisearch-${arch}`,
           etvNext: etvNext.binaryPath,
           etvNextCompanions: etvNext.companionPaths,
+        });
+        entries.push({
+          source: '../LICENSE',
+          name: `${releaseName}/LICENSE`,
         });
         const checksums = await releaseChecksums(entries);
         await fs.writeFile(`./bin/${releaseName}.SHA256SUMS`, checksums);

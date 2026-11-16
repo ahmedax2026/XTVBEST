@@ -40,7 +40,7 @@ jobs:
       - name: Test hardware selection, persistence, pipeline and authentication
         env:
           XBEST_CAPTURE_LOGIN: '1'
-        run: pnpm --filter @tunarr/server test src/ffmpeg/AutoHardwareAcceleration.test.ts src/db/TranscodeConfigDB.test.ts src/ffmpeg/FfmpegStreamFactory.test.ts src/stream/etv/EtvNextSession.test.ts src/util/basicAuth.test.ts src/services/access/AccessControl.test.ts src/services/access/StudioWebLogin.test.ts scripts/customerAssets.test.ts scripts/releaseChecksums.test.ts src/services/archive/ArchiveStore.test.ts src/services/archive/ChannelArchiveService.test.ts src/services/overlay/countdownAss.test.ts src/services/overlay/ChannelOverlayService.test.ts src/ffmpeg/FfmpegTrancodeSession.test.ts src/ffmpeg/builder/pipeline/ProgramOverlayPipeline.test.ts
+        run: pnpm --filter @tunarr/server test src/ffmpeg/AutoHardwareAcceleration.test.ts src/db/TranscodeConfigDB.test.ts src/ffmpeg/FfmpegStreamFactory.test.ts src/stream/etv/EtvNextSession.test.ts src/util/basicAuth.test.ts src/services/access/AccessControl.test.ts src/services/access/StudioWebLogin.test.ts scripts/releaseArchive.test.ts scripts/customerAssets.test.ts scripts/releaseChecksums.test.ts src/services/archive/ArchiveStore.test.ts src/services/archive/ChannelArchiveService.test.ts src/services/overlay/countdownAss.test.ts src/services/overlay/ChannelOverlayService.test.ts src/ffmpeg/FfmpegTrancodeSession.test.ts src/ffmpeg/builder/pipeline/ProgramOverlayPipeline.test.ts
       - name: Typecheck owner access and packaging tests
         run: pnpm --filter @tunarr/server exec tsc --noEmit -p tsconfig.access-test.json
       - name: Install FFmpeg for archive acceptance tests
@@ -121,13 +121,13 @@ jobs:
       - name: Upload preview and protected launchers
         uses: actions/upload-artifact@v4
         with:
-          name: xbest-preview-${{ matrix.target }}
+          name: XBEST-preview-${{ matrix.target }}
           if-no-files-found: error
           retention-days: 14
           path: |
-            server/bin/tunarr-*.zip
-            server/bin/tunarr-*.tar.gz
-            server/bin/tunarr-*.SHA256SUMS
+            server/bin/XBEST-*.zip
+            server/bin/XBEST-*.tar.gz
+            server/bin/XBEST-*.SHA256SUMS
             scripts/start-xbest.ps1
             scripts/start-xbest.sh
             docs/xbest-cpu-gpu-login.md

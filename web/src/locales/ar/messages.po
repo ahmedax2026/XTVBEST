@@ -151,7 +151,7 @@ msgstr "{0} ch"
 #. placeholder {0}: channels.length
 #: src/components/profiles/StreamSelectionProfilesTable.tsx
 msgid "{0} channel(s)"
-msgstr "{0} channel(s)"
+msgstr "{0} قناة"
 
 #: src/components/profiles/StreamSelectionProfilesTable.tsx
 #~ msgid "{0} custom show(s)"
@@ -194,7 +194,7 @@ msgstr "{0} of {1} channels failed to duplicate"
 #. placeholder {0}: customShows.length
 #: src/components/profiles/StreamSelectionProfilesTable.tsx
 msgid "{0} playlist(s)"
-msgstr "{0} playlist(s)"
+msgstr "{0} قائمة تشغيل"
 
 #. placeholder {0}: program.title
 #: src/components/programs/MediaDetailCard.tsx
@@ -294,11 +294,11 @@ msgstr "{days, plural, one {# day} other {# days}}"
 
 #: src/components/settings/media_source/MediaSourceLibrariesChip.tsx
 msgid "{enabled} of {total} enabled"
-msgstr "{enabled} of {total} enabled"
+msgstr "مفعّل {enabled} من {total}"
 
 #: src/components/ui/table/TablePager.tsx
 msgid "{from}–{to} of {count}"
-msgstr "{from}–{to} of {count}"
+msgstr "{from}–{to} من {count}"
 
 #: src/components/channels/ChannelSummaryQuickStats.tsx
 msgid "{hours, plural, one {# hour} other {# hours}}"
@@ -306,7 +306,7 @@ msgstr "{hours, plural, one {# hour} other {# hours}}"
 
 #: src/components/channels/ChannelStatusPill.tsx
 msgid "{label}, show sessions"
-msgstr "{label}, show sessions"
+msgstr "{label}، عرض الجلسات"
 
 #: src/components/slot_scheduler/RandomSlotTable.tsx
 #: src/components/slot_scheduler/TimeSlotTable.tsx
@@ -324,11 +324,11 @@ msgstr "{more, plural, one {and # more} other {and # more}}"
 #: src/components/profiles/StreamSelectionProfilesTable.tsx
 #: src/components/profiles/StreamSelectionProfilesTable.tsx
 msgid "{programCount} program(s)"
-msgstr "{programCount} program(s)"
+msgstr "{programCount} محتوى"
 
 #: src/components/guide/TvGuide.tsx
 msgid "{remainingTime} left"
-msgstr "{remainingTime} left"
+msgstr "المتبقي {remainingTime}"
 
 #: src/pages/channels/ChannelsPage.tsx
 #: src/pages/channels/ChannelsPage.tsx
@@ -356,7 +356,7 @@ msgstr "{value, plural, one {# program} other {# programs}}"
 
 #: src/pages/settings/HdhrSettingsPage.tsx
 msgid "* Restart required"
-msgstr "* Restart required"
+msgstr "* يتطلب إعادة تشغيل"
 
 #: src/components/programming_controls/AddBlockShuffleModal.tsx
 msgid "# of Programs"
@@ -434,7 +434,7 @@ msgstr "قد يفتح المشغّل الواحد عدة اتصالات؛ الع
 
 #: src/components/settings/media_source/LocalMediaEditDialog.tsx
 msgid "A root path to scan for media. Local sources can search many different paths."
-msgstr "A root path to scan for media. Local sources can search many different paths."
+msgstr "مسار مجلد المحتوى المراد فحصه. يمكنك إضافة عدة مسارات للمصدر المحلي."
 
 #: src/components/channel_config/ChannelTranscodingConfig.tsx
 #~ msgid "A stream selection profile chooses the audio and subtitle streams for programs on this channel. Filler lists and custom shows can assign their own profile, which takes precedence."
@@ -447,12 +447,12 @@ msgstr "A stream selection profile chooses the audio and subtitle streams for pr
 #: src/components/channel_config/ChannelProgrammingSort.tsx
 #: src/components/custom-shows/CustomShowSortToolsMenu.tsx
 msgid "A-Z (asc)"
-msgstr "A-Z (asc)"
+msgstr "أبجديًا تصاعديًا"
 
 #: src/components/channel_config/ChannelProgrammingSort.tsx
 #: src/components/custom-shows/CustomShowSortToolsMenu.tsx
 msgid "A-Z (desc)"
-msgstr "A-Z (desc)"
+msgstr "أبجديًا تنازليًا"
 
 #: src/helpers/dayjs.ts
 msgid "about "
@@ -465,12 +465,12 @@ msgstr "about "
 #: src/components/settings/media_source/PlexServerEditDialog.tsx
 #: src/components/settings/media_source/PlexServerEditDialog.tsx
 msgid "Access Token"
-msgstr "Access Token"
+msgstr "رمز الوصول"
 
 #: src/components/ui/table/ActionsHeader.tsx
 #: src/pages/settings/TaskSettingsPage.tsx
 msgid "Actions"
-msgstr "Actions"
+msgstr "الإجراءات"
 
 #: src/components/channel_config/AddProgrammingButton.tsx
 #: src/components/library/ProgramListItem.tsx
@@ -483,16 +483,16 @@ msgstr "Actions"
 #: src/components/settings/media_source/PlexServerEditDialog.tsx
 #: src/hooks/useRouteName.ts
 msgid "Add"
-msgstr "Add"
+msgstr "إضافة"
 
 #. placeholder {0}: item.type
 #: src/components/library/ProgramListItem.tsx
 msgid "Add {0}"
-msgstr "Add {0}"
+msgstr "إضافة {0}"
 
 #: src/components/channel_config/ChannelFlexConfig.tsx
 msgid "Add a Filler List"
-msgstr "Add a Filler List"
+msgstr "إضافة قائمة فواصل"
 
 #: src/components/search/SearchFilterBuilder.tsx
 msgid "Add a filter expression to fine-tune results of the search"
@@ -508,27 +508,27 @@ msgstr "Add a filter expression to fine-tune results of the search"
 
 #: src/components/programming_controls/AddBreaksModal.tsx
 msgid "Add Breaks"
-msgstr "Add Breaks"
+msgstr "إضافة فواصل"
 
 #: src/components/channel_config/ChannelProgrammingFlexTools.tsx
 msgid "Add Breaks..."
-msgstr "Add Breaks..."
+msgstr "إضافة فواصل..."
 
 #: src/components/programming_controls/AddRedirectModal.tsx
 msgid "Add Channel Redirect"
-msgstr "Add Channel Redirect"
+msgstr "إضافة تحويل إلى قناة"
 
 #: src/components/profiles/condition/ConditionGroupEditor.tsx
 msgid "Add condition"
-msgstr "Add condition"
+msgstr "إضافة شرط"
 
 #: src/components/search/SearchGroupNode.tsx
 msgid "Add field"
-msgstr "Add field"
+msgstr "إضافة حقل"
 
 #: src/components/slot_scheduler/SlotFillerDialogPanel.tsx
 msgid "Add filler"
-msgstr "Add filler"
+msgstr "إضافة فاصل"
 
 #: src/components/channel_config/AddProgrammingButton.tsx
 #~ msgid "Add Flex"
@@ -564,7 +564,7 @@ msgstr "Add point (%)"
 #: src/hooks/useRouteName.ts
 #: src/hooks/useRouteName.ts
 msgid "Add Programming"
-msgstr "Add Programming"
+msgstr "إضافة محتوى"
 
 #: src/components/custom-shows/EditCustomShowForm.tsx
 #~ msgid "Add programming to custom show"
@@ -601,7 +601,7 @@ msgstr "Add Slot"
 
 #: src/pages/welcome/WelcomePage.tsx
 msgid "Add these links to an IPTV client. Jellyfin and Emby can use XBest as either an M3U source or an HDHomeRun tuner. Plex can add XBest as an HDHomeRun tuner."
-msgstr "Add these links to an IPTV client. Jellyfin and Emby can use XBest as either an M3U source or an HDHomeRun tuner. Plex can add XBest as an HDHomeRun tuner."
+msgstr "أضف الروابط التالية إلى مشغّل البث. يدعم Jellyfin وEmby الاتصال بـXBEST عبر قائمة M3U أو موالف HDHomeRun، بينما يتصل Plex عبر موالف HDHomeRun."
 
 #: src/components/filler/EditFillerListForm.tsx
 msgid "Add TV Shows or Movies to filler"
@@ -688,7 +688,7 @@ msgstr "Albums"
 
 #: src/components/channels/ChannelsView.tsx
 msgid "All"
-msgstr "All"
+msgstr "الكل"
 
 #: src/components/profiles/condition/ConditionGroupEditor.tsx
 msgid "ALL"
@@ -870,7 +870,7 @@ msgstr "Attempts to balance programming groups by either total lineup duration o
 #: src/components/profiles/StreamSelectionRuleEditor.tsx
 #: src/pages/system/TroubleshootPage.tsx
 msgid "Audio"
-msgstr "Audio"
+msgstr "الصوت"
 
 #: src/pages/settings/FfmpegSettingsPage.tsx
 msgid "Audio & Subtitle Options"
@@ -1211,7 +1211,7 @@ msgstr "Change the verbosity of specific categories of logs. Useful if debugging
 #: src/pages/system/TroubleshootPage.tsx
 #: src/pages/system/TroubleshootPage.tsx
 msgid "Channel"
-msgstr "Channel"
+msgstr "قناة"
 
 #: src/components/profiles/StreamSelectionPreviewPanel.tsx
 #: src/components/profiles/StreamSelectionPreviewPanel.tsx
@@ -1238,7 +1238,7 @@ msgstr "Channel group is required"
 
 #: src/components/channel_config/ChannelPropertiesEditor.tsx
 msgid "Channel Name"
-msgstr "Channel Name"
+msgstr "اسم القناة"
 
 #: src/components/channel_config/ChannelPropertiesEditor.tsx
 #: src/components/channel_config/ChannelPropertiesEditor.tsx
@@ -1247,7 +1247,7 @@ msgstr "Channel name is required"
 
 #: src/components/channel_config/ChannelPropertiesEditor.tsx
 msgid "Channel Number"
-msgstr "Channel Number"
+msgstr "رقم القناة"
 
 #: src/components/channels/ChannelOverlayDialog.tsx
 msgid "Channel preview"
@@ -1291,7 +1291,7 @@ msgstr "Channels M3U Link:"
 
 #: src/pages/welcome/WelcomePage.tsx
 msgid "Channels play your content on a schedule, like live TV."
-msgstr "Channels play your content on a schedule, like live TV."
+msgstr "تعرض القناة محتواك وفق جدول زمني، مثل القنوات التلفزيونية المباشرة."
 
 #: src/components/settings/ffmpeg/EtvNextCompatibilityNotice.tsx
 msgid "Channels using this config cannot stream on the ErsatzTV next backend"
@@ -1304,7 +1304,7 @@ msgstr "Check"
 
 #: src/pages/welcome/WelcomePage.tsx
 msgid "Check FFmpeg"
-msgstr "Check FFmpeg"
+msgstr "فحص أدوات الفيديو FFmpeg"
 
 #: src/components/channel_config/ChannelTranscodingConfig.tsx
 msgid "Choose the transcode configuration to use for this channel. Configure transcode configurations on the <0>FFmpeg settings page</0>."
@@ -1451,7 +1451,7 @@ msgstr "Configure what appears on your channel when there is no suitable filler 
 
 #: src/pages/welcome/WelcomePage.tsx
 msgid "Connect a media source"
-msgstr "Connect a media source"
+msgstr "إضافة مصدر للمحتوى"
 
 #: src/components/channel_config/ProgrammingSelector.tsx
 msgid "Connect Media Source"
@@ -1585,7 +1585,7 @@ msgstr "Could not parse this filter expression. Check the <0>documentation</0> f
 
 #: src/pages/welcome/WelcomePage.tsx
 msgid "Could not save setup progress. {message}"
-msgstr "Could not save setup progress. {message}"
+msgstr "تعذر حفظ تقدم الإعداد. {message}"
 
 #: src/components/channels/ChannelOverlayDialog.tsx
 msgid "Countdown color"
@@ -1633,7 +1633,7 @@ msgstr "Create"
 
 #: src/pages/welcome/WelcomePage.tsx
 msgid "Create a channel"
-msgstr "Create a channel"
+msgstr "إنشاء قناة"
 
 #: src/components/channel_config/NoChannelsCreated.tsx
 #: src/components/channels/ChannelsView.tsx
@@ -1758,7 +1758,7 @@ msgstr "تصحيح الأخطاء"
 #: src/pages/system/TroubleshootPage.tsx
 #: src/pages/system/TroubleshootPage.tsx
 msgid "Default"
-msgstr "Default"
+msgstr "افتراضي"
 
 #. placeholder {0}: defaultProfile?.name ?? t`XBest Default`
 #: src/components/profiles/StreamSelectionProfileSelect.tsx
@@ -1921,7 +1921,7 @@ msgstr "Descending"
 
 #: src/pages/settings/TaskSettingsPage.tsx
 msgid "Description"
-msgstr "Description"
+msgstr "الوصف"
 
 #: src/components/fillers/AssignFillerToChannelsDialog.tsx
 msgid "Deselect All"
@@ -1942,7 +1942,7 @@ msgstr "رقمي"
 
 #: src/components/profiles/StreamSelectionRuleEditor.tsx
 msgid "Disable"
-msgstr "Disable"
+msgstr "تعطيل"
 
 #: src/components/settings/ffmpeg/TranscodeConfigAdvancedOptions.tsx
 msgid "Disable Hardware Decoding"
@@ -1969,7 +1969,7 @@ msgstr "Disable Watermarks"
 #: src/pages/settings/FfmpegSettingsPage.tsx
 #: src/pages/system/StatusPage.tsx
 msgid "Disabled"
-msgstr "Disabled"
+msgstr "معطّل"
 
 #: src/hooks/useVersion.tsx
 msgid "Dismiss"
@@ -1999,7 +1999,7 @@ msgstr "Do not group programs at all. Normal shuffle."
 
 #: src/pages/welcome/WelcomePage.tsx
 msgid "Docs"
-msgstr "Docs"
+msgstr "دليل الاستخدام"
 
 #: src/components/ui/patterns/AppShell/HelpMenu.tsx
 msgid "Documentation"
@@ -2059,7 +2059,7 @@ msgstr "Duplicates"
 #: src/components/slot_scheduler/RandomSlotTable.tsx
 #: src/pages/system/TroubleshootPage.tsx
 msgid "Duration"
-msgstr "Duration"
+msgstr "المدة"
 
 #: src/components/programming_controls/AddFlexModal.tsx
 #: src/components/programming_controls/AddRedirectModal.tsx
@@ -2265,7 +2265,7 @@ msgstr "Enable Watermark"
 #: src/components/channel_config/ChannelPropertiesEditor.tsx
 #: src/pages/system/StatusPage.tsx
 msgid "Enabled"
-msgstr "Enabled"
+msgstr "مفعّل"
 
 #: src/components/settings/ffmpeg/TranscodeConfigAudioSettingsForm.tsx
 msgid "Enabled (loudnorm)"
@@ -2481,7 +2481,7 @@ msgstr "Experimental: Make perfect schedule loop"
 #: src/components/channels/ChannelsView.tsx
 #: src/components/channels/ChannelsView.tsx
 msgid "Export M3U"
-msgstr "Export M3U"
+msgstr "تصدير قائمة M3U"
 
 #: src/components/profiles/StreamSelectionPreviewPanel.tsx
 msgid "external"
@@ -2736,7 +2736,7 @@ msgstr "Filter by {label}"
 
 #: src/pages/welcome/WelcomePage.tsx
 msgid "Finish"
-msgstr "Finish"
+msgstr "إنهاء الإعداد"
 
 #: src/components/programming_controls/AddBlockShuffleModal.tsx
 msgid "First Episode"
@@ -2784,7 +2784,7 @@ msgstr "Flex Style"
 
 #: src/pages/welcome/WelcomePage.tsx
 msgid "Follow these steps to set up your first channel. Each step will update upon completion. You can skip setup at any time and do all of this from the menu later."
-msgstr "Follow these steps to set up your first channel. Each step will update upon completion. You can skip setup at any time and do all of this from the menu later."
+msgstr "اتبع هذه الخطوات لتجهيز قناتك الأولى. تتحدث حالة كل خطوة تلقائيًا بعد إتمامها. يمكنك تخطي الإعداد الآن والعودة إلى هذه الخيارات من القائمة لاحقًا."
 
 #: src/components/settings/media_source/PlexServerEditDialog.tsx
 msgid "For more details on manually retrieving a Plex token, see <0>here</0>"
@@ -3138,7 +3138,7 @@ msgstr "اللغة"
 
 #: src/components/profiles/StreamSelectionRuleEditor.tsx
 msgid "Languages"
-msgstr "Languages"
+msgstr "اللغات"
 
 #: src/components/channels/ChannelSessionsDialog.tsx
 msgid "Last activity:"
@@ -3282,7 +3282,7 @@ msgstr "Loading version…"
 
 #: src/components/ProgramSearchAutocomplete.tsx
 msgid "Loading..."
-msgstr "Loading..."
+msgstr "جارٍ التحميل..."
 
 #: src/components/ProgramSearchAutocomplete.tsx
 #: src/components/ui/patterns/AppShell/CommandPalette.tsx
@@ -3291,7 +3291,7 @@ msgstr "Loading…"
 
 #: src/components/settings/media_source/AddMediaSourceButton.tsx
 msgid "Local"
-msgstr "Local"
+msgstr "محلي"
 
 #: src/components/settings/media_source/EditPathReplacementsForm.tsx
 msgid "Local Path"
@@ -3353,7 +3353,7 @@ msgstr "Loudnorm Options"
 
 #: src/pages/welcome/WelcomePage.tsx
 msgid "M3U playlist"
-msgstr "M3U playlist"
+msgstr "قائمة القنوات M3U"
 
 #: src/components/ui/patterns/AppShell/PhoneNav.tsx
 #: src/components/ui/patterns/AppShell/ShellTopBar.tsx
@@ -3476,7 +3476,7 @@ msgstr "Media Info"
 #: src/components/channel_config/ProgrammingSelector.tsx
 #: src/components/custom-shows/EditCustomShowForm.tsx
 msgid "Media Source"
-msgstr "Media Source"
+msgstr "مصدر المحتوى"
 
 #. placeholder {0}: library.mediaSource.name
 #. placeholder {0}: mediaSource.name
@@ -3488,7 +3488,7 @@ msgstr "Media Source: \"{0}\""
 #: src/pages/settings/MediaSourceSettingsPage.tsx
 #: src/pages/settings/MediaSourceSettingsPage.tsx
 msgid "Media Sources"
-msgstr "Media Sources"
+msgstr "مصادر المحتوى"
 
 #: src/pages/settings/MediaSourceSettingsPage.tsx
 #~ msgid "Media Sources are where Tunarr sources your content. Media can come from your filesystem or a remote server, like Plex or Jellyfin. At least one Media Source is necessary to create channels and play media in Tunarr."
@@ -3504,7 +3504,7 @@ msgstr "Media Sources are where XBest sources your content. Media can come from 
 
 #: src/pages/welcome/WelcomePage.tsx
 msgid "Media sources provide the content for your channels. XBest supports Plex, Jellyfin, Emby, and local folders."
-msgstr "Media sources provide the content for your channels. XBest supports Plex, Jellyfin, Emby, and local folders."
+msgstr "مصادر المحتوى هي الأماكن التي توجد فيها أفلامك ومسلسلاتك. يدعم XBEST مجلدات الجهاز وخوادم Plex وJellyfin وEmby."
 
 #: src/components/MediaSourceLibraryTable.tsx
 #: src/components/settings/media_source/LocalMediaEditDialog.tsx
@@ -3694,7 +3694,7 @@ msgstr "New"
 #: src/pages/channels/NewChannelPage.tsx
 #: src/pages/welcome/WelcomePage.tsx
 msgid "New Channel"
-msgstr "New Channel"
+msgstr "قناة جديدة"
 
 #: src/pages/library/EditCustomShowPage.tsx
 #: src/pages/library/NewCustomShowPage.tsx
@@ -3754,7 +3754,7 @@ msgstr "Next Scheduled Execution"
 #: src/components/channels/ChannelsView.tsx
 #: src/components/ui/table/filters/BooleanFilter.tsx
 msgid "No"
-msgstr "No"
+msgstr "لا"
 
 #: src/pages/channels/ChannelsPage.tsx
 #: src/pages/channels/ChannelsPage.tsx
@@ -3787,7 +3787,7 @@ msgstr "No filler lists found. Create a filler list first."
 
 #: src/pages/welcome/WelcomePage.tsx
 msgid "No libraries are enabled yet. XBest only syncs content from enabled libraries, so choose at least one below."
-msgstr "No libraries are enabled yet. XBest only syncs content from enabled libraries, so choose at least one below."
+msgstr "لم يتم تفعيل أي مكتبة بعد. اختر مكتبة واحدة على الأقل من القائمة ليتمكن XBEST من مزامنة محتواها."
 
 #: src/components/settings/media_source/MediaSourceLibrariesChip.tsx
 msgid "No libraries enabled"
@@ -3863,7 +3863,7 @@ msgstr "No viewers"
 #: src/components/programming_controls/ShuffleProgrammingModal.tsx
 #: src/pages/system/TroubleshootPage.tsx
 msgid "None"
-msgstr "None"
+msgstr "بدون"
 
 #: src/components/profiles/StreamSelectionRuleEditor.tsx
 #~ msgid "None (no filter)"
@@ -4116,12 +4116,12 @@ msgstr "Passthrough audio unchanged. Other settings will not apply."
 #: src/components/settings/media_source/JelllyfinServerEditDialog.tsx
 #: src/components/settings/media_source/JelllyfinServerEditDialog.tsx
 msgid "Password"
-msgstr "Password"
+msgstr "كلمة المرور"
 
 #: src/components/settings/media_source/LocalMediaEditDialog.tsx
 #: src/pages/system/TroubleshootPage.tsx
 msgid "Path"
-msgstr "Path"
+msgstr "المسار"
 
 #: src/components/settings/media_source/EditPathReplacementsForm.tsx
 msgid "Path Replacements"
@@ -4389,7 +4389,7 @@ msgstr "Program type"
 #: src/components/slot_scheduler/EditTimeSlotDialogContent.tsx
 #: src/hooks/useRouteName.ts
 msgid "Programming"
-msgstr "جدول البرامج"
+msgstr "جدول المحتوى"
 
 #: src/pages/channels/RandomSlotEditorPage.tsx
 #: src/pages/channels/TimeSlotEditorPage.tsx
@@ -4407,7 +4407,7 @@ msgstr "Programming starts at {startTime} and stops at {endTime}"
 
 #: src/components/channels/ChannelSummaryQuickStats.tsx
 msgid "Programs"
-msgstr "Programs"
+msgstr "المحتوى"
 
 #: src/components/channel_config/AddProgrammingButton.tsx
 #~ msgid "Programs a Flex time slot. Normally you'd use pad times, restrict times or add breaks to add a large quantity of Flex times at once, but this exists for more specific cases."
@@ -4580,7 +4580,7 @@ msgstr "المتبقي:"
 
 #: src/components/library/ProgramListItem.tsx
 msgid "Remove"
-msgstr "Remove"
+msgstr "إزالة"
 
 #. placeholder {0}: import { betterHumanize } from '@/helpers/dayjs'; import { isNonEmptyString } from '@/helpers/util'; import { Autocomplete, Box, Checkbox, Chip, DialogContentText, List, ListItem, ListItemText, TextField, } from '@mui/material'; import Button from '@mui/material/Button'; import Dialog from '@mui/material/Dialog'; import DialogActions from '@mui/material/DialogActions'; import DialogContent from '@mui/material/DialogContent'; import DialogTitle from '@mui/material/DialogTitle'; import { seq } from '@tunarr/shared/util'; import dayjs from 'dayjs'; import { every, identity, includes, isEmpty, map, reduce, some, uniqBy, values, } from 'lodash-es'; import { Trans, useLingui } from '@lingui/react/macro'; import { plural } from '@lingui/core/macro'; import type { HTMLAttributes } from 'react'; import { useMemo, useState } from 'react'; import { match, P } from 'ts-pattern'; import { useCounter } from 'usehooks-ts'; import { extractProgramGrandparent } from '../../helpers/programUtil.ts'; import type { RemoveProgrammingRequest } from '../../hooks/programming_controls/useRemoveProgramming'; import { useRemoveProgramming } from '../../hooks/programming_controls/useRemoveProgramming'; import useStore from '../../store'; import { materializedProgramListSelector } from '../../store/selectors'; type RemoveShowsModalProps = { open: boolean; onClose: () => void; }; interface FilmOptionType { id: string; title: string; firstLetter?: string; } const RemoveShowsModalContent = ({ onClose, }: Omit<RemoveShowsModalProps, 'open'>) => { const { t } = useLingui(); const { count, increment, decrement } = useCounter(0); const removeProgramming = useRemoveProgramming(); const [removeRequest, setRemoveRequest] = useState<RemoveProgrammingRequest>( {}, ); const programs = useStore(materializedProgramListSelector); const hasMovies = useMemo(() => { return some( programs, (p) => p.type === 'content' && p.program.type === 'movie', ); }, [programs]); const numAndDurationById = useMemo(() => { return reduce( programs, (acc, curr) => { const key = match(curr) .with( { type: 'content', program: { type: P.select(P.union('movie', 'music_video', 'other_video')), }, }, identity, ) .with( { type: 'content', program: { type: 'episode' } }, ({ program }) => program.show?.uuid ?? program.season?.show?.uuid, ) .with( { type: 'content', program: { type: 'track' } }, ({ program }) => program.artist?.uuid ?? program.album?.artist?.uuid, ) .with({ type: P._ }, () => undefined) .exhaustive(); if (key) { acc[key] ??= { totalDuration: 0, totalPrograms: 0 }; acc[key].totalDuration += curr.duration; acc[key].totalPrograms++; } return acc; }, {} as Record<string, { totalPrograms: number; totalDuration: number }>, ); }, [programs]); // Get the total number of movies from the memoized object const movieCount = numAndDurationById['movie']?.totalPrograms ?? 0; const showList = useMemo(() => { return map( uniqBy( seq.collect(programs, (program) => { if ( program.type === 'content' && program.program.type === 'episode' && isNonEmptyString( program.program.show?.uuid ?? program.program.season?.show?.uuid, ) ) { return program; } return; }), ({ program }) => extractProgramGrandparent(program)?.uuid, ), ({ program }) => ({ // Verified safe above // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain id: extractProgramGrandparent(program)?.uuid!, title: extractProgramGrandparent(program)?.title ?? program.title, }), ); }, [programs]); const artistList = useMemo(() => { return map( uniqBy( seq.collect(programs, (program) => { if ( program.type === 'content' && program.program.type === 'track' && isNonEmptyString(extractProgramGrandparent(program.program)?.uuid) ) { return program; } return; }), ({ program }) => extractProgramGrandparent(program)?.uuid, ), ({ program }) => ({ // Verified safe above // eslint-disable-next-line @typescript-eslint/no-non-null-asserted-optional-chain id: extractProgramGrandparent(program)?.uuid!, title: extractProgramGrandparent(program)?.title ?? program.title, }), ); }, [programs]); const mapListToGroupedOptions = ( list: Array<{ id: string; title: string }>, ) => { return list.map((option) => { // Get the first letter, use a placeholder if title is empty. const firstLetter = (option.title?.[0] ?? '-').toUpperCase(); return { // Group numbers/digits under '0-9', otherwise use the first letter. firstLetter: /[0-9]/.test(firstLetter) ? '0-9' : firstLetter, ...option, }; }); }; const showOptions = useMemo( () => mapListToGroupedOptions(showList), [showList], ); const artistOptions = useMemo( () => mapListToGroupedOptions(artistList), [artistList], ); const isEmptyRemoveRequest = useMemo(() => { return ( isEmpty(removeRequest) ?? every(values(removeRequest), (value) => { // If it's a boolean (movies: true/false), only check if it's the 'empty' state (false). // We do this because lodash treats booleans as empty regardless of value if (typeof value === 'boolean') { return value === false; } // Otherwise, check if the value is empty. return isEmpty(value); }) ); }, [removeRequest]); const removeShowsProgramming = () => { removeProgramming(removeRequest); onClose(); }; const getProgramCounts = (id: string, type?: string) => { const details = numAndDurationById[id]; if (!details) { return null; } const count = details.totalPrograms; const programLabel = type === 'episode' ? plural(count, { one: 'episode', other: 'episodes' }) : type === 'track' ? plural(count, { one: 'track', other: 'tracks' }) : plural(count, { one: 'program', other: 'programs' }); return t`${count} ${programLabel}, ${betterHumanize( dayjs.duration(details.totalDuration), { style: 'short', }, )}`; }; const getArtistIds = (options: FilmOptionType[]) => map(options, 'id'); return ( <> <DialogTitle> <Trans>Remove Programming</Trans> </DialogTitle> <DialogContent> <DialogContentText> <Trans>Pick specific programming to remove from the channel.</Trans> </DialogContentText> <Autocomplete options={[...showOptions].sort( (a, b) => -b.firstLetter.localeCompare(a.firstLetter), )} groupBy={(option: FilmOptionType) => option.firstLetter ?? '-'} getOptionLabel={(option: FilmOptionType) => option.title} openOnFocus sx={{ my: 2, flex: 1 }} autoComplete includeInputInList multiple={true} getOptionDisabled={(option) => { const selectedIds = removeRequest.showIds ?? []; return includes(selectedIds, option.id); }} onChange={(_, newOptions) => { // Extract the IDs from the selected options const newShowIds = map(newOptions, 'id'); setRemoveRequest((prev) => ({ ...prev, showIds: newShowIds, })); // Update the program counter based on the number of selected shows const countDifference = newShowIds.length - (removeRequest.showIds?.length ?? 0); if (countDifference > 0) { for (let i = 0; i < countDifference; i++) increment(); } else if (countDifference < 0) { for (let i = 0; i < Math.abs(countDifference); i++) decrement(); } }} value={ removeRequest.showIds ? showList.filter((show) => (removeRequest.showIds ?? []).includes(show.id), ) : [] } renderInput={(params) => ( <TextField {...params} label={t`Select Shows to Remove`} /> )} renderOption={( props: HTMLAttributes<HTMLLIElement>, option: FilmOptionType, ) => { const { ...optionProps } = props; return ( <Box key={option.id} component="li" sx={{ width: '100%', flexDirection: ['column', 'row'], }} {...optionProps} > <div style={{ textAlign: 'left', width: '100%', }} > {option.title} </div> <Chip label={getProgramCounts(option.id, 'episode')} size="small" sx={{ width: '100%' }} /> </Box> ); }} /> {artistList.length > 0 && ( <Autocomplete options={[...artistOptions].sort( (a, b) => -b.firstLetter.localeCompare(a.firstLetter), )} groupBy={(option: FilmOptionType) => option.firstLetter ?? '-'} getOptionLabel={(option: FilmOptionType) => option.title} openOnFocus sx={{ my: 2, flex: 1 }} autoComplete includeInputInList multiple={true} getOptionDisabled={(option) => { const selectedIds = removeRequest.artistIds ?? []; return includes(selectedIds, option.id); }} value={ removeRequest.artistIds ? artistList.filter((artist) => (removeRequest.artistIds ?? []).includes(artist.id), ) : [] } onChange={(_, newOptions) => { const newArtistIds = getArtistIds(newOptions); const previousArtistIds = removeRequest.artistIds ?? []; setRemoveRequest((prev) => ({ ...prev, artistIds: newArtistIds, })); // Update the program counter based on the number of selected shows const countDifference = newArtistIds.length - previousArtistIds.length; if (countDifference > 0) { for (let i = 0; i < countDifference; i++) increment(); } else if (countDifference < 0) { for (let i = 0; i < Math.abs(countDifference); i++) decrement(); } }} renderInput={(params) => ( <TextField {...params} label={t`Select Artists to Remove`} /> )} renderOption={( props: HTMLAttributes<HTMLLIElement>, option: FilmOptionType, ) => { const { ...optionProps } = props; return ( <Box key={option.id} component="li" sx={{ width: '100%', flexDirection: ['column', 'row'], }} {...optionProps} > <div style={{ textAlign: 'left', width: '100%', }} > {option.title} </div> <Chip label={getProgramCounts(option.id, 'track')} size="small" sx={{ width: '100%' }} /> </Box> ); }} /> )} <Box key="dynamic-list-container"> <List dense> {hasMovies && ( <ListItem secondaryAction={ <Checkbox edge="end" onChange={(e) => { const isChecked = e.target.checked; setRemoveRequest((prev) => { const newState = { ...prev, movies: isChecked, }; return newState; }); const countDelta = isChecked ? movieCount : -movieCount; for (let i = 0; i < Math.abs(countDelta); i++) { if (countDelta > 0) increment(); else decrement(); } }} checked={!!removeRequest.movies} /> } > <ListItemText primary={t`Remove All ${movieCount} ${plural(movieCount, { one: 'Movie', other: 'Movies' })}`} secondary={getProgramCounts('movies')} /> </ListItem> )} </List> </Box> </DialogContent> <DialogActions> <Button onClick={() => onClose()}> <Trans>Cancel</Trans> </Button> <Button variant="contained" onClick={() => removeShowsProgramming()} disabled={isEmptyRemoveRequest} > <Trans> Remove {count}{' '} {plural(count, { one: 'program', other: 'programs' })} </Trans> </Button> </DialogActions> </> ); }; // The content mounts only while the dialog is open, so it does no work when closed. export const RemoveShowsModal = ({ open, ...props }: RemoveShowsModalProps) => ( <Dialog open={open} scroll={'paper'}> <RemoveShowsModalContent {...props} /> </Dialog> ); 
 #: src/components/programming_controls/RemoveShowsModal.tsx
@@ -4589,7 +4589,7 @@ msgstr "Remove {count} {0}"
 
 #: src/components/slot_scheduler/SlotProgrammingTooLongWarningDetails.tsx
 msgid "Remove All"
-msgstr "Remove All"
+msgstr "إزالة الكل"
 
 #: src/components/programming_controls/RemoveShowsModal.tsx
 msgid "Remove All {movieCount} {movieCount, plural, one {Movie} other {Movies}}"
@@ -4709,7 +4709,7 @@ msgstr "Rescan Interval (hours)"
 #: src/components/custom-shows/EditCustomShowForm.tsx
 #: src/components/filler/EditFillerListForm.tsx
 msgid "Reset"
-msgstr "Reset"
+msgstr "إعادة ضبط"
 
 #: src/components/channel_config/ChannelEditActions.tsx
 #: src/components/settings/ffmpeg/TranscodeConfigSettingsForm.tsx
@@ -4818,7 +4818,7 @@ msgstr "Root"
 
 #: src/components/ui/table/TablePager.tsx
 msgid "Rows per page"
-msgstr "Rows per page"
+msgstr "عدد الصفوف في الصفحة"
 
 #. placeholder {0}: idx + 1
 #. placeholder {0}: index + 1
@@ -4932,7 +4932,7 @@ msgstr "Scan {0}"
 
 #: src/pages/welcome/WelcomePage.tsx
 msgid "Scan your libraries"
-msgstr "Scan your libraries"
+msgstr "فحص المكتبات"
 
 #: src/components/shell/useShellNav.tsx
 msgid "Scanner"
@@ -5031,7 +5031,7 @@ msgstr "Select a slot to link to"
 #: src/components/fillers/AssignFillerToChannelsDialog.tsx
 #: src/components/search/SearchFieldRestrictMenu.tsx
 msgid "Select All"
-msgstr "Select All"
+msgstr "تحديد الكل"
 
 #: src/components/ui/table/SelectCheckboxes.tsx
 msgid "Select all on this page"
@@ -5252,7 +5252,7 @@ msgstr "Skip mid-roll for programs shorter than this"
 
 #: src/pages/welcome/WelcomePage.tsx
 msgid "Skip Setup"
-msgstr "Skip Setup"
+msgstr "تخطي الإعداد"
 
 #: src/hooks/useRouteName.ts
 msgid "Slot Editor"
@@ -5371,7 +5371,7 @@ msgstr "Soundtrack"
 #: src/components/MediaSourceLibraryTable.tsx
 #: src/pages/system/TroubleshootPage.tsx
 msgid "Source"
-msgstr "Source"
+msgstr "المصدر"
 
 #: src/components/MediaSourceLibraryTable.tsx
 #~ msgid "Source Type"
@@ -5396,7 +5396,7 @@ msgstr "رابط HLS الثابت"
 
 #: src/components/programming_controls/AddRerunBlockModal.tsx
 msgid "Start"
-msgstr "Start"
+msgstr "بدء"
 
 #: src/components/programming_controls/AddRestrictHoursModal.tsx
 #: src/components/slot_scheduler/EditTimeSlotDialogContent.tsx
@@ -5434,7 +5434,7 @@ msgstr "Status filter"
 #: src/components/channels/ChannelsView.tsx
 #: src/components/channels/ChannelsView.tsx
 msgid "Stealth"
-msgstr "Stealth"
+msgstr "مخفية من الدليل"
 
 #: src/components/channel_config/ChannelEpgConfig.tsx
 msgid "Stealth Mode"
@@ -5522,7 +5522,7 @@ msgstr "Stream this channel through the experimental ErsatzTV next backend inste
 #: src/components/channel_config/EditChannelForm.tsx
 #: src/components/channels/ChannelsView.tsx
 msgid "Streaming"
-msgstr "Streaming"
+msgstr "قيد البث"
 
 #: src/components/settings/ffmpeg/TranscodeConfigSettingsForm.tsx
 #~ msgid "Submit"
@@ -5559,7 +5559,7 @@ msgstr "Subtitle Streams"
 
 #: src/pages/settings/FfmpegSettingsPage.tsx
 msgid "Subtitles"
-msgstr "Subtitles"
+msgstr "الترجمة"
 
 #: src/components/profiles/StreamSelectionPreviewPanel.tsx
 msgid "Subtitles:"
@@ -6013,7 +6013,7 @@ msgstr "Timestamp"
 #: src/pages/system/TroubleshootPage.tsx
 #: src/pages/system/TroubleshootPage.tsx
 msgid "Title"
-msgstr "Title"
+msgstr "العنوان"
 
 #: src/components/profiles/StreamSelectionRuleEditor.tsx
 msgid "Title Contains"
@@ -6245,7 +6245,7 @@ msgstr "TV shows are grouped by show"
 #: src/pages/system/TroubleshootPage.tsx
 #: src/pages/system/TroubleshootPage.tsx
 msgid "Type"
-msgstr "Type"
+msgstr "النوع"
 
 #: src/components/channels/ChannelArchiveDialog.tsx
 msgid "Unable to load archive status."
@@ -6346,7 +6346,7 @@ msgstr "Used By"
 #: src/components/settings/media_source/JelllyfinServerEditDialog.tsx
 #: src/components/settings/media_source/JelllyfinServerEditDialog.tsx
 msgid "Username"
-msgstr "Username"
+msgstr "اسم المستخدم"
 
 #: src/components/ui/patterns/AppShell/HelpMenu.tsx
 msgid "Users and licenses"
@@ -6395,7 +6395,7 @@ msgstr "الهامش الرأسي بالبكسل"
 
 #: src/pages/system/TroubleshootPage.tsx
 msgid "Video"
-msgstr "Video"
+msgstr "الفيديو"
 
 #: src/components/settings/ffmpeg/TranscodeConfigVideoSettingsForm.tsx
 msgid "Video Bitrate"
@@ -6471,7 +6471,7 @@ msgstr "View Stream Selection Profile"
 
 #: src/pages/welcome/WelcomePage.tsx
 msgid "Waiting for the first scan to finish..."
-msgstr "Waiting for the first scan to finish..."
+msgstr "جارٍ انتظار اكتمال الفحص الأول..."
 
 #: src/components/channels/ChannelCard.tsx
 #: src/hooks/useRouteName.ts
@@ -6484,7 +6484,7 @@ msgstr "Watch Channel"
 
 #: src/pages/welcome/WelcomePage.tsx
 msgid "Watch from a client"
-msgstr "Watch from a client"
+msgstr "المشاهدة من مشغّل خارجي"
 
 #: src/components/channel_config/ChannelTranscodingConfig.tsx
 msgid "Watermark"
@@ -6544,7 +6544,7 @@ msgstr "مرحبًا"
 
 #: src/pages/welcome/WelcomePage.tsx
 msgid "Welcome to XBest!"
-msgstr "Welcome to XBest!"
+msgstr "مرحبًا بك في XBEST!"
 
 #: src/pages/system/TroubleshootPage.tsx
 msgid "What the ErsatzTV next worker recorded the last few times this channel failed to play an item. Attach it to a bug report."
@@ -6635,15 +6635,15 @@ msgstr "XBest runs various tasks, sometimes on a schedule, for background operat
 
 #: src/pages/welcome/WelcomePage.tsx
 msgid "XBest scans enabled libraries in the background. Channels can only use programs that have been scanned by XBest."
-msgstr "XBest scans enabled libraries in the background. Channels can only use programs that have been scanned by XBest."
+msgstr "يفحص XBEST المكتبات المفعلة في الخلفية. بعد اكتمال الفحص يمكنك إضافة المحتوى المكتشف إلى قنواتك."
 
 #: src/pages/welcome/WelcomePage.tsx
 msgid "XBest uses FFmpeg 6.1 or newer to transcode streams."
-msgstr "XBest uses FFmpeg 6.1 or newer to transcode streams."
+msgstr "يستخدم XBEST أداة FFmpeg بإصدار 6.1 أو أحدث لتحويل الفيديو والبث."
 
 #: src/pages/welcome/WelcomePage.tsx
 msgid "XBest uses FFmpeg to transcode streams. Your container image includes it, but XBest could not use it."
-msgstr "XBest uses FFmpeg to transcode streams. Your container image includes it, but XBest could not use it."
+msgstr "يستخدم XBEST أداة FFmpeg لتحويل الفيديو. الأداة مرفقة ببيئة التشغيل، لكن البرنامج لم يتمكن من تشغيلها. راجع مسارها وصلاحياتها."
 
 #: src/components/settings/media_source/PlexServerEditDialog.tsx
 msgid "XBest will attempt to get Plex to pull XBest's updated XMLTV upon regeneration"
@@ -6663,7 +6663,7 @@ msgstr "XMLTV"
 
 #: src/pages/welcome/WelcomePage.tsx
 msgid "XMLTV guide"
-msgstr "XMLTV guide"
+msgstr "دليل البرامج XMLTV"
 
 #: src/pages/system/StatusPage.tsx
 msgid "XMLTV Link:"
@@ -6673,7 +6673,7 @@ msgstr "XMLTV Link:"
 #: src/components/channels/ChannelsView.tsx
 #: src/components/ui/table/filters/BooleanFilter.tsx
 msgid "Yes"
-msgstr "Yes"
+msgstr "نعم"
 
 #: src/components/programming_controls/AddBlockShuffleModal.tsx
 msgid "You can change any setting below before shuffling."

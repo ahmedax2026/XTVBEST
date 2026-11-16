@@ -26,31 +26,11 @@ dayjs.extend(duration);
 dayjs.extend(dayjsMod);
 
 function printBanner() {
-  console.log(
-    `
-${chalk.blue(' _____')} ${chalk.green('_   _')}${chalk.yellow(
-      ' _  _ ',
-    )}${chalk.magentaBright('  _   ')}${chalk.red('___ ')}${chalk.cyan('___ ')}
-${chalk.blue('|_   _|')}${chalk.green(' | | | ')}${chalk.yellow(
-      '\\| |',
-    )}${chalk.magentaBright(' /_\\ ')}${chalk.red('| _ \\')}${chalk.cyan(
-      ' _ \\',
-    )}
-${chalk.blue('  | | ')}${chalk.green('| |_| |')}${chalk.yellow(
-      ' .` |',
-    )}${chalk.magentaBright('/ _ \\')}${chalk.red('|   /')}${chalk.cyan('   /')}
-${chalk.blue('  |_| ')}${chalk.green(' \\___/')}${chalk.yellow(
-      '|_|\\_/',
-    )}${chalk.magentaBright('_/ \\_\\')}${chalk.red('_|_\\')}${chalk.cyan(
-      '_|_\\',
-    )}
-\n\t  ${getTunarrVersion()}
-`,
-  );
+  console.log(chalk.red(`XBEST Channels Studio ${getTunarrVersion()}`));
 }
 
 yargs(hideBin(process.argv))
-  .scriptName('tunarr')
+  .scriptName('XBEST')
   .option('log_level', {
     type: 'string',
     choices: ValidLogLevels,

@@ -13,7 +13,7 @@ describe('releaseArchiveEntries', () => {
     expect(entries).toEqual([
       {
         source: './bin/tunarr-v2026.11.1-win-x64.exe',
-        name: 'tunarr-v2026.11.1-win-x64/tunarr.exe',
+        name: 'tunarr-v2026.11.1-win-x64/XBEST.exe',
       },
       {
         source: './bin/meilisearch-win-x64',
@@ -47,7 +47,7 @@ describe('releaseArchiveEntries', () => {
     );
 
     expect(entries.map((e) => e.name)).toEqual([
-      'tunarr-v2026.11.1-linux-x64/tunarr',
+      'tunarr-v2026.11.1-linux-x64/XBEST',
       'tunarr-v2026.11.1-linux-x64/meilisearch',
       'tunarr-v2026.11.1-linux-x64/ersatztv-channel',
     ]);
