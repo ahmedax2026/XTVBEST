@@ -1,5 +1,6 @@
 import { fireEvent, renderWithProviders, screen, waitFor } from '@/test/utils';
 import { beforeEach, expect, test, vi } from 'vitest';
+import useStore from '../../store/index.ts';
 import { DefaultChannelOverlay } from '@tunarr/types';
 import type { Channel } from '@tunarr/types';
 import { ChannelOverlayDialog } from './ChannelOverlayDialog.tsx';
@@ -11,6 +12,7 @@ const channel = {
 } as Channel;
 beforeEach(() => {
   vi.clearAllMocks();
+  useStore.setState((state) => { state.settings.ui.i18n.locale = 'en'; });
   api.get.mockImplementation(async (url: string) => ({
     data: url.endsWith('/transcode_config')
       ? { resolution: { widthPx: 1280, heightPx: 720 } }

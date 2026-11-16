@@ -109,7 +109,7 @@ export function XBestShell({
             mt: 0.5,
           }}
         >
-          CHANNELS STUDIO
+          {text('استوديو القنوات', 'CHANNELS STUDIO')}
         </Typography>
       </Box>
     </Stack>
@@ -523,7 +523,7 @@ export function XBestShell({
             fontSize: 10,
           }}
         >
-          <span>XBEST CHANNELS STUDIO</span>
+          <span>{text('XBEST — استوديو القنوات', 'XBEST CHANNELS STUDIO')}</span>
           <span>
             {text('مساحة واحدة لكل قنواتك', 'One workspace. Every channel.')}
           </span>

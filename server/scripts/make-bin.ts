@@ -9,6 +9,8 @@ import retry from 'async-retry';
 import axios from 'axios';
 import nodeAbi from 'node-abi';
 import { createWriteStream } from 'node:fs';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import stream from 'node:stream';
@@ -251,6 +253,23 @@ for (const arch of args.target) {
       await fs.cp(`${dir.path}/dist/bin/${execName}`, `./bin/${execName}`);
 
       console.info(`Copied binary to bin/${execName}`);
+      if (osString === 'win') {
+        const executable = path.resolve('./bin', execName);
+        const branded = executable + '.branded.exe';
+        await promisify(execFile)('pnpm', [
+          'dlx', 'resedit-cli@3.1.1', executable, branded,
+          '--no-grow', '--delete-allicon',
+          '--icon', '1,' + path.resolve('./bin/XBEST.ico'),
+          '--company-name', 'XBEST',
+          '--file-description', 'XBEST Channels Studio',
+          '--product-name', 'XBEST',
+          '--internal-name', 'XBEST',
+          '--original-filename', 'XBEST.exe',
+          '--file-version', '2026.11.1.0',
+          '--product-version', '2026.11.1.0',
+        ], { timeout: 180000, maxBuffer: 10 * 1024 * 1024 });
+        await fs.rename(branded, executable);
+      }
 
       if (args.outputArchives) {
         console.info('Creating release archive');

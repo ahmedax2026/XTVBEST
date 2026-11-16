@@ -7404,6 +7404,18 @@ export type GetApiChannelsByIdOverlayResponses = {
         color: string;
         hideOnFillers: boolean;
         showTitle: boolean;
+        title?: {
+            text: string;
+            fontFamily: 'Arial' | 'Tahoma' | 'Verdana' | 'DejaVu Sans' | 'Noto Sans Arabic';
+            fontSize: number;
+            color: string;
+            opacity: number;
+            position: 'top-left' | 'top-center' | 'top-right' | 'middle-left' | 'middle-center' | 'middle-right' | 'bottom-left' | 'bottom-center' | 'bottom-right';
+            horizontalMargin: number;
+            verticalMargin: number;
+            bold: boolean;
+            outline: number;
+        };
     };
 };
 
@@ -7421,6 +7433,18 @@ export type PutApiChannelsByIdOverlayData = {
         color?: string;
         hideOnFillers?: boolean;
         showTitle?: boolean;
+        title?: {
+            text?: string;
+            fontFamily?: 'Arial' | 'Tahoma' | 'Verdana' | 'DejaVu Sans' | 'Noto Sans Arabic';
+            fontSize?: number;
+            color?: string;
+            opacity?: number;
+            position?: 'top-left' | 'top-center' | 'top-right' | 'middle-left' | 'middle-center' | 'middle-right' | 'bottom-left' | 'bottom-center' | 'bottom-right';
+            horizontalMargin?: number;
+            verticalMargin?: number;
+            bold?: boolean;
+            outline?: number;
+        };
     };
     path: {
         id: string;
@@ -7455,6 +7479,18 @@ export type PutApiChannelsByIdOverlayResponses = {
         color: string;
         hideOnFillers: boolean;
         showTitle: boolean;
+        title?: {
+            text: string;
+            fontFamily: 'Arial' | 'Tahoma' | 'Verdana' | 'DejaVu Sans' | 'Noto Sans Arabic';
+            fontSize: number;
+            color: string;
+            opacity: number;
+            position: 'top-left' | 'top-center' | 'top-right' | 'middle-left' | 'middle-center' | 'middle-right' | 'bottom-left' | 'bottom-center' | 'bottom-right';
+            horizontalMargin: number;
+            verticalMargin: number;
+            bold: boolean;
+            outline: number;
+        };
     };
 };
 

@@ -1,0 +1,17 @@
+import fs from 'node:fs/promises';
+const png = await fs.readFile('server/src/resources/images/xbest-logo.png');
+if (png.subarray(0, 8).toString('hex') !== '89504e470d0a1a0a') throw new Error('Invalid XBEST PNG');
+const width = png.readUInt32BE(16);
+const height = png.readUInt32BE(20);
+if (width < 1 || height < 1 || width > 256 || height > 256) throw new Error('XBEST icon dimensions must be 1–256');
+const header = Buffer.alloc(22);
+header.writeUInt16LE(1, 2);
+header.writeUInt16LE(1, 4);
+header.writeUInt8(width % 256, 6);
+header.writeUInt8(height % 256, 7);
+header.writeUInt16LE(1, 10);
+header.writeUInt16LE(32, 12);
+header.writeUInt32LE(png.length, 14);
+header.writeUInt32LE(22, 18);
+await fs.mkdir('server/bin', { recursive: true });
+await fs.writeFile('server/bin/XBEST.ico', Buffer.concat([header, png]));

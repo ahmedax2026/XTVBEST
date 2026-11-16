@@ -78,7 +78,9 @@ export const RunServerCommand: CommandModule<GlobalArgsType, ServerArgsType> = {
         tools.ffmpegExecutablePath !== oldTools.ffmpegExecutablePath ||
         tools.ffprobeExecutablePath !== oldTools.ffprobeExecutablePath
       ) {
-        await settings.updateFfmpegSettings(FfmpegSettingsSchema.parse({ ...oldTools, ...tools }));
+        await settings.updateFfmpegSettings(
+          FfmpegSettingsSchema.parse({ ...oldTools, ...tools }),
+        );
       }
     }
     let portToUse =

@@ -41,7 +41,7 @@ msgstr "\"{0}\" Live"
 
 #: src/components/channel_config/ChannelEpgConfig.tsx
 msgid "\"Stealth\" channels are hidden from TV guides, spoofed HDHR, the m3u playlist, etc. The channel can still be streamed directly, used as a redirect target, or exported from the Channels page."
-msgstr "\"Stealth\" channels are hidden from TV guides, spoofed HDHR, the m3u playlist, etc. The channel can still be streamed directly, used as a redirect target, or exported from the Channels page."
+msgstr "تُخفى هذه القناة من دليل البرامج وقوائم M3U واكتشاف HDHomeRun، لكن تظل متاحة عبر رابطها المباشر والتحويل من قناة أخرى والتصدير من صفحة القنوات."
 
 #. placeholder {0}: badge.count
 #: src/components/ui/patterns/AppShell/NavBadge.tsx
@@ -51,7 +51,7 @@ msgstr "{0, plural, one {(# health check issue)} other {(# health check issues)}
 #. placeholder {0}: customShow.contentCount
 #: src/components/channel_config/SelectedProgrammingList.tsx
 msgid "{0, plural, one {# item} other {# items}}"
-msgstr "{0, plural, one {# item} other {# items}}"
+msgstr "{0, plural, one {# عنصر} other {# عناصر}}"
 
 #. placeholder {0}: filler.contentCount
 #. placeholder {0}: programList.length
@@ -60,12 +60,12 @@ msgstr "{0, plural, one {# item} other {# items}}"
 #: src/components/channels/BulkAssignFillersDialog.tsx
 #: src/components/slot_scheduler/FillerListSlotProgrammingForm.tsx
 msgid "{0, plural, one {# program} other {# programs}}"
-msgstr "{0, plural, one {# program} other {# programs}}"
+msgstr "{0, plural, one {# برنامج} other {# برامج}}"
 
 #. placeholder {0}: customShow.contentCount
 #: src/components/channel_config/CustomShowProgrammingSelector.tsx
 msgid "{0, plural, one {# Program} other {# Programs}}"
-msgstr "{0, plural, one {# Program} other {# Programs}}"
+msgstr "{0, plural, one {# برنامج} other {# برامج}}"
 
 #. placeholder {0}: media.childCount ?? 0
 #. placeholder {1}: media.grandchildCount ?? 0
@@ -76,7 +76,7 @@ msgstr "{0, plural, one {# season} other {# seasons}}, {1, plural, one {# total 
 #. placeholder {0}: selectedMedia.length
 #: src/components/channel_config/SelectedProgrammingActions.tsx
 msgid "{0, plural, one {# Selected Item} other {# Selected Items}}"
-msgstr "{0, plural, one {# Selected Item} other {# Selected Items}}"
+msgstr "{0, plural, one {# عنصر محدد} other {# عناصر محددة}}"
 
 #: src/pages/channels/ChannelsPage.tsx
 #: src/pages/channels/ChannelsPage.tsx
@@ -90,7 +90,7 @@ msgstr "{0, plural, one {# Selected Item} other {# Selected Items}}"
 #. placeholder {0}: status.connections
 #: src/components/channels/ChannelStatusPill.tsx
 msgid "{0, plural, one {# watching} other {# watching}}"
-msgstr "{0, plural, one {# watching} other {# watching}}"
+msgstr "{0, plural, one {# اتصال} other {# اتصالات}}"
 
 #. placeholder {0}: currentBackupSchedule!.increment
 #: src/components/settings/general/BackupForm.tsx
@@ -129,12 +129,12 @@ msgstr "{0, plural, one {Path} other {Paths}}"
 #: src/components/channels/ChannelCard.tsx
 #: src/components/slot_scheduler/SlotProgrammingTooLongWarningDetails.tsx
 msgid "{0, plural, one {program} other {programs}}"
-msgstr "{0, plural, one {program} other {programs}}"
+msgstr "{0, plural, one {برنامج} other {برامج}}"
 
 #. placeholder {0}: selectedMedia.length
 #: src/components/channel_config/SelectedProgrammingList.tsx
 msgid "{0, plural, one {Selected Item} other {Selected Items}}"
-msgstr "{0, plural, one {Selected Item} other {Selected Items}}"
+msgstr "{0, plural, one {عنصر محدد} other {عناصر محددة}}"
 
 #. placeholder {0}: result.audioStreams.length
 #. placeholder {1}: result.subtitleStreams.length
@@ -366,11 +366,11 @@ msgstr "# of Programs"
 #: src/pages/library/CustomShowsPage.tsx
 #: src/pages/library/FillerListsPage.tsx
 msgid "# Programs"
-msgstr "# Programs"
+msgstr "عدد البرامج"
 
 #: src/components/channels/ChannelsView.tsx
 msgid "<0>{channelCount}</0> {channelCount, plural, one {channel} other {channels}} · <1>{streaming}</1> streaming"
-msgstr "<0>{channelCount}</0> {channelCount, plural, one {channel} other {channels}} · <1>{streaming}</1> streaming"
+msgstr "<0>{channelCount}</0> {channelCount, plural, one {قناة} other {قنوات}} · <1>{streaming}</1> قيد البث"
 
 #: src/pages/settings/FfmpegSettingsPage.tsx
 #~ msgid "<0>Configure the directory where Tunarr writes HLS segment files when transcoding. Tunarr will create the target directory (but not intermediate directories) if it doesn't exist.<1/>Changing this field will only affect new sessions. Existing sessions will continue writing to the previous setting, but will clean out segments when the segment ends.<2/>When unset, Tunarr will write segments to its current working directory.</0>"
@@ -442,7 +442,7 @@ msgstr "مسار مجلد المحتوى المراد فحصه. يمكنك إض�
 
 #: src/components/channel_config/ChannelTranscodingConfig.tsx
 msgid "A stream selection profile chooses the audio and subtitle streams for programs on this channel. Filler lists and playlists can assign their own profile, which takes precedence."
-msgstr "A stream selection profile chooses the audio and subtitle streams for programs on this channel. Filler lists and playlists can assign their own profile, which takes precedence."
+msgstr "يحدد ملف اختيار المسارات الصوت والترجمة المستخدمين في القناة. إذا كان لقائمة التشغيل أو الفواصل ملف مستقل، تكون له الأولوية."
 
 #: src/components/channel_config/ChannelProgrammingSort.tsx
 #: src/components/custom-shows/CustomShowSortToolsMenu.tsx
@@ -551,7 +551,7 @@ msgstr "Add group"
 #: src/components/custom-shows/EditCustomShowForm.tsx
 #: src/components/filler/EditFillerListForm.tsx
 msgid "Add Media"
-msgstr "Add Media"
+msgstr "إضافة محتوى"
 
 #: src/components/programming_controls/AddPaddingModal.tsx
 msgid "Add Padding"
@@ -584,11 +584,11 @@ msgstr "Add Rule"
 
 #: src/components/channel_config/SelectedProgrammingActions.tsx
 msgid "Add Selected Media"
-msgstr "Add Selected Media"
+msgstr "إضافة المحتوى المحدد"
 
 #: src/components/channel_config/CustomShowProgrammingSelector.tsx
 msgid "Add Show"
-msgstr "Add Show"
+msgstr "إضافة مسلسل"
 
 #: src/components/slot_scheduler/AddRandomSlotButton.tsx
 #: src/components/slot_scheduler/AddTimeSlotButton.tsx
@@ -609,7 +609,7 @@ msgstr "Add TV Shows or Movies to filler"
 
 #: src/components/channel_config/AddProgrammingButton.tsx
 msgid "Add TV Shows or Movies to programming list."
-msgstr "Add TV Shows or Movies to programming list."
+msgstr "أضف الأفلام أو المسلسلات إلى جدول محتوى القناة."
 
 #. placeholder {0}: data.added
 #. placeholder {1}: data.added
@@ -620,11 +620,11 @@ msgstr "Added {0} {1, plural, one {assignment} other {assignments}}, updated {2}
 
 #: src/components/channel_config/AddProgrammingButton.tsx
 msgid "Adds a channel redirect. During this period of time, the channel will redirect to another channel."
-msgstr "Adds a channel redirect. During this period of time, the channel will redirect to another channel."
+msgstr "يضيف فترة تعرض خلالها هذه القناة بث قناة أخرى."
 
 #: src/components/channel_config/ChannelProgrammingFlexTools.tsx
 msgid "Adds Flex after each TV episode or movie so the next program starts at one of the allowed minute marks, such as XX:00 or XX:30. Removes existing Flex first."
-msgstr "Adds Flex after each TV episode or movie so the next program starts at one of the allowed minute marks, such as XX:00 or XX:30. Removes existing Flex first."
+msgstr "يضيف وقتًا مرنًا بعد كل فيلم أو حلقة حتى يبدأ المحتوى التالي عند الدقائق المحددة، مثل بداية الساعة أو نصفها. يزيل الفترات المرنة القديمة أولًا."
 
 #: src/components/programming_controls/AddPaddingModal.tsx
 msgid "Adds Flex breaks after each TV episode or movie to ensure that the program starts at one of the allowed minute marks."
@@ -637,7 +637,7 @@ msgstr "Adds Flex breaks after each TV episode or movie to ensure that the progr
 
 #: src/components/channel_config/ChannelProgrammingFlexTools.tsx
 msgid "Adds Flex breaks between programs so that no run of consecutive programs goes longer than the time you set. Existing Flex stays in place."
-msgstr "Adds Flex breaks between programs so that no run of consecutive programs goes longer than the time you set. Existing Flex stays in place."
+msgstr "يضيف فترات مرنة بين البرامج لمنع استمرار المحتوى المتتالي أطول من المدة المحددة، مع الاحتفاظ بالفترات المرنة الموجودة."
 
 #: src/components/programming_controls/AddBreaksModal.tsx
 msgid "Adds Flex breaks between programs, attempting to avoid groups of consecutive programs that exceed the specified number of minutes."
@@ -645,11 +645,11 @@ msgstr "Adds Flex breaks between programs, attempting to avoid groups of consecu
 
 #: src/components/channel_config/AddProgrammingButton.tsx
 msgid "Adds one Flex time slot. To add Flex across the whole lineup at once, use the Flex menu next to Add."
-msgstr "Adds one Flex time slot. To add Flex across the whole lineup at once, use the Flex menu next to Add."
+msgstr "يضيف فترة مرنة واحدة. لإضافتها إلى الجدول كله، استخدم قائمة الفترات المرنة بجوار زر الإضافة."
 
 #: src/components/settings/ffmpeg/TranscodeConfigAudioSettingsForm.tsx
 msgid "Adjust the output volume (not recommended). Values higher than 100 will boost the audio."
-msgstr "Adjust the output volume (not recommended). Values higher than 100 will boost the audio."
+msgstr "يضبط مستوى صوت البث. القيم الأعلى من ١٠٠ ترفع الصوت وقد تسبب تشويهًا؛ يفضل إبقاء القيمة الافتراضية."
 
 #: src/components/programming_controls/AdjustWeightsModal.tsx
 #: src/components/slot_scheduler/RandomSlotsWeightAdjustDialog.tsx
@@ -663,16 +663,16 @@ msgstr "Adjust Weights"
 
 #: src/components/settings/ffmpeg/TranscodeConfigAudioSettingsForm.tsx
 msgid "Advanced options relating to audio. In general, do not change these unless you know what you are doing!"
-msgstr "Advanced options relating to audio. In general, do not change these unless you know what you are doing!"
+msgstr "إعدادات متقدمة للصوت. غيّرها فقط عند معرفة تأثيرها على البث."
 
 #: src/components/settings/ffmpeg/TranscodeConfigSettingsForm.tsx
 msgid "Advanced options relating to transcoding. In general, do not change these unless you know what you are doing! These settings exist in order to leave some parity with the old dizqueTV transcode pipeline as well as to provide mechanisms to aid in debugging streaming issues."
-msgstr "Advanced options relating to transcoding. In general, do not change these unless you know what you are doing! These settings exist in order to leave some parity with the old dizqueTV transcode pipeline as well as to provide mechanisms to aid in debugging streaming issues."
+msgstr "إعدادات متقدمة للتحويل والتوافق وتشخيص مشكلات البث. يفضل الإبقاء على القيم الافتراضية ما لم تكن بحاجة محددة إلى تعديلها."
 
 #: src/components/settings/ffmpeg/TranscodeConfigAudioSettingsForm.tsx
 #: src/components/settings/ffmpeg/TranscodeConfigSettingsForm.tsx
 msgid "Advanced Video Options"
-msgstr "Advanced Video Options"
+msgstr "إعدادات الفيديو المتقدمة"
 
 #: src/components/programming_controls/AddBreaksModal.tsx
 msgid "After Every"
@@ -697,7 +697,7 @@ msgstr "ALL"
 #: src/components/settings/ffmpeg/TranscodeConfigsTable.tsx
 #: src/pages/settings/FfmpegSettingsPage.tsx
 msgid "All channels assigned to this config will be set to use the default configuration. If this is the last configuration, a new default configuration will be created."
-msgstr "All channels assigned to this config will be set to use the default configuration. If this is the last configuration, a new default configuration will be created."
+msgstr "ستنتقل القنوات المرتبطة بهذا الملف إلى ملف التحويل الافتراضي. إذا كان هذا آخر ملف، يُنشأ ملف افتراضي جديد."
 
 #: src/components/MediaSourceLibraryTable.tsx
 msgid "All folders"
@@ -713,7 +713,7 @@ msgstr "All folders"
 
 #: src/components/channel_config/ChannelFlexConfig.tsx
 msgid "All lists are used"
-msgstr "All lists are used"
+msgstr "كل القوائم مستخدمة"
 
 #: src/pages/welcome/WelcomePage.tsx
 #~ msgid "All Set!"
@@ -741,7 +741,7 @@ msgstr "Allow image-based subtitles"
 
 #: src/components/channel_config/ChannelProgrammingDeleteOptions.tsx
 msgid "Allows you to pick specific programming to remove from the channel."
-msgstr "Allows you to pick specific programming to remove from the channel."
+msgstr "يتيح اختيار محتوى معين لإزالته من القناة."
 
 #: src/components/programming_controls/AddBlockShuffleModal.tsx
 msgid "Alphabetical"
@@ -750,7 +750,7 @@ msgstr "Alphabetical"
 #: src/components/channel_config/ChannelProgrammingSort.tsx
 #: src/components/custom-shows/CustomShowSortToolsMenu.tsx
 msgid "Alphabetically"
-msgstr "Alphabetically"
+msgstr "حسب الترتيب الأبجدي"
 
 #: src/components/programming_controls/AddBlockShuffleModal.tsx
 #~ msgid "Alternate programs in blocks. You can pick the number of programs in each block, whether episodes play in order, and whether shows take turns or come up at random."
@@ -767,7 +767,7 @@ msgstr "Alphabetically"
 #: src/components/channel_config/ChannelProgrammingSort.tsx
 #: src/components/custom-shows/CustomShowSortToolsMenu.tsx
 msgid "Alternates TV shows in blocks of episodes. You can pick the number of episodes per show in each block and if the order of shows in each block should be randomized. Movies are moved to the bottom."
-msgstr "Alternates TV shows in blocks of episodes. You can pick the number of episodes per show in each block and if the order of shows in each block should be randomized. Movies are moved to the bottom."
+msgstr "يتناوب بين المسلسلات في مجموعات من الحلقات. حدد عدد الحلقات لكل مسلسل وترتيب المسلسلات داخل كل مجموعة. تُنقل الأفلام إلى نهاية الجدول."
 
 #: src/components/profiles/condition/types.ts
 msgid "Always match"
@@ -842,7 +842,7 @@ msgstr "Assign \"{fillerName}\" to Channels"
 
 #: src/components/channels/ChannelsView.tsx
 msgid "Assign fillers"
-msgstr "Assign fillers"
+msgstr "تعيين قوائم الفواصل"
 
 #. placeholder {0}: selectedChannelIds.length
 #: src/components/channels/BulkAssignFillersDialog.tsx
@@ -878,7 +878,7 @@ msgstr "Audio & Subtitle Options"
 
 #: src/components/channel_config/ChannelTranscodingConfig.tsx
 msgid "Audio & Subtitles"
-msgstr "Audio & Subtitles"
+msgstr "الصوت والترجمة"
 
 #: src/pages/system/TroubleshootPage.tsx
 msgid "Audio Action"
@@ -890,7 +890,7 @@ msgstr "معدل بت الصوت"
 
 #: src/components/settings/ffmpeg/TranscodeConfigAudioSettingsForm.tsx
 msgid "Audio Buffer Size"
-msgstr "Audio Buffer Size"
+msgstr "حجم مخزن الصوت"
 
 #: src/components/profiles/condition/types.ts
 msgid "Audio channel count"
@@ -898,16 +898,16 @@ msgstr "Audio channel count"
 
 #: src/components/settings/ffmpeg/TranscodeConfigAudioSettingsForm.tsx
 msgid "Audio Channels"
-msgstr "Audio Channels"
+msgstr "قنوات الصوت"
 
 #: src/components/channel_config/ChannelFlexConfig.tsx
 msgid "Audio file path or URL. It loops for as long as the fallback plays."
-msgstr "Audio file path or URL. It loops for as long as the fallback plays."
+msgstr "مسار ملف الصوت أو رابطه. يتكرر تشغيله طوال عرض المحتوى البديل."
 
 #: src/components/settings/ffmpeg/TranscodeConfigAudioSettingsForm.tsx
 #: src/components/settings/ffmpeg/TranscodeConfigsTable.tsx
 msgid "Audio Format"
-msgstr "Audio Format"
+msgstr "صيغة الصوت"
 
 #: src/components/profiles/condition/types.ts
 msgid "Audio language"
@@ -920,15 +920,15 @@ msgstr "Audio language"
 #: src/components/settings/ffmpeg/TranscodeConfigAudioSettingsForm.tsx
 #: src/components/settings/ffmpeg/TranscodeConfigAudioSettingsForm.tsx
 msgid "Audio Loudness Normalization"
-msgstr "Audio Loudness Normalization"
+msgstr "توحيد مستوى الصوت"
 
 #: src/components/settings/ffmpeg/TranscodeConfigSettingsForm.tsx
 msgid "Audio Options"
-msgstr "Audio Options"
+msgstr "إعدادات الصوت"
 
 #: src/components/settings/ffmpeg/TranscodeConfigAudioSettingsForm.tsx
 msgid "Audio Sample Rate"
-msgstr "Audio Sample Rate"
+msgstr "معدل أخذ عينات الصوت"
 
 #: src/components/profiles/StreamSelectionRuleEditor.tsx
 msgid "Audio Selection"
@@ -945,7 +945,7 @@ msgstr "Audio Streams"
 
 #: src/components/settings/ffmpeg/TranscodeConfigAudioSettingsForm.tsx
 msgid "Audio Volume"
-msgstr "Audio Volume"
+msgstr "مستوى الصوت"
 
 #: src/components/profiles/StreamSelectionPreviewPanel.tsx
 msgid "Audio:"
@@ -961,7 +961,7 @@ msgstr "تلقائي — كارت الشاشة مع الرجوع للمعالج"
 
 #: src/components/settings/ffmpeg/TranscodeConfigVideoSettingsForm.tsx
 msgid "Auto Deinterlace Video"
-msgstr "Auto Deinterlace Video"
+msgstr "إزالة تشابك الفيديو تلقائيًا"
 
 #: src/components/settings/general/WebSettings.tsx
 msgid "Auto uses the time convention for the selected language."
@@ -1011,7 +1011,7 @@ msgstr "Balance Programming"
 
 #: src/components/channel_config/ChannelProgrammingOrganizeOptions.tsx
 msgid "Balance..."
-msgstr "Balance..."
+msgstr "موازنة..."
 
 #: src/components/profiles/condition/ConditionEditor.tsx
 msgid "Basic"
@@ -1027,7 +1027,7 @@ msgstr "Bit Depth"
 
 #: src/components/settings/ffmpeg/TranscodeConfigAudioSettingsForm.tsx
 msgid "Bitrate cannot be changed when copying input audio"
-msgstr "Bitrate cannot be changed when copying input audio"
+msgstr "لا يمكن تغيير معدل البت عند نسخ الصوت الأصلي دون تحويل."
 
 #: src/components/programming_controls/AddRerunBlockModal.tsx
 msgid "Block"
@@ -1039,7 +1039,7 @@ msgstr "Block"
 #: src/components/custom-shows/CustomShowSortToolsMenu.tsx
 #: src/components/programming_controls/AddBlockShuffleModal.tsx
 msgid "Block Shuffle"
-msgstr "Block Shuffle"
+msgstr "خلط مجموعات الحلقات"
 
 #: src/components/channels/ChannelOverlayDialog.tsx
 msgid "Bottom left"
@@ -1067,11 +1067,11 @@ msgstr "Break Positioning"
 
 #: src/components/settings/ffmpeg/TranscodeConfigAudioSettingsForm.tsx
 msgid "Buffer size cannot be changed when copying input audio"
-msgstr "Buffer size cannot be changed when copying input audio"
+msgstr "لا يمكن تغيير حجم المخزن عند نسخ الصوت الأصلي دون تحويل."
 
 #: src/components/settings/ffmpeg/TranscodeConfigVideoSettingsForm.tsx
 msgid "Buffer size effects how frequently ffmpeg reconsiders the output bitrate. <0>Read more</0>"
-msgstr "Buffer size effects how frequently ffmpeg reconsiders the output bitrate. <0>Read more</0>"
+msgstr "يتحكم حجم المخزن في سرعة تعديل FFmpeg لمعدل بت البث. <0>معرفة المزيد</0>"
 
 #: src/pages/system/TroubleshootPage.tsx
 msgid "Builder"
@@ -1178,7 +1178,7 @@ msgstr "Cannot disable libraries when they are locked"
 
 #: src/components/channel_config/ChannelPropertiesEditor.tsx
 msgid "Cannot use a channel number <= 0"
-msgstr "Cannot use a channel number <= 0"
+msgstr "يجب أن يكون رقم القناة أكبر من صفر."
 
 #: src/components/programs/Actors.tsx
 msgid "Cast & Crew"
@@ -1225,16 +1225,16 @@ msgstr "Channel #{0}"
 
 #: src/components/channel_config/ChannelFlexConfig.tsx
 msgid "Channel Fallback"
-msgstr "Channel Fallback"
+msgstr "المحتوى البديل للقناة"
 
 #: src/components/channel_config/ChannelPropertiesEditor.tsx
 msgid "Channel Group"
-msgstr "Channel Group"
+msgstr "مجموعة القناة"
 
 #: src/components/channel_config/ChannelPropertiesEditor.tsx
 #: src/components/channel_config/ChannelPropertiesEditor.tsx
 msgid "Channel group is required"
-msgstr "Channel group is required"
+msgstr "مجموعة القناة مطلوبة."
 
 #: src/components/channel_config/ChannelPropertiesEditor.tsx
 msgid "Channel Name"
@@ -1243,7 +1243,7 @@ msgstr "اسم القناة"
 #: src/components/channel_config/ChannelPropertiesEditor.tsx
 #: src/components/channel_config/ChannelPropertiesEditor.tsx
 msgid "Channel name is required"
-msgstr "Channel name is required"
+msgstr "اسم القناة مطلوب."
 
 #: src/components/channel_config/ChannelPropertiesEditor.tsx
 msgid "Channel Number"
@@ -1255,17 +1255,17 @@ msgstr "معاينة القناة"
 
 #: src/components/channel_config/ChannelEditActions.tsx
 msgid "Channel settings saved!"
-msgstr "Channel settings saved!"
+msgstr "تم حفظ إعدادات القناة!"
 
 #: src/components/channel_config/ChannelTranscodingConfig.tsx
 #: src/components/channel_config/ChannelTranscodingConfig.tsx
 msgid "Channel Stream Mode"
-msgstr "Channel Stream Mode"
+msgstr "وضع بث القناة"
 
 #: src/components/channel_config/ChannelTranscodingConfig.tsx
 #: src/components/channel_config/ChannelTranscodingConfig.tsx
 msgid "Channel Transcode Config"
-msgstr "Channel Transcode Config"
+msgstr "ملف تحويل القناة"
 
 #: src/App.tsx
 #: src/components/channels/ChannelsView.tsx
@@ -1295,7 +1295,7 @@ msgstr "تعرض القناة محتواك وفق جدول زمني، مثل ا�
 
 #: src/components/settings/ffmpeg/EtvNextCompatibilityNotice.tsx
 msgid "Channels using this config cannot stream on the ErsatzTV next backend"
-msgstr "Channels using this config cannot stream on the ErsatzTV next backend"
+msgstr "القنوات المرتبطة بهذا الملف لا تستطيع البث عبر المحرك التجريبي ErsatzTV next."
 
 #: src/pages/system/SystemDebugPage.tsx
 #: src/pages/system/SystemDebugPage.tsx
@@ -1308,7 +1308,7 @@ msgstr "فحص أدوات الفيديو FFmpeg"
 
 #: src/components/channel_config/ChannelTranscodingConfig.tsx
 msgid "Choose the transcode configuration to use for this channel. Configure transcode configurations on the <0>FFmpeg settings page</0>."
-msgstr "Choose the transcode configuration to use for this channel. Configure transcode configurations on the <0>FFmpeg settings page</0>."
+msgstr "اختر ملف التحويل المستخدم لهذه القناة. يمكنك إنشاء الملفات وتعديلها من <0>إعدادات FFmpeg</0>."
 
 #: src/components/custom-shows/EditCustomShowForm.tsx
 #~ msgid "Chooses audio and subtitle streams for programs scheduled from this custom show."
@@ -1330,7 +1330,7 @@ msgstr "دائري"
 #: src/components/search/SearchFieldRestrictMenu.tsx
 #: src/components/ui/patterns/CollectionView/SelectionBar.tsx
 msgid "Clear"
-msgstr "Clear"
+msgstr "مسح"
 
 #: src/components/custom-shows/CustomShowSortToolsMenu.tsx
 #: src/components/filler/EditFillerListForm.tsx
@@ -1344,7 +1344,7 @@ msgstr "Clear filters"
 
 #: src/components/channel_config/ChannelProgrammingDeleteOptions.tsx
 msgid "Clear Schedule"
-msgstr "Clear Schedule"
+msgstr "مسح الجدول"
 
 #: src/components/channel_config/CustomShowProgrammingSelector.tsx
 #~ msgid "Click to preview the items in this Custom Show. Note that only the whole show can be added at once."
@@ -1352,7 +1352,7 @@ msgstr "Clear Schedule"
 
 #: src/components/channel_config/CustomShowProgrammingSelector.tsx
 msgid "Click to preview the items in this playlist. Only the whole playlist can be added at once."
-msgstr "Click to preview the items in this playlist. Only the whole playlist can be added at once."
+msgstr "اضغط لمعاينة محتوى قائمة التشغيل. تضاف القائمة كاملة دفعة واحدة."
 
 #: src/components/ui/patterns/AppShell/CommandPalette.tsx
 msgid "close"
@@ -1391,7 +1391,7 @@ msgstr "Commit"
 #: src/components/channel_config/ChannelProgrammingSort.tsx
 #: src/components/custom-shows/CustomShowSortToolsMenu.tsx
 msgid "Completely randomizes the order of programs."
-msgstr "Completely randomizes the order of programs."
+msgstr "يعيد ترتيب كل محتوى القناة عشوائيًا."
 
 #: src/pages/system/SystemLogsPage.tsx
 msgid "Component"
@@ -1439,11 +1439,11 @@ msgstr "Configure Cyclic Shuffle"
 #: src/pages/profiles/TranscodeConfigsPage.tsx
 #: src/pages/settings/FfmpegSettingsPage.tsx
 msgid "Configure transcoding settings for XBest's streams. Each channel is assigned one transcode configuration."
-msgstr "Configure transcoding settings for XBest's streams. Each channel is assigned one transcode configuration."
+msgstr "اضبط إعدادات تحويل البث في XBEST. ترتبط كل قناة بملف تحويل واحد."
 
 #: src/components/channel_config/ChannelFlexConfig.tsx
 msgid "Configure what appears on your channel when there is no suitable filler content available. Using channel fallbacks requires ffmpeg transcoding."
-msgstr "Configure what appears on your channel when there is no suitable filler content available. Using channel fallbacks requires ffmpeg transcoding."
+msgstr "حدد ما تعرضه القناة عندما لا يتوفر فاصل مناسب. يتطلب المحتوى البديل تحويل الفيديو باستخدام FFmpeg."
 
 #: src/pages/welcome/WelcomePage.tsx
 #~ msgid "Congrats, you're ready to start building channels! Just click Finish below to start working on your first channel."
@@ -1455,7 +1455,7 @@ msgstr "إضافة مصدر للمحتوى"
 
 #: src/components/channel_config/ProgrammingSelector.tsx
 msgid "Connect Media Source"
-msgstr "Connect Media Source"
+msgstr "إضافة مصدر للمحتوى"
 
 #: src/pages/welcome/WelcomePage.tsx
 #~ msgid "Connect Media Sources"
@@ -1471,11 +1471,11 @@ msgstr "Console"
 
 #: src/components/channel_config/ChannelProgrammingOrganizeOptions.tsx
 msgid "Consolidate"
-msgstr "Consolidate"
+msgstr "دمج الفترات"
 
 #: src/components/channel_config/ChannelProgrammingOrganizeOptions.tsx
 msgid "Consolidates contiguous match flex and redirect blocks into singular spans"
-msgstr "Consolidates contiguous match flex and redirect blocks into singular spans"
+msgstr "يدمج الفترات المرنة والتحويلات المتجاورة والمتطابقة في فترات موحدة."
 
 #: src/components/profiles/condition/types.ts
 msgid "contains"
@@ -1502,7 +1502,7 @@ msgstr "Cooldown"
 #: src/components/channels/BulkAssignFillersDialog.tsx
 #: src/components/fillers/AssignFillerToChannelsDialog.tsx
 msgid "Cooldown (s)"
-msgstr "Cooldown (s)"
+msgstr "مدة الانتظار بالثواني"
 
 #: src/components/channel_config/ChannelFlexConfig.tsx
 #~ msgid "Cooldown (seconds)"
@@ -1617,7 +1617,7 @@ msgstr "شكل العداد"
 
 #: src/components/channel_config/WatermarkTimingFields.tsx
 msgid "Counted from the start of each program. If a stream starts partway through a program, it counts from that point. Set to 0 for no limit."
-msgstr "Counted from the start of each program. If a stream starts partway through a program, it counts from that point. Set to 0 for no limit."
+msgstr "تُحسب المدة من بداية كل برنامج، أو من موضع بدء البث إذا بدأ أثناء البرنامج. استخدم صفرًا لإلغاء الحد."
 
 #: src/components/channel_config/WatermarkTimingFields.tsx
 #~ msgid "Counted from the start of each program. Set to 0 for no limit."
@@ -1638,7 +1638,7 @@ msgstr "إنشاء قناة"
 #: src/components/channel_config/NoChannelsCreated.tsx
 #: src/components/channels/ChannelsView.tsx
 msgid "Create a Channel"
-msgstr "Create a Channel"
+msgstr "إنشاء قناة"
 
 #: src/components/profiles/StreamSelectionProfileSelect.tsx
 msgid "Create a new profile"
@@ -1715,7 +1715,7 @@ msgstr "Customize how movie blocks are sorted"
 #: src/components/channel_config/ChannelProgrammingSort.tsx
 #: src/components/programming_controls/AddBlockShuffleModal.tsx
 msgid "Cyclic Shuffle"
-msgstr "Cyclic Shuffle"
+msgstr "خلط دوري"
 
 #: src/components/slot_scheduler/SlotSchedulerCyclicShuffleDialog.tsx
 msgid "Cyclic Shuffle randomly shuffles groups of programming."
@@ -1737,7 +1737,7 @@ msgstr "Data Directory:"
 #: src/components/slot_scheduler/EditTimeSlotDialogContent.tsx
 #: src/components/slot_scheduler/EditTimeSlotDialogContent.tsx
 msgid "Day"
-msgstr "Day"
+msgstr "يوم"
 
 #: src/components/slot_scheduler/RandomSlotSettingsForm.tsx
 #: src/components/slot_scheduler/RandomSlotSettingsForm.tsx
@@ -1771,7 +1771,7 @@ msgstr "Default (first stream)"
 
 #: src/components/settings/ffmpeg/TranscodeConfigsTable.tsx
 msgid "Default Config"
-msgstr "Default Config"
+msgstr "ملف الإعداد الافتراضي"
 
 #: src/components/profiles/StreamSelectionRuleEditor.tsx
 msgid "Default only"
@@ -1856,7 +1856,7 @@ msgstr "Delete Slot"
 #: src/components/settings/ffmpeg/TranscodeConfigsTable.tsx
 #: src/pages/settings/FfmpegSettingsPage.tsx
 msgid "Delete Transcoding Config \"{0}\"?"
-msgstr "Delete Transcoding Config \"{0}\"?"
+msgstr "هل تريد حذف ملف التحويل \"{0}\"؟"
 
 #: src/components/slot_scheduler/CustomShowSlotProgrammingForm.tsx
 #~ msgid "Deleted custom show"
@@ -1946,23 +1946,23 @@ msgstr "تعطيل"
 
 #: src/components/settings/ffmpeg/TranscodeConfigAdvancedOptions.tsx
 msgid "Disable Hardware Decoding"
-msgstr "Disable Hardware Decoding"
+msgstr "تعطيل فك الترميز بكارت الشاشة"
 
 #: src/components/settings/ffmpeg/TranscodeConfigAdvancedOptions.tsx
 msgid "Disable Hardware Encoding"
-msgstr "Disable Hardware Encoding"
+msgstr "تعطيل الترميز بكارت الشاشة"
 
 #: src/components/settings/ffmpeg/TranscodeConfigAdvancedOptions.tsx
 msgid "Disable Hardware Filters"
-msgstr "Disable Hardware Filters"
+msgstr "تعطيل الفلاتر بكارت الشاشة"
 
 #: src/components/channel_config/ChannelTranscodingConfig.tsx
 msgid "Disable Image Scaling"
-msgstr "Disable Image Scaling"
+msgstr "تعطيل تغيير حجم الصورة"
 
 #: src/components/settings/ffmpeg/TranscodeConfigSettingsForm.tsx
 msgid "Disable Watermarks"
-msgstr "Disable Watermarks"
+msgstr "تعطيل شعارات البث"
 
 #: src/components/profiles/StreamSelectionRuleEditor.tsx
 #: src/components/settings/ffmpeg/TranscodeConfigAudioSettingsForm.tsx
@@ -1977,7 +1977,7 @@ msgstr "Dismiss"
 
 #: src/components/channel_config/WatermarkTimingFields.tsx
 msgid "Display Watermark on Leading Edge"
-msgstr "Display Watermark on Leading Edge"
+msgstr "إظهار الشعار فور بدء البث"
 
 #. placeholder {0}: logBuf.length
 #: src/pages/system/SystemLogsPage.tsx
@@ -2043,7 +2043,7 @@ msgstr "Download last {0} {1, plural, one {# row} other {# rows}}"
 #: src/components/settings/ffmpeg/TranscodeConfigsTable.tsx
 #: src/pages/profiles/StreamSelectionProfilePage.tsx
 msgid "Duplicate"
-msgstr "Duplicate"
+msgstr "إنشاء نسخة"
 
 #: src/components/channels/ChannelOptionsMenu.tsx
 msgid "Duplicate Channel"
@@ -2051,7 +2051,7 @@ msgstr "Duplicate Channel"
 
 #: src/components/channel_config/ChannelProgrammingDeleteOptions.tsx
 msgid "Duplicates"
-msgstr "Duplicates"
+msgstr "المحتوى المكرر"
 
 #: src/components/channels/ChannelsView.tsx
 #: src/components/programming_controls/BalanceProgrammingModal.tsx
@@ -2114,7 +2114,7 @@ msgstr "Edit Channel Redirect"
 #: src/components/channels/ChannelsView.tsx
 #: src/components/channels/ChannelsView.tsx
 msgid "Edit Channel Settings"
-msgstr "Edit Channel Settings"
+msgstr "تعديل إعدادات القناة"
 
 #: src/pages/library/EditFillerPage.tsx
 msgid "Edit Filler List"
@@ -2208,11 +2208,11 @@ msgstr "Emptying trash: {0} / {1}"
 
 #: src/components/settings/ffmpeg/TranscodeConfigAudioSettingsForm.tsx
 msgid "Enable <0>EBU R 128</0> loudness normalization via the <1>loudnorm</1> FFmpeg filter. May increase CPU usage during streaming."
-msgstr "Enable <0>EBU R 128</0> loudness normalization via the <1>loudnorm</1> FFmpeg filter. May increase CPU usage during streaming."
+msgstr "يوحّد مستوى الصوت وفق معيار <0>EBU R 128</0> باستخدام فلتر <1>loudnorm</1> في FFmpeg. قد يرفع استهلاك المعالج أثناء البث."
 
 #: src/components/channel_config/ChannelTranscodingConfig.tsx
 msgid "Enable Animation"
-msgstr "Enable Animation"
+msgstr "تفعيل تحريك الشعار"
 
 #: src/components/settings/general/GeneralSettingsForm.tsx
 msgid "Enable Backups"
@@ -2236,7 +2236,7 @@ msgstr "Enable ffmpeg logging to different sinks. Outputting to a file will crea
 
 #: src/components/channel_config/ChannelTranscodingConfig.tsx
 msgid "Enable if the watermark is an animated GIF or PNG. The watermark will loop according to the image's configuration. If this option is enabled and the image is not animated, there will be playback errors."
-msgstr "Enable if the watermark is an animated GIF or PNG. The watermark will loop according to the image's configuration. If this option is enabled and the image is not animated, there will be playback errors."
+msgstr "فعّل هذا الخيار للشعارات المتحركة بصيغة GIF أو PNG. يتكرر التحريك حسب إعداد الصورة. تفعيله مع صورة ثابتة قد يسبب أخطاء في البث."
 
 #: src/components/settings/DarkModeButton.tsx
 msgid "Enable light Mode"
@@ -2260,7 +2260,7 @@ msgstr "Enable SSDP server"
 
 #: src/components/channel_config/ChannelTranscodingConfig.tsx
 msgid "Enable Watermark"
-msgstr "Enable Watermark"
+msgstr "تفعيل شعار القناة"
 
 #: src/components/channel_config/ChannelPropertiesEditor.tsx
 #: src/pages/system/StatusPage.tsx
@@ -2269,7 +2269,7 @@ msgstr "مفعّل"
 
 #: src/components/settings/ffmpeg/TranscodeConfigAudioSettingsForm.tsx
 msgid "Enabled (loudnorm)"
-msgstr "Enabled (loudnorm)"
+msgstr "مفعّل: توحيد مستوى الصوت"
 
 #: src/pages/settings/FfmpegSettingsPage.tsx
 msgid "Enabling embedded subtitle extaction will periodically scan your upcoming programming for embedded text-based subtitle streams and extract them to a local cache. This is necessary in order to enable subtitle burning for text-based subtitles which are not external streams."
@@ -2305,7 +2305,7 @@ msgstr "Enter a name for your Local Media Source"
 
 #: src/components/channel_config/WatermarkTimingFields.tsx
 msgid "Enter a number of minutes, 0 or more."
-msgstr "Enter a number of minutes, 0 or more."
+msgstr "أدخل عدد دقائق يساوي صفرًا أو أكثر."
 
 #: src/components/settings/media_source/EmbyServerEditDialog.tsx
 msgid "Enter your Emby password to generate a new access token."
@@ -2321,7 +2321,7 @@ msgstr "Enter your Jellyfin password to generate a new access token.<0/><1>NOTE:
 
 #: src/components/channel_config/EditChannelForm.tsx
 msgid "EPG"
-msgstr "EPG"
+msgstr "دليل البرامج"
 
 #: src/pages/settings/XmlTvSettingsPage.tsx
 #: src/pages/settings/XmlTvSettingsPage.tsx
@@ -2352,7 +2352,7 @@ msgstr "Error assigning fillers: {message}"
 
 #: src/components/settings/ffmpeg/TranscodeConfigErrorOptions.tsx
 msgid "Error Audio"
-msgstr "Error Audio"
+msgstr "صوت شاشة الخطأ"
 
 #: src/components/channels/ChannelOptionsMenu.tsx
 msgid "Error copying channel m3u link to clipboard"
@@ -2368,11 +2368,11 @@ msgstr "Error occurred while loading channels, please try again soon."
 
 #: src/components/settings/ffmpeg/TranscodeConfigSettingsForm.tsx
 msgid "Error Options"
-msgstr "Error Options"
+msgstr "إعدادات شاشة الخطأ"
 
 #: src/components/channel_config/SelectedProgrammingActions.tsx
 msgid "Error querying Plex. Check console log and consider reporting a bug!"
-msgstr "Error querying Plex. Check console log and consider reporting a bug!"
+msgstr "تعذر جلب البيانات من Plex. راجع سجل التشغيل لمعرفة السبب."
 
 #: src/pages/channels/ChannelProgrammingPage.tsx
 msgid "Error removing schedule. {message}"
@@ -2396,7 +2396,7 @@ msgstr "Error saving new Smart Collection. Check server logs and browser console
 
 #: src/components/channel_config/ChannelProgrammingConfig.tsx
 msgid "Error saving programs. {message}"
-msgstr "Error saving programs. {message}"
+msgstr "تعذر حفظ المحتوى. {message}"
 
 #: src/pages/channels/RandomSlotEditorPage.tsx
 #: src/pages/channels/TimeSlotEditorPage.tsx
@@ -2405,11 +2405,11 @@ msgstr "Error saving schedule. {message}"
 
 #: src/components/settings/ffmpeg/TranscodeConfigErrorOptions.tsx
 msgid "Error Screen"
-msgstr "Error Screen"
+msgstr "شاشة الخطأ"
 
 #: src/components/channel_config/ChannelEditActions.tsx
 msgid "Error updating channel.<0/>Check browser console for details"
-msgstr "Error updating channel.<0/>Check browser console for details"
+msgstr "تعذر تحديث القناة.<0/>راجع سجل المتصفح لمعرفة التفاصيل."
 
 #: src/components/smart_collections/EditSmartCollectionDialog.tsx
 msgid "Error updating Smart Collection. Check logs for details."
@@ -2430,7 +2430,7 @@ msgstr "Error while saving settings. Please check console for details."
 #: src/components/settings/ffmpeg/useTranscodeConfigFormOptions.ts
 #: src/components/settings/ffmpeg/useTranscodeConfigFormOptions.ts
 msgid "Error while saving transcode config. See console log for details."
-msgstr "Error while saving transcode config. See console log for details."
+msgstr "تعذر حفظ ملف التحويل. راجع سجل التشغيل لمعرفة التفاصيل."
 
 #: src/pages/settings/TaskSettingsPage.tsx
 msgid "Error while scheduling {taskId}. Check server logs for details"
@@ -2489,11 +2489,11 @@ msgstr "external"
 
 #: src/components/channel_config/WatermarkTimingFields.tsx
 msgid "Fade In and Out"
-msgstr "Fade In and Out"
+msgstr "ظهور واختفاء تدريجي"
 
 #: src/components/channel_config/WatermarkTimingFields.tsx
 msgid "Fade Period (mins)"
-msgstr "Fade Period (mins)"
+msgstr "مدة الظهور والاختفاء بالدقائق"
 
 #: src/components/fillers/AssignFillerToChannelsDialog.tsx
 msgid "Failed to load channels."
@@ -2538,7 +2538,7 @@ msgstr "Fallback"
 #: src/components/channel_config/ChannelFlexConfig.tsx
 #: src/components/channel_config/ChannelFlexConfig.tsx
 msgid "Fallback Mode"
-msgstr "Fallback Mode"
+msgstr "وضع المحتوى البديل"
 
 #: src/pages/settings/FeaturesSettingsPage.tsx
 msgid "Feature flags saved!"
@@ -2659,11 +2659,11 @@ msgstr "Filler - {0}"
 
 #: src/components/channel_config/ChannelFlexConfig.tsx
 msgid "Filler Content"
-msgstr "Filler Content"
+msgstr "محتوى الفواصل"
 
 #: src/components/channel_config/ChannelFlexConfig.tsx
 msgid "Filler cooldown must be a number"
-msgstr "Filler cooldown must be a number"
+msgstr "يجب إدخال مدة انتظار الفواصل كرقم."
 
 #: src/components/slot_scheduler/MidRollConfigPanel.tsx
 msgid "Filler is picked fresh at stream time like Flex time. The guide shows \"Commercial Break\" placeholders."
@@ -2683,11 +2683,11 @@ msgstr "Filler list"
 #: src/components/slot_scheduler/SlotFillerDialogPanel.tsx
 #: src/components/slot_scheduler/SlotSchedulerCyclicShuffleDialog.tsx
 msgid "Filler List"
-msgstr "Filler List"
+msgstr "قائمة الفواصل"
 
 #: src/components/channel_config/ChannelFlexConfig.tsx
 msgid "Filler List Cooldown (seconds)"
-msgstr "Filler List Cooldown (seconds)"
+msgstr "مدة انتظار قائمة الفواصل بالثواني"
 
 #. placeholder {0}: cs.description
 #: src/components/slot_scheduler/SlotSchedulerCyclicShuffleDialog.tsx
@@ -2709,7 +2709,7 @@ msgstr "Filler lists are collections of videos that you may want to play during 
 
 #: src/components/channel_config/ChannelFlexConfig.tsx
 msgid "Filler Options"
-msgstr "Filler Options"
+msgstr "إعدادات الفواصل"
 
 #: src/components/profiles/StreamSelectionRuleEditor.tsx
 #: src/components/profiles/StreamSelectionRuleEditor.tsx
@@ -2769,7 +2769,7 @@ msgstr "فاصل"
 
 #: src/components/channel_config/AddProgrammingButton.tsx
 msgid "Flex Slot..."
-msgstr "Flex Slot..."
+msgstr "فترة مرنة..."
 
 #: src/components/slot_scheduler/RandomSlotSettingsForm.tsx
 #: src/components/slot_scheduler/RandomSlotSettingsForm.tsx
@@ -2839,19 +2839,19 @@ msgstr "Go Home"
 
 #: src/components/ui/table/TablePager.tsx
 msgid "Go to first page"
-msgstr "Go to first page"
+msgstr "الانتقال إلى الصفحة الأولى"
 
 #: src/components/ui/table/TablePager.tsx
 msgid "Go to last page"
-msgstr "Go to last page"
+msgstr "الانتقال إلى الصفحة الأخيرة"
 
 #: src/components/ui/table/TablePager.tsx
 msgid "Go to next page"
-msgstr "Go to next page"
+msgstr "الانتقال إلى الصفحة التالية"
 
 #: src/components/ui/table/TablePager.tsx
 msgid "Go to previous page"
-msgstr "Go to previous page"
+msgstr "الانتقال إلى الصفحة السابقة"
 
 #: src/components/base/ProgramViewToggleButton.tsx
 msgid "Grid"
@@ -2876,7 +2876,7 @@ msgstr "Guide Start Time"
 
 #: src/components/settings/ffmpeg/TranscodeConfigsTable.tsx
 msgid "Hardware Accel."
-msgstr "Hardware Accel."
+msgstr "التسريع بكارت الشاشة"
 
 #: src/components/settings/ffmpeg/TranscodeConfigVideoSettingsForm.tsx
 #~ msgid "Hardware Acceleration"
@@ -2909,7 +2909,7 @@ msgstr "Help and links"
 
 #: src/pages/profiles/TranscodeConfigPage.tsx
 msgid "Hide Advanced"
-msgstr "Hide Advanced"
+msgstr "إخفاء الإعدادات المتقدمة"
 
 #: src/components/channels/ChannelOverlayDialog.tsx
 msgid "Hide during fillers"
@@ -2917,15 +2917,15 @@ msgstr "إخفاء أثناء الفواصل"
 
 #: src/components/channel_config/WatermarkTimingFields.tsx
 msgid "Hide Watermark After (minutes)"
-msgstr "Hide Watermark After (minutes)"
+msgstr "إخفاء الشعار بعد عدد دقائق"
 
 #: src/components/channel_config/ChannelFlexConfig.tsx
 msgid "Hide watermark during filler"
-msgstr "Hide watermark during filler"
+msgstr "إخفاء الشعار أثناء الفواصل"
 
 #: src/components/channel_config/WatermarkTimingFields.tsx
 msgid "Hides the watermark for the rest of each program once the limit is reached. This overrides the fade settings above."
-msgstr "Hides the watermark for the rest of each program once the limit is reached. This overrides the fade settings above."
+msgstr "يخفي الشعار لبقية البرنامج بعد انقضاء المدة المحددة. تكون لهذا الخيار أولوية على إعدادات الظهور والاختفاء التدريجي."
 
 #: src/pages/settings/FfmpegSettingsPage.tsx
 #: src/pages/settings/FfmpegSettingsPage.tsx
@@ -2991,7 +2991,7 @@ msgstr "If no more programs can fit into a duration-based slot, flex time is add
 #: src/components/settings/ffmpeg/TranscodeConfigSettingsForm.tsx
 #: src/components/settings/ffmpeg/TranscodeConfigVideoSettingsForm.tsx
 msgid "If set, all watermark overlays will be disabled for channels assigned this transcode config."
-msgstr "If set, all watermark overlays will be disabled for channels assigned this transcode config."
+msgstr "يعطل كل شعارات البث للقنوات المرتبطة بملف التحويل هذا."
 
 #: src/components/programming_controls/AddBlockShuffleModal.tsx
 msgid "If set, any programming group with fewer episodes will be looped in order to make perfectly even blocks."
@@ -3003,7 +3003,7 @@ msgstr "If set, any programming group with fewer episodes will be looped in orde
 
 #: src/components/settings/ffmpeg/TranscodeConfigErrorOptions.tsx
 msgid "If there are issues playing a video, XBest will try to use an error screen as a placeholder while retrying loading the video every 60 seconds."
-msgstr "If there are issues playing a video, XBest will try to use an error screen as a placeholder while retrying loading the video every 60 seconds."
+msgstr "إذا تعذر تشغيل الفيديو، يعرض XBEST شاشة خطأ مؤقتة ويعيد محاولة تحميل الفيديو كل ٦٠ ثانية."
 
 #: src/components/slot_scheduler/RandomSlotSettingsForm.tsx
 msgid "If true, adjusting the weight of one slot will scale the weights of other slots such that all weights total 100%. Otherwise, weights can be adjusted freely and the weight of each slot is only relative to the total weight."
@@ -3019,11 +3019,11 @@ msgstr "If you proceed, all unsaved changes will be lost. Are you sure you want 
 
 #: src/components/channel_config/ChannelFlexConfig.tsx
 msgid "Image"
-msgstr "Image"
+msgstr "صورة"
 
 #: src/components/channel_config/ChannelFlexConfig.tsx
 msgid "Image URL"
-msgstr "Image URL"
+msgstr "رابط الصورة"
 
 #: src/components/programming_controls/AddBlockShuffleModal.tsx
 msgid "In Order"
@@ -3103,11 +3103,11 @@ msgstr "is not"
 
 #: src/components/channel_config/MediaGridItem.tsx
 msgid "Item was not present during the last scan"
-msgstr "Item was not present during the last scan"
+msgstr "لم يُعثر على هذا المحتوى أثناء الفحص الأخير."
 
 #: src/components/channel_config/ChannelFlexConfig.tsx
 msgid "Items from any filler list will not be chosen more frequently than this cooldown setting."
-msgstr "Items from any filler list will not be chosen more frequently than this cooldown setting."
+msgstr "يمنع تكرار اختيار محتوى الفواصل قبل مرور مدة الانتظار المحددة."
 
 #: src/components/settings/media_source/AddMediaSourceButton.tsx
 msgid "Jellyfin"
@@ -3176,7 +3176,7 @@ msgstr "Least channels (e.g. stereo)"
 
 #: src/components/channel_config/ChannelTranscodingConfig.tsx
 msgid "Leave blank to use the channel's icon."
-msgstr "Leave blank to use the channel's icon."
+msgstr "اتركه فارغًا لاستخدام شعار القناة."
 
 #: src/pages/welcome/WelcomePage.tsx
 #~ msgid "Let's get started..."
@@ -3206,7 +3206,7 @@ msgstr "المكتبة"
 
 #: src/components/channel_config/ChannelFlexConfig.tsx
 msgid "Library Clip (not yet implemented)"
-msgstr "Library Clip (not yet implemented)"
+msgstr "مقطع من المكتبة: غير متاح بعد"
 
 #. placeholder {0}: library.name
 #: src/routes/media_sources_/$mediaSourceId/libraries_.$libraryId.tsx
@@ -3249,7 +3249,7 @@ msgstr "Linked slots advance episode progression together sequentially."
 #: src/components/base/ProgramViewToggleButton.tsx
 #: src/components/channel_config/ChannelProgrammingConfig.tsx
 msgid "List"
-msgstr "List"
+msgstr "قائمة"
 
 #: src/components/channels/ChannelArchiveDialog.tsx
 msgid "Live"
@@ -3341,15 +3341,15 @@ msgstr "Loop Short Programs"
 
 #: src/components/settings/ffmpeg/TranscodeConfigAudioSettingsForm.tsx
 msgid "Loudness Range Target"
-msgstr "Loudness Range Target"
+msgstr "نطاق مستوى الصوت المستهدف"
 
 #: src/components/settings/ffmpeg/TranscodeConfigAudioSettingsForm.tsx
 msgid "Loudness Target"
-msgstr "Loudness Target"
+msgstr "مستوى الصوت المستهدف"
 
 #: src/components/settings/ffmpeg/TranscodeConfigAudioSettingsForm.tsx
 msgid "Loudnorm Options"
-msgstr "Loudnorm Options"
+msgstr "إعدادات توحيد مستوى الصوت"
 
 #: src/pages/welcome/WelcomePage.tsx
 msgid "M3U playlist"
@@ -3454,7 +3454,7 @@ msgstr "Max Overflow"
 
 #: src/components/settings/ffmpeg/TranscodeConfigAudioSettingsForm.tsx
 msgid "Max True Peak"
-msgstr "Max True Peak"
+msgstr "أقصى ذروة صوت حقيقية"
 
 #: src/components/slot_scheduler/MidRollConfigPanel.tsx
 msgid "Maximum number of breaks per program (0 = unlimited)"
@@ -3514,7 +3514,7 @@ msgstr "Media Type"
 
 #: src/components/channel_config/AddProgrammingButton.tsx
 msgid "Media..."
-msgstr "Media..."
+msgstr "محتوى..."
 
 #: src/pages/system/SystemLogsPage.tsx
 msgid "Message"
@@ -3547,7 +3547,7 @@ msgstr "Min Duration (minutes)"
 
 #: src/components/channel_config/ChannelEpgConfig.tsx
 msgid "Min. Visible in Guide Duration Program (seconds)"
-msgstr "Min. Visible in Guide Duration Program (seconds)"
+msgstr "أقل مدة لظهور البرنامج في الدليل بالثواني"
 
 #: src/components/slot_scheduler/MidRollConfigPanel.tsx
 msgid "Minimum Program Duration (minutes)"
@@ -3559,7 +3559,7 @@ msgstr "Modify Programming"
 
 #: src/components/channel_config/ChannelProgrammingConfig.tsx
 msgid "Month"
-msgstr "Month"
+msgstr "شهر"
 
 #: src/components/ui/patterns/AppShell/PhoneNav.tsx
 #: src/components/ui/patterns/AppShell/ShellTopBar.tsx
@@ -3594,7 +3594,7 @@ msgstr "Move up"
 #: src/components/channel_config/SelectedProgrammingList.tsx
 #: src/components/profiles/condition/types.ts
 msgid "Movie"
-msgstr "Movie"
+msgstr "فيلم"
 
 #: src/components/programming_controls/AddBlockShuffleModal.tsx
 #: src/components/programming_controls/AddBlockShuffleModal.tsx
@@ -3609,7 +3609,7 @@ msgstr "Movie Sort Order"
 #. placeholder {0}: media.year
 #: src/components/channel_config/SelectedProgrammingList.tsx
 msgid "Movie, {0}"
-msgstr "Movie, {0}"
+msgstr "فيلم، {0}"
 
 #: src/components/channels/ChannelPrograms.tsx
 #: src/pages/library/TrashPage.tsx
@@ -3688,7 +3688,7 @@ msgstr "never"
 #: src/pages/library/CustomShowsPage.tsx
 #: src/pages/library/FillerListsPage.tsx
 msgid "New"
-msgstr "New"
+msgstr "جديد"
 
 #: src/components/channels/ChannelsView.tsx
 #: src/pages/channels/NewChannelPage.tsx
@@ -3736,7 +3736,7 @@ msgstr "New Stream Selection Profile"
 
 #: src/pages/profiles/TranscodeConfigPage.tsx
 msgid "New Transcode Config"
-msgstr "New Transcode Config"
+msgstr "ملف تحويل جديد"
 
 #: src/pages/welcome/WelcomePage.tsx
 #~ msgid "Next"
@@ -3771,7 +3771,7 @@ msgstr "No channels found. Create a channel first."
 
 #: src/components/channels/ChannelsView.tsx
 msgid "No channels match this filter."
-msgstr "No channels match this filter."
+msgstr "لا توجد قنوات مطابقة لهذا الفلتر."
 
 #: src/components/profiles/StreamSelectionRuleEditor.tsx
 msgid "No condition"
@@ -3799,7 +3799,7 @@ msgstr "No libraries enabled"
 
 #: src/components/channel_config/ProgrammingSelector.tsx
 msgid "No Media Sources detected."
-msgstr "No Media Sources detected."
+msgstr "لم تتم إضافة مصادر محتوى."
 
 #: src/components/ui/patterns/AppShell/CommandPalette.tsx
 msgid "No pages or lists match."
@@ -3811,7 +3811,7 @@ msgstr "No preference"
 
 #: src/components/channel_config/ChannelLineupList.tsx
 msgid "No programming added yet"
-msgstr "No programming added yet"
+msgstr "لم تتم إضافة محتوى إلى الجدول بعد."
 
 #: src/components/guide/TvGuide.tsx
 msgid "No Programming scheduled"
@@ -3832,7 +3832,7 @@ msgstr "No records to display"
 #: src/components/channel_config/MediaItemGrid.tsx
 #: src/components/channel_config/MediaItemList.tsx
 msgid "No results"
-msgstr "No results"
+msgstr "لا توجد نتائج"
 
 #: src/components/ui/table/DataTable.tsx
 msgid "No results found"
@@ -3888,11 +3888,11 @@ msgstr "None:"
 
 #: src/components/settings/ffmpeg/TranscodeConfigVideoSettingsForm.tsx
 msgid "Normalize Frame Rate"
-msgstr "Normalize Frame Rate"
+msgstr "توحيد معدل الإطارات"
 
 #: src/components/channel_config/ChannelPropertiesEditor.tsx
 msgid "Not a valid number"
-msgstr "Not a valid number"
+msgstr "القيمة ليست رقمًا صالحًا."
 
 #: src/components/settings/media_source/EmbyServerEditDialog.tsx
 #: src/components/settings/media_source/JelllyfinServerEditDialog.tsx
@@ -3948,11 +3948,11 @@ msgstr "of the following"
 #: src/components/channels/ChannelCard.tsx
 #: src/components/channels/ChannelsView.tsx
 msgid "On-Demand"
-msgstr "On-Demand"
+msgstr "حسب الطلب"
 
 #: src/components/channel_config/ChannelPropertiesEditor.tsx
 msgid "On-Demand channels resume from where you left off. Programming is paused when the channel is not streaming.<0/><1>NOTE:</1> While the channel is inactive, the TV Guide for the channel will be empty."
-msgstr "On-Demand channels resume from where you left off. Programming is paused when the channel is not streaming.<0/><1>NOTE:</1> While the channel is inactive, the TV Guide for the channel will be empty."
+msgstr "تستأنف قنوات حسب الطلب المشاهدة من موضع التوقف، ويتوقف جدولها عند عدم وجود بث.<0/><1>ملاحظة:</1> يظهر دليل القناة فارغًا أثناء توقفها."
 
 #: src/pages/channels/ChannelsPage.tsx
 #~ msgid "On-Demand?"
@@ -3968,7 +3968,7 @@ msgstr "يُجهّز عمل واحد في المرة. حد التخزين يشم
 
 #: src/components/channel_config/ChannelTranscodingConfig.tsx
 msgid "Opacity"
-msgstr "Opacity"
+msgstr "الشفافية"
 
 #: src/components/ui/patterns/AppShell/CommandPalette.tsx
 #: src/components/ui/patterns/CollectionView/SelectionBar.tsx
@@ -4025,7 +4025,7 @@ msgstr "Order of programming within the slot"
 
 #: src/components/channel_config/ChannelProgrammingOrganizeOptions.tsx
 msgid "Organize"
-msgstr "Organize"
+msgstr "تنظيم"
 
 #: src/components/profiles/condition/types.ts
 msgid "Other Video"
@@ -4043,7 +4043,7 @@ msgstr "Output Path"
 
 #: src/components/settings/ffmpeg/TranscodeConfigVideoSettingsForm.tsx
 msgid "Output video at a constant frame rate."
-msgstr "Output video at a constant frame rate."
+msgstr "يُخرج الفيديو بمعدل إطارات ثابت."
 
 #: src/components/slot_scheduler/SlotLinkingControl.tsx
 #: src/components/slot_scheduler/SlotLinkingControl.tsx
@@ -4069,7 +4069,7 @@ msgstr "Override how programs within this slot are padded."
 #. placeholder {0}: hardwareAccelerationMode === 'qsv' ? 'QSV' : 'VA-API'
 #: src/components/settings/ffmpeg/TranscodeConfigVideoSettingsForm.tsx
 msgid "Override the default {0} device path (defaults to <0>/dev/dri/renderD128</0> on Linux and blank otherwise)"
-msgstr "Override the default {0} device path (defaults to <0>/dev/dri/renderD128</0> on Linux and blank otherwise)"
+msgstr "يحدد مسار جهاز {0} بدل المسار الافتراضي. الافتراضي على لينكس هو <0>/dev/dri/renderD128</0>، ويترك فارغًا على الأنظمة الأخرى."
 
 #: src/components/programs/ProgramDetailsDialog.tsx
 msgid "Overview"
@@ -4083,7 +4083,7 @@ msgstr "Pad Start Times"
 
 #: src/components/channel_config/ChannelProgrammingFlexTools.tsx
 msgid "Pad Start Times..."
-msgstr "Pad Start Times..."
+msgstr "محاذاة مواعيد البدء..."
 
 #: src/components/slot_scheduler/RandomSlotSettingsForm.tsx
 #: src/components/slot_scheduler/RandomSlotSettingsForm.tsx
@@ -4109,7 +4109,7 @@ msgstr "Pages"
 
 #: src/components/settings/ffmpeg/TranscodeConfigAudioSettingsForm.tsx
 msgid "Passthrough audio unchanged. Other settings will not apply."
-msgstr "Passthrough audio unchanged. Other settings will not apply."
+msgstr "يمرر الصوت الأصلي دون تحويل، ولا تطبق عليه إعدادات التحويل الأخرى."
 
 #: src/components/settings/media_source/EmbyServerEditDialog.tsx
 #: src/components/settings/media_source/EmbyServerEditDialog.tsx
@@ -4158,7 +4158,7 @@ msgstr "Pixel Format"
 
 #: src/components/channel_config/ChannelEpgConfig.tsx
 msgid "Placeholder Program Title"
-msgstr "Placeholder Program Title"
+msgstr "عنوان البرنامج المؤقت"
 
 #: src/pages/system/TroubleshootPage.tsx
 msgid "Platform"
@@ -4179,7 +4179,7 @@ msgstr "Playlist"
 #: src/components/channel_config/SelectedProgrammingList.tsx
 #: src/hooks/slot_scheduler/useSlotName.ts
 msgid "Playlist - {0}"
-msgstr "Playlist - {0}"
+msgstr "قائمة تشغيل - {0}"
 
 #: src/components/slot_scheduler/EditSlotProgrammingForm.tsx
 msgid "Playlist (add programs to a playlist first)"
@@ -4239,7 +4239,7 @@ msgstr "Plex (Manual)"
 #: src/components/channel_config/ChannelTranscodingConfig.tsx
 #: src/components/channel_config/ChannelTranscodingConfig.tsx
 msgid "Position"
-msgstr "Position"
+msgstr "المكان"
 
 #: src/components/slot_scheduler/SlotFillerDialogPanel.tsx
 msgid "Post"
@@ -4372,7 +4372,7 @@ msgstr "Program Playback Troubleshooter"
 #: src/components/channels/ChannelCard.tsx
 #: src/components/channels/ChannelsView.tsx
 msgid "Program progress"
-msgstr "Program progress"
+msgstr "تقدم تشغيل المحتوى"
 
 #: src/components/profiles/condition/types.ts
 msgid "Program title"
@@ -4399,7 +4399,7 @@ msgstr "Programming Preview"
 #: src/components/channel_config/ChannelPropertiesEditor.tsx
 #: src/pages/channels/TimeSlotEditorPage.tsx
 msgid "Programming Start"
-msgstr "Programming Start"
+msgstr "بداية الجدول"
 
 #: src/components/programming_controls/AddRestrictHoursModal.tsx
 msgid "Programming starts at {startTime} and stops at {endTime}"
@@ -4419,7 +4419,7 @@ msgstr "المحتوى"
 
 #: src/components/channel_config/ChannelProgrammingConfig.tsx
 msgid "Programs saved!"
-msgstr "Programs saved!"
+msgstr "تم حفظ المحتوى!"
 
 #. placeholder {0}: errors?.guideMinimumDuration?.message ?? ''
 #: src/components/channel_config/ChannelEpgConfig.tsx
@@ -4440,7 +4440,7 @@ msgstr "شريط تقدّم"
 
 #: src/components/channel_config/EditChannelForm.tsx
 msgid "Properties"
-msgstr "Properties"
+msgstr "الخصائص"
 
 #: src/components/settings/media_source/EmbyServerEditDialog.tsx
 #: src/components/settings/media_source/JelllyfinServerEditDialog.tsx
@@ -4450,7 +4450,7 @@ msgstr "Protocol must be HTTP or HTTPS"
 
 #: src/components/settings/ffmpeg/TranscodeConfigVideoSettingsForm.tsx
 msgid "QSV Device"
-msgstr "QSV Device"
+msgstr "جهاز Intel QSV"
 
 #: src/components/MediaSourceLibraryTable.tsx
 #: src/components/MediaSourceLibraryTable.tsx
@@ -4462,12 +4462,12 @@ msgstr "Queued"
 #: src/components/programming_controls/AddBlockShuffleModal.tsx
 #: src/components/programming_controls/AddBlockShuffleModal.tsx
 msgid "Random"
-msgstr "Random"
+msgstr "عشوائي"
 
 #: src/components/channel_config/ChannelProgrammingSort.tsx
 #: src/components/custom-shows/CustomShowSortToolsMenu.tsx
 msgid "Random (by show)"
-msgstr "Random (by show)"
+msgstr "عشوائي حسب المسلسل"
 
 #: src/components/programming_controls/AddBlockShuffleModal.tsx
 msgid "Random Episode"
@@ -4475,7 +4475,7 @@ msgstr "Random Episode"
 
 #: src/components/channel_config/ChannelProgrammingSort.tsx
 msgid "Random..."
-msgstr "Random..."
+msgstr "ترتيب عشوائي..."
 
 #: src/components/custom-shows/CustomShowSortToolsMenu.tsx
 msgid "Random…"
@@ -4509,7 +4509,7 @@ msgstr "Redirect to \"{0}\""
 #: src/components/channels/ChannelCard.tsx
 #: src/components/channels/ChannelsView.tsx
 msgid "Redirect to channel {0}"
-msgstr "Redirect to channel {0}"
+msgstr "تحويل إلى القناة {0}"
 
 #. placeholder {0}: p.channel
 #: src/components/guide/TvGuide.tsx
@@ -4518,7 +4518,7 @@ msgstr "Redirect to Channel {0}"
 
 #: src/components/channel_config/AddProgrammingButton.tsx
 msgid "Redirect..."
-msgstr "Redirect..."
+msgstr "تحويل إلى قناة..."
 
 #: src/components/channels/ChannelSessionsDialog.tsx
 #: src/hooks/useVersion.tsx
@@ -4558,17 +4558,17 @@ msgstr "Relative weight"
 #: src/components/custom-shows/CustomShowSortToolsMenu.tsx
 #: src/components/programming_controls/AddBlockShuffleModal.tsx
 msgid "Release Date"
-msgstr "Release Date"
+msgstr "تاريخ الإصدار"
 
 #: src/components/channel_config/ChannelProgrammingSort.tsx
 #: src/components/custom-shows/CustomShowSortToolsMenu.tsx
 msgid "Release Date (asc)"
-msgstr "Release Date (asc)"
+msgstr "تاريخ الإصدار: الأقدم أولًا"
 
 #: src/components/channel_config/ChannelProgrammingSort.tsx
 #: src/components/custom-shows/CustomShowSortToolsMenu.tsx
 msgid "Release Date (desc)"
-msgstr "Release Date (desc)"
+msgstr "تاريخ الإصدار: الأحدث أولًا"
 
 #: src/components/Video.tsx
 msgid "Reload Stream"
@@ -4597,7 +4597,7 @@ msgstr "Remove All {movieCount} {movieCount, plural, one {Movie} other {Movies}}
 
 #: src/components/channel_config/ChannelProgrammingFlexTools.tsx
 msgid "Remove All Flex"
-msgstr "Remove All Flex"
+msgstr "إزالة كل الفترات المرنة"
 
 #: src/components/profiles/condition/ConditionClauseEditor.tsx
 msgid "Remove condition"
@@ -4613,7 +4613,7 @@ msgstr "Remove group"
 
 #: src/components/channel_config/ChannelPropertiesEditor.tsx
 msgid "Remove icon"
-msgstr "Remove icon"
+msgstr "إزالة الشعار"
 
 #: src/components/programming_controls/RemoveShowsModal.tsx
 msgid "Remove Programming"
@@ -4634,11 +4634,11 @@ msgstr "Remove schedule?"
 
 #: src/components/channel_config/ChannelProgrammingDeleteOptions.tsx
 msgid "Remove..."
-msgstr "Remove..."
+msgstr "إزالة..."
 
 #: src/components/channel_config/ChannelProgrammingFlexTools.tsx
 msgid "Removes all Flex periods from the schedule."
-msgstr "Removes all Flex periods from the schedule."
+msgstr "يزيل كل الفترات المرنة من الجدول."
 
 #: src/components/custom-shows/CustomShowSortToolsMenu.tsx
 #~ msgid "Removes all programs from custom show"
@@ -4650,15 +4650,15 @@ msgstr "Removes all programs from playlist"
 
 #: src/components/channel_config/ChannelProgrammingDeleteOptions.tsx
 msgid "Removes all programs from schedule"
-msgstr "Removes all programs from schedule"
+msgstr "يزيل كل المحتوى من الجدول."
 
 #: src/components/channel_config/ChannelProgrammingDeleteOptions.tsx
 msgid "Removes any specials from the schedule. Specials are episodes with season '00'."
-msgstr "Removes any specials from the schedule. Specials are episodes with season '00'."
+msgstr "يزيل الحلقات الخاصة من الجدول، وهي الحلقات المسجلة تحت الموسم 00."
 
 #: src/components/channel_config/ChannelProgrammingDeleteOptions.tsx
 msgid "Removes repeated programs."
-msgstr "Removes repeated programs."
+msgstr "يزيل المحتوى المكرر."
 
 #: src/components/slot_scheduler/SlotProgrammingTooLongWarningDetails.tsx
 msgid "Removing overrun programs from the channel."
@@ -4666,11 +4666,11 @@ msgstr "Removing overrun programs from the channel."
 
 #: src/components/channel_config/ChannelTranscodingConfig.tsx
 msgid "Renders a channel icon (also known as bug or Digital On-screen Graphic) on top of the channel's stream."
-msgstr "Renders a channel icon (also known as bug or Digital On-screen Graphic) on top of the channel's stream."
+msgstr "يضع شعار القناة فوق صورة الفيديو داخل البث."
 
 #: src/components/channel_config/WatermarkTimingFields.tsx
 msgid "Repeatedly fades the watermark in and out while a program plays."
-msgstr "Repeatedly fades the watermark in and out while a program plays."
+msgstr "يظهر الشعار ويخفيه تدريجيًا بصورة متكررة أثناء تشغيل البرنامج."
 
 #: src/components/programming_controls/AddRerunBlockModal.tsx
 msgid "Repeats"
@@ -4694,7 +4694,7 @@ msgstr "Replicate Programs"
 
 #: src/components/channel_config/ChannelProgrammingOrganizeOptions.tsx
 msgid "Replicate..."
-msgstr "Replicate..."
+msgstr "تكرار الجدول..."
 
 #: src/components/slot_scheduler/SlotLinkingControl.tsx
 msgid "Rerun"
@@ -4719,11 +4719,11 @@ msgstr "إعادة ضبط"
 #: src/pages/settings/HdhrSettingsPage.tsx
 #: src/pages/settings/XmlTvSettingsPage.tsx
 msgid "Reset Changes"
-msgstr "Reset Changes"
+msgstr "التراجع عن التعديلات"
 
 #: src/components/channel_config/ChannelProgrammingConfig.tsx
 msgid "Reset changes made to the channel's lineup"
-msgstr "Reset changes made to the channel's lineup"
+msgstr "يتراجع عن التعديلات التي أجريتها على جدول القناة."
 
 #: src/components/settings/general/GeneralSettingsForm.tsx
 #: src/pages/channels/RandomSlotEditorPage.tsx
@@ -4748,7 +4748,7 @@ msgstr "الدقة"
 
 #: src/components/channel_config/ChannelPropertiesEditor.tsx
 msgid "Restore default logo"
-msgstr "Restore default logo"
+msgstr "استعادة الشعار الافتراضي"
 
 #: src/pages/settings/HdhrSettingsPage.tsx
 #: src/pages/settings/XmlTvSettingsPage.tsx
@@ -4761,7 +4761,7 @@ msgstr "Restrict Hours"
 
 #: src/components/channel_config/ChannelProgrammingFlexTools.tsx
 msgid "Restrict Hours..."
-msgstr "Restrict Hours..."
+msgstr "تحديد ساعات العرض..."
 
 #: src/components/search/SearchInput.tsx
 msgid "Restrict search fields"
@@ -4786,11 +4786,11 @@ msgstr "الرجوع للمباشر مع بداية الفيلم التالي"
 
 #: src/components/channel_config/SelectedProgrammingActions.tsx
 msgid "Review"
-msgstr "Review"
+msgstr "مراجعة"
 
 #: src/components/channel_config/SelectedProgrammingActions.tsx
 msgid "Review Selections"
-msgstr "Review Selections"
+msgstr "مراجعة الاختيارات"
 
 #: src/components/channels/ChannelOverlayDialog.tsx
 msgid "Ring"
@@ -4860,7 +4860,7 @@ msgstr "Running..."
 
 #: src/components/settings/ffmpeg/TranscodeConfigAudioSettingsForm.tsx
 msgid "Sample rate cannot be changed when copying input audio"
-msgstr "Sample rate cannot be changed when copying input audio"
+msgstr "لا يمكن تغيير معدل العينات عند نسخ الصوت الأصلي دون تحويل."
 
 #: src/components/channel_config/ChannelEditActions.tsx
 #: src/components/channel_config/ChannelEditActions.tsx
@@ -4919,7 +4919,7 @@ msgstr "القناة المحفوظة: {0}"
 
 #: src/components/settings/ffmpeg/TranscodeConfigSettingsForm.tsx
 msgid "Saving..."
-msgstr "Saving..."
+msgstr "جارٍ الحفظ..."
 
 #: src/components/MediaSourceLibraryTable.tsx
 msgid "Scan"
@@ -4945,11 +4945,11 @@ msgstr "Scanning"
 
 #: src/components/channel_config/ChannelProgrammingOrganizeOptions.tsx
 msgid "Schedule programming in blocks that are either count or duration based. Can be used to generate random schedules."
-msgstr "Schedule programming in blocks that are either count or duration based. Can be used to generate random schedules."
+msgstr "ينظم المحتوى في مجموعات حسب عدد البرامج أو مدتها، ويمكن استخدامه لإنشاء جداول عشوائية."
 
 #: src/components/channel_config/ChannelProgrammingOrganizeOptions.tsx
 msgid "Schedule programming using slots assigned a start time and duration."
-msgstr "Schedule programming using slots assigned a start time and duration."
+msgstr "يجدول المحتوى في فترات محددة بموعد بدء ومدة."
 
 #: src/pages/channels/ChannelProgrammingPage.tsx
 msgid "Schedule removed"
@@ -5122,7 +5122,7 @@ msgstr "Set to 0 to never delete backups"
 
 #: src/components/settings/ffmpeg/TranscodeConfigSettingsForm.tsx
 msgid "Sets the number of threads used to decode the input stream. Set to 0 to let ffmpeg automatically decide how many threads to use. Read more about this option <0>here</0>. <1>Note: </1> this option is overridden to 1 when using hardware accelearation for stability reasons."
-msgstr "Sets the number of threads used to decode the input stream. Set to 0 to let ffmpeg automatically decide how many threads to use. Read more about this option <0>here</0>. <1>Note: </1> this option is overridden to 1 when using hardware accelearation for stability reasons."
+msgstr "يحدد عدد خيوط المعالجة لفك ترميز الفيديو. استخدم صفرًا ليختار FFmpeg العدد تلقائيًا. <0>معرفة المزيد</0>. <1>ملاحظة: </1>قد يثبت العدد عند خيط واحد مع التسريع بكارت الشاشة للحفاظ على الاستقرار."
 
 #: src/components/shell/useShellNav.tsx
 #: src/components/slot_scheduler/RandomSlotSettingsForm.tsx
@@ -5147,11 +5147,11 @@ msgstr "Show"
 
 #: src/pages/profiles/TranscodeConfigPage.tsx
 msgid "Show Advanced"
-msgstr "Show Advanced"
+msgstr "إظهار الإعدادات المتقدمة"
 
 #: src/components/channels/ChannelsView.tsx
 msgid "Show all channels"
-msgstr "Show all channels"
+msgstr "عرض كل القنوات"
 
 #: src/components/channels/ChannelOverlayDialog.tsx
 msgid "Show countdown in video"
@@ -5273,7 +5273,7 @@ msgstr "Slots"
 
 #: src/components/channel_config/ChannelProgrammingOrganizeOptions.tsx
 msgid "Slots Editor..."
-msgstr "Slots Editor..."
+msgstr "محرر الفترات..."
 
 #: src/components/shell/CommandPaletteContainer.tsx
 msgid "Smart collection"
@@ -5307,7 +5307,7 @@ msgstr "Smart Collections are self-updating content lists. You set the query and
 
 #: src/components/settings/ffmpeg/TranscodeConfigsTable.tsx
 msgid "Software (No GPU)"
-msgstr "Software (No GPU)"
+msgstr "المعالج فقط: دون كارت شاشة"
 
 #: src/hooks/useQueryErrorSnackbar.tsx
 msgid "Something went wrong loading data. Check the logs for details."
@@ -5315,7 +5315,7 @@ msgstr "Something went wrong loading data. Check the logs for details."
 
 #: src/components/channel_config/ChannelProgrammingSort.tsx
 msgid "Sort"
-msgstr "Sort"
+msgstr "ترتيب"
 
 #: src/components/ui/table/SortButton.tsx
 msgid "Sort by {label} ascending"
@@ -5328,19 +5328,19 @@ msgstr "Sort by {label} descending"
 #: src/components/channel_config/ChannelProgrammingSort.tsx
 #: src/components/custom-shows/CustomShowSortToolsMenu.tsx
 msgid "Sort By..."
-msgstr "Sort By..."
+msgstr "ترتيب حسب..."
 
 #: src/components/channel_config/ChannelProgrammingSort.tsx
 msgid "Sort TV Shows"
-msgstr "Sort TV Shows"
+msgstr "ترتيب المسلسلات"
 
 #: src/components/channel_config/ChannelProgrammingSort.tsx
 msgid "Sort TV Shows (asc)"
-msgstr "Sort TV Shows (asc)"
+msgstr "ترتيب المسلسلات تصاعديًا"
 
 #: src/components/channel_config/ChannelProgrammingSort.tsx
 msgid "Sort TV Shows (desc)"
-msgstr "Sort TV Shows (desc)"
+msgstr "ترتيب المسلسلات تنازليًا"
 
 #: src/components/ui/table/SortButton.tsx
 msgid "Sorted by {label} ascending"
@@ -5353,20 +5353,20 @@ msgstr "Sorted by {label} descending"
 #: src/components/channel_config/ChannelProgrammingSort.tsx
 #: src/components/custom-shows/CustomShowSortToolsMenu.tsx
 msgid "Sorts alphabetically by program title"
-msgstr "Sorts alphabetically by program title"
+msgstr "يرتب المحتوى أبجديًا حسب العنوان."
 
 #: src/components/channel_config/ChannelProgrammingSort.tsx
 #: src/components/custom-shows/CustomShowSortToolsMenu.tsx
 msgid "Sorts everything by its release date. This will only work correctly if the release dates in Plex are correct. In case any item does not have a release date specified, it will be moved to the bottom."
-msgstr "Sorts everything by its release date. This will only work correctly if the release dates in Plex are correct. In case any item does not have a release date specified, it will be moved to the bottom."
+msgstr "يرتب المحتوى حسب تاريخ الإصدار المسجل في المصدر. يُنقل المحتوى الذي ليس له تاريخ إصدار إلى نهاية القائمة."
 
 #: src/components/channel_config/ChannelProgrammingSort.tsx
 msgid "Sorts the list by TV Show and the episodes in each TV show by their season/episode number. Movies are moved to the bottom of the schedule."
-msgstr "Sorts the list by TV Show and the episodes in each TV show by their season/episode number. Movies are moved to the bottom of the schedule."
+msgstr "يرتب المحتوى حسب المسلسل ثم رقم الموسم والحلقة. تُنقل الأفلام إلى نهاية الجدول."
 
 #: src/components/channel_config/ChannelFlexConfig.tsx
 msgid "Soundtrack"
-msgstr "Soundtrack"
+msgstr "المسار الصوتي"
 
 #: src/components/MediaSourceLibraryTable.tsx
 #: src/pages/system/TroubleshootPage.tsx
@@ -5384,7 +5384,7 @@ msgstr "المصادر"
 
 #: src/components/channel_config/ChannelProgrammingDeleteOptions.tsx
 msgid "Specials"
-msgstr "Specials"
+msgstr "الحلقات الخاصة"
 
 #: src/components/channels/ChannelOverlayDialog.tsx
 msgid "Square"
@@ -5428,7 +5428,7 @@ msgstr "الحالة"
 
 #: src/components/channels/ChannelsView.tsx
 msgid "Status filter"
-msgstr "Status filter"
+msgstr "فلتر الحالة"
 
 #: src/components/channels/ChannelCard.tsx
 #: src/components/channels/ChannelsView.tsx
@@ -5438,7 +5438,7 @@ msgstr "مخفية من الدليل"
 
 #: src/components/channel_config/ChannelEpgConfig.tsx
 msgid "Stealth Mode"
-msgstr "Stealth Mode"
+msgstr "إخفاء القناة من الدليل"
 
 #: src/pages/channels/ChannelsPage.tsx
 #~ msgid "Stealth?"
@@ -5580,7 +5580,7 @@ msgstr "Successfully ran system fixer {fixerId}"
 #: src/components/settings/ffmpeg/useTranscodeConfigFormOptions.ts
 #: src/components/settings/ffmpeg/useTranscodeConfigFormOptions.ts
 msgid "Successfully saved config!"
-msgstr "Successfully saved config!"
+msgstr "تم حفظ ملف الإعداد بنجاح!"
 
 #: src/pages/settings/TaskSettingsPage.tsx
 msgid "Successfully scheduled {taskId} (running in background)."
@@ -5716,19 +5716,19 @@ msgstr "يظهر العداد داخل فيديو القناة. القنوات �
 
 #: src/components/channel_config/MediaItemGrid.tsx
 msgid "The End."
-msgstr "The End."
+msgstr "النهاية."
 
 #: src/components/channel_config/ChannelTranscodingConfig.tsx
 msgid "The ErsatzTV next backend does not serve this stream mode. It supports HLS, HLS Direct v2 and MPEG-TS."
-msgstr "The ErsatzTV next backend does not serve this stream mode. It supports HLS, HLS Direct v2 and MPEG-TS."
+msgstr "المحرك التجريبي ErsatzTV next لا يدعم وضع البث المحدد. الأوضاع المدعومة هي HLS وHLS Direct v2 وMPEG-TS."
 
 #: src/components/settings/ffmpeg/EtvNextCompatibilityNotice.tsx
 msgid "The ErsatzTV next backend ignores some of these settings"
-msgstr "The ErsatzTV next backend ignores some of these settings"
+msgstr "المحرك التجريبي ErsatzTV next يتجاهل بعض هذه الإعدادات."
 
 #: src/components/channel_config/ChannelTranscodingConfig.tsx
 msgid "The image will be rendered at its actual size without any scaling applied."
-msgstr "The image will be rendered at its actual size without any scaling applied."
+msgstr "تُعرض الصورة بحجمها الأصلي دون تكبير أو تصغير."
 
 #: src/hooks/useVersion.tsx
 #~ msgid "The loaded version of the Tunarr UI does not match the server. Reload the browser to get the latest. If this message persists, clear your browser cache and reload."
@@ -5764,7 +5764,7 @@ msgstr "The rules, program, or channel changed since this test ran. Run it again
 
 #: src/components/channel_config/ChannelTranscodingConfig.tsx
 msgid "The streaming mode affects the type of underlying transcoding process used to create the channel's video stream.<0/>Learn more about XBest's stream modes <1>here</1>!"
-msgstr "The streaming mode affects the type of underlying transcoding process used to create the channel's video stream.<0/>Learn more about XBest's stream modes <1>here</1>!"
+msgstr "يحدد وضع البث الطريقة المستخدمة لتحويل الفيديو وإنتاج بث القناة.<0/><1>معرفة المزيد عن أوضاع البث في XBEST</1>."
 
 #: src/components/profiles/StreamSelectionPreviewPanel.tsx
 msgid "The test could not be run."
@@ -5776,7 +5776,7 @@ msgstr "The type of media in the provided paths"
 
 #: src/components/channel_config/WatermarkTimingFields.tsx
 msgid "The watermark fades in, stays for this many minutes, then hides for the same length. Set to 0 to keep it on screen without fading."
-msgstr "The watermark fades in, stays for this many minutes, then hides for the same length. Set to 0 to keep it on screen without fading."
+msgstr "يظهر الشعار تدريجيًا للمدة المحددة، ثم يختفي لمدة مماثلة. استخدم صفرًا لإبقائه ظاهرًا باستمرار."
 
 #: src/components/settings/general/WebSettings.tsx
 msgid "Theme Settings"
@@ -5814,7 +5814,7 @@ msgstr "يظل هذا الرابط ثابتًا عند تغيير اسم الق�
 
 #: src/components/channel_config/ChannelProgrammingOrganizeOptions.tsx
 msgid "This allows to schedule specific shows to run at specific time slots of the day or a week. It's recommended you first populate the channel with the episodes from the shows you want to play and/or other content like movies and redirects."
-msgstr "This allows to schedule specific shows to run at specific time slots of the day or a week. It's recommended you first populate the channel with the episodes from the shows you want to play and/or other content like movies and redirects."
+msgstr "يتيح عرض مسلسلات معينة في مواعيد محددة يوميًا أو أسبوعيًا. أضف الحلقات والأفلام والتحويلات إلى القناة أولًا، ثم حدد فترات عرضها."
 
 #: src/components/programming_controls/AdjustWeightsModal.tsx
 msgid "This allows you to pick the weights for each of the shows, so you can decide that some shows should be less frequent than other shows."
@@ -5835,7 +5835,7 @@ msgstr "This channel keeps its current programs but will no longer use its slot 
 
 #: src/components/channel_config/ChannelPropertiesEditor.tsx
 msgid "This channel number has already been used"
-msgstr "This channel number has already been used"
+msgstr "رقم القناة مستخدم بالفعل."
 
 #: src/components/slot_scheduler/SlotProgrammingTooLongWarningDetails.tsx
 msgid "This could cause the following slot's programs to go unscheduled. Possible solutions include:"
@@ -5871,7 +5871,7 @@ msgstr "This is the default profile. The built-in profile will become the defaul
 
 #: src/components/channel_config/ChannelEpgConfig.tsx
 msgid "This is the name of the fake program that will appear in the TV guide when there are no programs to display in that time slot guide, e.g when a large Flex block is scheduled."
-msgstr "This is the name of the fake program that will appear in the TV guide when there are no programs to display in that time slot guide, e.g when a large Flex block is scheduled."
+msgstr "اسم يظهر في دليل البرامج عندما لا يتوفر برنامج فعلي لتلك الفترة، مثل الفترات المرنة الطويلة."
 
 #: src/components/channel_config/ChannelPropertiesEditor.tsx
 #~ msgid "This is used by iptv clients to categorize the channels. You can leave it as 'tunarr' if you don't need this sort of classification."
@@ -5883,11 +5883,11 @@ msgstr ""
 
 #: src/components/settings/ffmpeg/EtvNextCompatibilityNotice.tsx
 msgid "This machine cannot encode this config in hardware on the ErsatzTV next backend"
-msgstr "This machine cannot encode this config in hardware on the ErsatzTV next backend"
+msgstr "هذا الجهاز لا يستطيع تنفيذ إعداد التحويل هذا بكارت الشاشة على المحرك التجريبي ErsatzTV next."
 
 #: src/components/channel_config/ProgrammingSelector.tsx
 msgid "This media source has no enabled or scanned libraries. Enable libraries for this source on the <0>Media Sources</0> page or manually trigger scans on the <1>Library</1> page."
-msgstr "This media source has no enabled or scanned libraries. Enable libraries for this source on the <0>Media Sources</0> page or manually trigger scans on the <1>Library</1> page."
+msgstr "لم يتم تفعيل مكتبات هذا المصدر أو فحصها. فعّلها من <0>مصادر المحتوى</0>، ثم ابدأ فحصها من <1>المكتبة</1>."
 
 #: src/components/programming_controls/AddBlockShuffleModal.tsx
 msgid "This option is disabled because it would calculate a schedule that is too long."
@@ -5967,11 +5967,11 @@ msgstr "هذه النسخة تدعم القوائم المحلية الثابت�
 
 #: src/components/settings/ffmpeg/TranscodeConfigSettingsForm.tsx
 msgid "Threads"
-msgstr "Threads"
+msgstr "خيوط المعالجة"
 
 #: src/components/channel_config/ChannelPropertiesEditor.tsx
 msgid "Thumbnail URL"
-msgstr "Thumbnail URL"
+msgstr "رابط الصورة المصغرة"
 
 #: src/components/slot_scheduler/MidRollConfigPanel.tsx
 msgid "Time before first break"
@@ -5991,7 +5991,7 @@ msgstr "تنسيق الوقت"
 
 #: src/components/channel_config/WatermarkTimingFields.tsx
 msgid "Time Limit"
-msgstr "Time Limit"
+msgstr "حد المدة"
 
 #: src/hooks/useRouteName.ts
 msgid "Time Slot Editor"
@@ -6003,7 +6003,7 @@ msgstr "Time Slots"
 
 #: src/components/channel_config/ChannelProgrammingOrganizeOptions.tsx
 msgid "Time Slots..."
-msgstr "Time Slots..."
+msgstr "فترات زمنية..."
 
 #: src/pages/system/SystemLogsPage.tsx
 msgid "Timestamp"
@@ -6045,7 +6045,7 @@ msgstr "To schedule movies, add them to a playlist and choose Playlist."
 
 #: src/components/channel_config/ProgrammingSelector.tsx
 msgid "To use XBest, you need to first connect a media source. This will allow you to build custom channels with your content."
-msgstr "To use XBest, you need to first connect a media source. This will allow you to build custom channels with your content."
+msgstr "ابدأ بإضافة مصدر محتوى إلى XBEST حتى تتمكن من إنشاء قنوات من أفلامك ومسلسلاتك."
 
 #: src/components/slot_scheduler/ProgramWeekCalendarView.tsx
 msgid "Today"
@@ -6069,7 +6069,7 @@ msgstr "Toggle visibility {label}"
 #: src/components/channel_config/ChannelProgrammingTools.tsx
 #: src/components/custom-shows/CustomShowSortToolsMenu.tsx
 msgid "Tools"
-msgstr "Tools"
+msgstr "الأدوات"
 
 #: src/components/channels/ChannelOverlayDialog.tsx
 msgid "Top left"
@@ -6104,7 +6104,7 @@ msgstr "Tracks"
 #: src/components/channels/ChannelsView.tsx
 #: src/pages/system/TroubleshootPage.tsx
 msgid "Transcode Config"
-msgstr "Transcode Config"
+msgstr "ملف التحويل"
 
 #: src/pages/system/TroubleshootPage.tsx
 #: src/pages/system/TroubleshootPage.tsx
@@ -6124,11 +6124,11 @@ msgstr "إعدادات الترميز"
 #: src/pages/profiles/TranscodeConfigsPage.tsx
 #: src/pages/settings/FfmpegSettingsPage.tsx
 msgid "Transcoding Configs"
-msgstr "Transcoding Configs"
+msgstr "ملفات التحويل"
 
 #: src/components/channel_config/ChannelTranscodingConfig.tsx
 msgid "Transcoding Settings"
-msgstr "Transcoding Settings"
+msgstr "إعدادات التحويل"
 
 #: src/components/shell/useShellNav.tsx
 #: src/hooks/useRouteName.ts
@@ -6322,7 +6322,7 @@ msgstr "Use channel default"
 
 #: src/components/channel_config/ChannelTranscodingConfig.tsx
 msgid "Use ErsatzTV next Backend (Experimental)"
-msgstr "Use ErsatzTV next Backend (Experimental)"
+msgstr "استخدام محرك ErsatzTV next التجريبي"
 
 #: src/components/slot_scheduler/TimeSlotConfigDialogPanel.tsx
 #: src/components/slot_scheduler/TimeSlotConfigDialogPanel.tsx
@@ -6335,7 +6335,7 @@ msgstr "Use Show Poster"
 
 #: src/components/channel_config/ChannelTranscodingConfig.tsx
 msgid "Use these settings to override global ffmpeg settings for this channel."
-msgstr "Use these settings to override global ffmpeg settings for this channel."
+msgstr "تستبدل هذه الخيارات إعدادات FFmpeg العامة لهذه القناة فقط."
 
 #: src/components/profiles/StreamSelectionProfilesTable.tsx
 msgid "Used By"
@@ -6358,7 +6358,7 @@ msgstr "Usually slots need to add flex time to ensure that the next slot starts 
 
 #: src/components/settings/ffmpeg/TranscodeConfigVideoSettingsForm.tsx
 msgid "VA-API Device"
-msgstr "VA-API Device"
+msgstr "جهاز VA-API"
 
 #: src/pages/system/SystemDebugPage.tsx
 msgid "VAAPI Capabilities"
@@ -6403,7 +6403,7 @@ msgstr "معدل بت الفيديو"
 
 #: src/components/settings/ffmpeg/TranscodeConfigVideoSettingsForm.tsx
 msgid "Video Buffer Size"
-msgstr "Video Buffer Size"
+msgstr "حجم مخزن الفيديو"
 
 #: src/components/channels/ChannelOptionsMenu.tsx
 msgid "Video countdown"
@@ -6417,11 +6417,11 @@ msgstr "عداد داخل البث: {0}"
 #: src/components/settings/ffmpeg/TranscodeConfigsTable.tsx
 #: src/components/settings/ffmpeg/TranscodeConfigVideoSettingsForm.tsx
 msgid "Video Format"
-msgstr "Video Format"
+msgstr "صيغة الفيديو"
 
 #: src/components/settings/ffmpeg/TranscodeConfigSettingsForm.tsx
 msgid "Video Options"
-msgstr "Video Options"
+msgstr "إعدادات الفيديو"
 
 #: src/pages/system/TroubleshootPage.tsx
 msgid "Video Streams"
@@ -6492,7 +6492,7 @@ msgstr "العلامة المائية"
 
 #: src/components/channel_config/ChannelTranscodingConfig.tsx
 msgid "Watermark Image URL"
-msgstr "Watermark Image URL"
+msgstr "رابط صورة الشعار"
 
 #: src/components/settings/general/WebSettings.tsx
 msgid "Web Settings"
@@ -6506,7 +6506,7 @@ msgstr "Web version = {0}, Server version = {1}"
 
 #: src/components/channel_config/ChannelProgrammingConfig.tsx
 msgid "Week"
-msgstr "Week"
+msgstr "أسبوع"
 
 #: src/pages/channels/TimeSlotEditorPage.tsx
 msgid "Weekly"
@@ -6515,7 +6515,7 @@ msgstr "Weekly"
 #: src/components/channel_config/ChannelFlexConfig.tsx
 #: src/components/slot_scheduler/RandomSlotTable.tsx
 msgid "Weight"
-msgstr "Weight"
+msgstr "الوزن النسبي"
 
 #: src/components/slot_scheduler/EditRandomSlotDialogContent.tsx
 msgid "Weight %"
@@ -6552,7 +6552,7 @@ msgstr "What the ErsatzTV next worker recorded the last few times this channel f
 
 #: src/components/channel_config/WatermarkTimingFields.tsx
 msgid "When enabled, intermittent watermarks fade in immediately when a stream is initialized. When disabled, the first watermark fade-in occurs after a full period."
-msgstr "When enabled, intermittent watermarks fade in immediately when a stream is initialized. When disabled, the first watermark fade-in occurs after a full period."
+msgstr "عند التفعيل يبدأ ظهور الشعار المتقطع فور بدء البث. عند التعطيل ينتظر دورة كاملة قبل الظهور الأول."
 
 #: src/components/settings/general/GeneralSettingsForm.tsx
 #~ msgid "When enabling, Tunarr will generate an initial backup immediately"
@@ -6580,15 +6580,15 @@ msgstr "Which subtitle track(s) to select when the condition holds"
 
 #: src/components/settings/ffmpeg/TranscodeConfigAdvancedOptions.tsx
 msgid "Will force use of a software decoder despite hardware acceleration settings."
-msgstr "Will force use of a software decoder despite hardware acceleration settings."
+msgstr "يجبر فك ترميز الفيديو على استخدام المعالج حتى مع تفعيل كارت الشاشة."
 
 #: src/components/settings/ffmpeg/TranscodeConfigAdvancedOptions.tsx
 msgid "Will force use of a software encoder despite hardware acceleration settings."
-msgstr "Will force use of a software encoder despite hardware acceleration settings."
+msgstr "يجبر ترميز الفيديو على استخدام المعالج حتى مع تفعيل كارت الشاشة."
 
 #: src/components/settings/ffmpeg/TranscodeConfigAdvancedOptions.tsx
 msgid "Will force use of a software filters (e.g. scale, pad, etc.) despite hardware acceleration settings."
-msgstr "Will force use of a software filters (e.g. scale, pad, etc.) despite hardware acceleration settings."
+msgstr "يجبر فلاتر التحجيم والهوامش وغيرها على استخدام المعالج حتى مع تفعيل كارت الشاشة."
 
 #. placeholder {0}: version.tunarr
 #: src/components/ui/patterns/AppShell/HelpMenu.tsx
@@ -6694,11 +6694,11 @@ msgstr "You have unsaved changes!"
 #: src/components/channel_config/NoChannelsCreated.tsx
 #: src/components/channels/ChannelsView.tsx
 msgid "You haven't created any channels yet."
-msgstr "You haven't created any channels yet."
+msgstr "لم تُنشئ أي قنوات بعد."
 
 #: src/components/channel_config/ChannelFlexConfig.tsx
 msgid "You haven't created any filler lists yet! Go to the <0>Filler Lists</0> page to create one."
-msgstr "You haven't created any filler lists yet! Go to the <0>Filler Lists</0> page to create one."
+msgstr "لم تُنشئ قوائم فواصل بعد. انتقل إلى <0>قوائم الفواصل</0> لإنشاء قائمة."
 
 #: src/components/slot_scheduler/EditRandomSlotDialogContent.tsx
 msgid "You must create at least one <0>filler list</0> before assigning filler to a lot."
