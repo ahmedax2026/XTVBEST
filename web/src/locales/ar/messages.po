@@ -1842,7 +1842,7 @@ msgstr "Deselect All"
 
 #: src/components/channels/ChannelNowPlayingCard.tsx
 msgid "Details"
-msgstr "Details"
+msgstr "التفاصيل"
 
 #: src/components/settings/media_source/JelllyfinServerEditDialog.tsx
 msgid "Did not receive an accessToken or userId from Jellyfin server."
@@ -2660,7 +2660,7 @@ msgstr "Fixed Interval"
 #: src/hooks/useProgramTitleFormatter.ts
 #: src/hooks/useRouteName.ts
 msgid "Flex"
-msgstr "Flex"
+msgstr "فاصل"
 
 #: src/components/channel_config/AddProgrammingButton.tsx
 msgid "Flex Slot..."
@@ -3774,11 +3774,11 @@ msgstr "Not synced"
 #: src/components/channels/ChannelCard.tsx
 #: src/components/channels/ChannelsView.tsx
 msgid "Now playing"
-msgstr "Now playing"
+msgstr "يُعرض الآن"
 
 #: src/components/channels/ChannelNowPlayingCard.tsx
 msgid "Now Playing:"
-msgstr "Now Playing:"
+msgstr "يُعرض الآن:"
 
 #: src/components/channels/ChannelsView.tsx
 msgid "Number"
@@ -6119,7 +6119,7 @@ msgstr "View Full Details"
 #: src/components/channels/ChannelNowPlayingCard.tsx
 #: src/components/ProgramMetadataDialogContent.tsx
 msgid "View in {0}"
-msgstr "View in {0}"
+msgstr "عرض في {0}"
 
 #: src/components/MediaSourceLibraryTable.tsx
 #~ msgid "View Library"

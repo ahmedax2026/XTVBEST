@@ -16,7 +16,7 @@ Protected startup scripts for Windows and Linux prompt for credentials; server-s
 
 The session window polls the existing server API every five seconds while open, shows session state, connection counts and client activity, and stops sessions with server confirmation and error feedback. It is available from every channel menu, including idle channels. Counts represent connections, not unique viewers. Reconnecting players may restart a stopped session; persistent offline/standby remains pending.
 
-Copied HLS links now use channel UUIDs and survive renaming/renumbering. The summary card counts down in HH:MM:SS every second and refreshes after a program ends. This countdown is in the administration panel; the burned-in countdown and its visual styles remain pending.
+Copied HLS links now use channel UUIDs and survive renaming/renumbering. The summary card counts down in HH:MM:SS every second and refreshes after a program ends. Failed end-of-program refreshes retry every minute and resume normal updates after recovery. The now-playing labels and detail controls are translated into Arabic. This countdown is in the administration panel; the burned-in countdown and its visual styles remain pending.
 
 ## Remaining acceptance criteria
 

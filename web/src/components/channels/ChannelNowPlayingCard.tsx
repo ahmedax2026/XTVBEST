@@ -51,7 +51,12 @@ export const ChannelNowPlayingCard = ({ channelId }: Props) => {
   const {
     data: { lineup },
   } = useChannelAndProgramming(channelId);
-  const { data: firstProgram, dataUpdatedAt } = useChannelNowPlaying(channelId);
+  const {
+    data: firstProgram,
+    dataUpdatedAt,
+    errorUpdatedAt,
+    isError,
+  } = useChannelNowPlaying(channelId);
   const [open, toggleOpen] = useToggle(false);
 
   const queryClient = useQueryClient();
@@ -62,7 +67,7 @@ export const ChannelNowPlayingCard = ({ channelId }: Props) => {
   }, []);
 
   useEffect(() => {
-    const delay = guideRefreshDelay([firstProgram.stop], Date.now(), false);
+    const delay = guideRefreshDelay([firstProgram.stop], Date.now(), isError);
     if (delay === undefined) return;
     const timer = setTimeout(() => {
       queryClient
@@ -74,7 +79,14 @@ export const ChannelNowPlayingCard = ({ channelId }: Props) => {
         .catch(console.error);
     }, delay);
     return () => clearTimeout(timer);
-  }, [channelId, firstProgram.stop, dataUpdatedAt, queryClient]);
+  }, [
+    channelId,
+    firstProgram.stop,
+    dataUpdatedAt,
+    errorUpdatedAt,
+    isError,
+    queryClient,
+  ]);
 
   const details = useMemo(() => {
     return match(firstProgram)

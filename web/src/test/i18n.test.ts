@@ -32,6 +32,14 @@ describe('loadCatalog', () => {
     expect(i18n._(msg`Refresh`)).toBe('تحديث');
   });
 
+  it('translates the now-playing card controls into Arabic', async () => {
+    await loadCatalog('ar');
+    expect(i18n._(msg`Now Playing:`)).toBe('يُعرض الآن:');
+    expect(i18n._(msg`Now playing`)).toBe('يُعرض الآن');
+    expect(i18n._(msg`Details`)).toBe('التفاصيل');
+    expect(i18n._(msg`Flex`)).toBe('فاصل');
+  });
+
   it.each(['es', 'zh-CN', 'pseudo-LOCALE'])(
     'uses English fallback for removed locale %s',
     async (locale) => {
