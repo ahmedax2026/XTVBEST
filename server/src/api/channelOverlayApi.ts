@@ -36,12 +36,10 @@ export const channelOverlayApi: RouterPluginAsyncCallback = (fastify) => {
             .save(req.params.id, req.body),
         );
       } catch {
-        return reply
-          .code(409)
-          .send({
-            error:
-              'Unable to save overlay. Select the built-in transcoded HLS or MPEG-TS engine.',
-          });
+        return reply.code(409).send({
+          error:
+            'Unable to save overlay. Select the built-in transcoded HLS or MPEG-TS engine.',
+        });
       }
     },
   );
