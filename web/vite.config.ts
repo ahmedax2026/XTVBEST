@@ -42,7 +42,7 @@ export default defineConfig({
     svgr(),
   ],
   build: {
-    sourcemap: true,
+    sourcemap: false,
   },
   define: {
     __TUNARR_VERSION__: `"${version}"`,

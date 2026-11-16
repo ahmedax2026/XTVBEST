@@ -38,7 +38,7 @@ jobs:
           pnpm --filter @tunarr/server typecheck
           pnpm --filter @tunarr/web typecheck
       - name: Test hardware selection, persistence, pipeline and authentication
-        run: pnpm --filter @tunarr/server test src/ffmpeg/AutoHardwareAcceleration.test.ts src/db/TranscodeConfigDB.test.ts src/ffmpeg/FfmpegStreamFactory.test.ts src/stream/etv/EtvNextSession.test.ts src/util/basicAuth.test.ts src/services/archive/ArchiveStore.test.ts src/services/archive/ChannelArchiveService.test.ts src/services/overlay/countdownAss.test.ts src/services/overlay/ChannelOverlayService.test.ts src/ffmpeg/FfmpegTrancodeSession.test.ts src/ffmpeg/builder/pipeline/ProgramOverlayPipeline.test.ts
+        run: pnpm --filter @tunarr/server test src/ffmpeg/AutoHardwareAcceleration.test.ts src/db/TranscodeConfigDB.test.ts src/ffmpeg/FfmpegStreamFactory.test.ts src/stream/etv/EtvNextSession.test.ts src/util/basicAuth.test.ts scripts/customerAssets.test.ts src/services/archive/ArchiveStore.test.ts src/services/archive/ChannelArchiveService.test.ts src/services/overlay/countdownAss.test.ts src/services/overlay/ChannelOverlayService.test.ts src/ffmpeg/FfmpegTrancodeSession.test.ts src/ffmpeg/builder/pipeline/ProgramOverlayPipeline.test.ts
       - name: Install FFmpeg for archive acceptance tests
         if: runner.os == 'Linux'
         run: |

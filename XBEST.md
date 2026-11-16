@@ -83,3 +83,19 @@ removed after encoder exit or cancellation, including cancellation before start.
 - Per-channel quality profiles and optional adaptive HLS; verify actual output URLs with IPTV panel.
 - Authentication, authorization and HTTPS deployment; no hardcoded credentials. Existing basic authentication is not a substitute for stream authorization.
 - Windows and Linux build and playback verification before a release.
+
+## Customer distribution and licensing status
+
+Customer builds no longer generate browser source maps. Executable staging also
+omits stale source maps, TypeScript files, root build metadata, environment files
+and conventionally named private issuer keys. Runtime JavaScript, native modules,
+SQL migrations, public verification keys and license notices are retained. This
+reduces accidental disclosure; minification and executable packaging do not
+prevent a server administrator from extracting or modifying local software.
+
+User management, per-installation activation and owner-issued licenses are still
+pending. Their signing private key must stay on an owner-controlled issuer, never
+in customer executables or repository files. Customer installations should carry
+only public verification material. Offline validation cannot promise immediate
+remote revocation. The existing public repository already exposes application
+source; future proprietary licensing components need a private delivery path.

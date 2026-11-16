@@ -1,3 +1,4 @@
+import { copyCustomerAssets } from './customerAssets.ts';
 import dotenv from '@dotenvx/dotenvx';
 dotenv.config({ debug: false, quiet: true, ignore: ['MISSING_ENV_FILE'] });
 
@@ -189,7 +190,7 @@ for (const arch of args.target) {
       });
 
       // Move the dist directory over to the working directory
-      await fs.cp('./dist', `${dir.path}/dist`, { recursive: true });
+      await copyCustomerAssets('./dist', `${dir.path}/dist`);
 
       // Move the extracted better-sqlite3 to the right place in dist
       await fs.rename(
