@@ -62,23 +62,11 @@ export function XBestShell({
       sx={{ px: 2.5, py: 3 }}
     >
       <Box
-        aria-hidden
-        sx={{
-          width: 44,
-          height: 44,
-          bgcolor: 'primary.main',
-          color: '#fff',
-          display: 'grid',
-          placeItems: 'center',
-          fontSize: 29,
-          fontWeight: 900,
-          borderRadius: '12px',
-          boxShadow: '0 6px 30px #f02c4540',
-          transform: 'rotate(-6deg)',
-        }}
-      >
-        X
-      </Box>
+        component="img"
+        src={`${import.meta.env.BASE_URL}xbest.png`}
+        alt="XBEST"
+        sx={{ width: 52, height: 52, objectFit: 'contain', borderRadius: 2 }}
+      />
       <Box>
         <Typography
           dir="ltr"
@@ -523,7 +511,9 @@ export function XBestShell({
             fontSize: 10,
           }}
         >
-          <span>{text('XBEST — استوديو القنوات', 'XBEST CHANNELS STUDIO')}</span>
+          <span>
+            {text('XBEST — استوديو القنوات', 'XBEST CHANNELS STUDIO')}
+          </span>
           <span>
             {text('مساحة واحدة لكل قنواتك', 'One workspace. Every channel.')}
           </span>

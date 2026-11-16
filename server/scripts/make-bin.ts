@@ -256,18 +256,34 @@ for (const arch of args.target) {
       if (osString === 'win') {
         const executable = path.resolve('./bin', execName);
         const branded = executable + '.branded.exe';
-        await promisify(execFile)('pnpm', [
-          'dlx', 'resedit-cli@3.1.1', executable, branded,
-          '--no-grow', '--delete-allicon',
-          '--icon', '1,' + path.resolve('./bin/XBEST.ico'),
-          '--company-name', 'XBEST',
-          '--file-description', 'XBEST Channels Studio',
-          '--product-name', 'XBEST',
-          '--internal-name', 'XBEST',
-          '--original-filename', 'XBEST.exe',
-          '--file-version', '2026.11.1.0',
-          '--product-version', '2026.11.1.0',
-        ], { timeout: 180000, maxBuffer: 10 * 1024 * 1024 });
+        await promisify(execFile)(
+          'pnpm',
+          [
+            'dlx',
+            'resedit-cli@3.1.1',
+            executable,
+            branded,
+            '--no-grow',
+            '--delete-allicon',
+            '--icon',
+            '1,' + path.resolve('./bin/XBEST.ico'),
+            '--company-name',
+            'XBEST',
+            '--file-description',
+            'XBEST Channels Studio',
+            '--product-name',
+            'XBEST',
+            '--internal-name',
+            'XBEST',
+            '--original-filename',
+            'XBEST.exe',
+            '--file-version',
+            '2026.11.1.0',
+            '--product-version',
+            '2026.11.1.0',
+          ],
+          { timeout: 180000, maxBuffer: 10 * 1024 * 1024 },
+        );
         await fs.rename(branded, executable);
       }
 

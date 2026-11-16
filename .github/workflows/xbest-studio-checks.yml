@@ -30,11 +30,11 @@ jobs:
           corepack enable
       - run: pnpm install --frozen-lockfile
       - name: Format changed XBEST source for verification
-        run: pnpm exec prettier --write server/src/services/desktop/videoTools.ts server/src/services/desktop/videoTools.test.ts server/src/services/desktop/DesktopStartup.ts server/src/services/desktop/DesktopStartup.test.ts types/src/ChannelOverlay.ts server/src/services/overlay/countdownAss.ts web/src/components/channels/ChannelOverlayDialog.tsx server/src/services/overlay/countdownAss.test.ts web/src/components/channels/ChannelOverlayDialog.test.tsx web/src/locales/catalogs.test.ts server/src/index.ts server/src/cli/RunServerCommand.ts web/index.html web/src/components/shell/XBestShell.tsx scripts/make-xbest-ico.mjs server/scripts/make-bin.ts
+        run: pnpm exec prettier --write server/src/services/desktop/videoTools.ts server/src/services/desktop/videoTools.test.ts server/src/services/desktop/DesktopStartup.ts server/src/services/desktop/DesktopStartup.test.ts types/src/ChannelOverlay.ts server/src/services/overlay/countdownAss.ts web/src/components/channels/ChannelOverlayDialog.tsx server/src/services/overlay/countdownAss.test.ts web/src/components/channels/ChannelOverlayDialog.test.tsx web/src/locales/catalogs.test.ts server/src/index.ts server/src/cli/RunServerCommand.ts web/index.html web/src/components/shell/XBestShell.tsx scripts/make-xbest-ico.mjs server/scripts/make-bin.ts web/src/components/TunarrLogo.tsx server/src/services/access/StudioWebLogin.ts
       - name: Record formatted source for the author
         if: runner.os == 'Linux'
         run: |
-          node --input-type=module -e 'import fs from "node:fs"; for (const p of ["server/src/services/desktop/videoTools.ts","server/src/services/desktop/videoTools.test.ts","server/src/services/desktop/DesktopStartup.ts","server/src/services/desktop/DesktopStartup.test.ts","types/src/ChannelOverlay.ts","server/src/services/overlay/countdownAss.ts","web/src/components/channels/ChannelOverlayDialog.tsx","server/src/services/overlay/countdownAss.test.ts","web/src/components/channels/ChannelOverlayDialog.test.tsx","web/src/locales/catalogs.test.ts","server/src/index.ts","server/src/cli/RunServerCommand.ts","web/index.html","web/src/components/shell/XBestShell.tsx","scripts/make-xbest-ico.mjs","server/scripts/make-bin.ts"]) console.log("XBEST_FORMATTED "+JSON.stringify({path:p,content:fs.readFileSync(p,"utf8")}));'
+          node --input-type=module -e 'import fs from "node:fs"; for (const p of ["server/src/services/desktop/videoTools.ts","server/src/services/desktop/videoTools.test.ts","server/src/services/desktop/DesktopStartup.ts","server/src/services/desktop/DesktopStartup.test.ts","types/src/ChannelOverlay.ts","server/src/services/overlay/countdownAss.ts","web/src/components/channels/ChannelOverlayDialog.tsx","server/src/services/overlay/countdownAss.test.ts","web/src/components/channels/ChannelOverlayDialog.test.tsx","web/src/locales/catalogs.test.ts","server/src/index.ts","server/src/cli/RunServerCommand.ts","web/index.html","web/src/components/shell/XBestShell.tsx","scripts/make-xbest-ico.mjs","server/scripts/make-bin.ts","web/src/components/TunarrLogo.tsx","server/src/services/access/StudioWebLogin.ts"]) console.log("XBEST_FORMATTED "+JSON.stringify({path:p,content:fs.readFileSync(p,"utf8")}));'
       - name: Build shared packages
         run: |
           pnpm --filter @tunarr/types build
@@ -209,6 +209,8 @@ jobs:
             if (-not $js.Content.Contains('xbest-workspace')) { throw 'Packaged executable is not serving the new studio shell' }
             Write-Host "XBEST packaged desktop acceptance passed on port $port"
           } finally {
+            if (Test-Path $stdout) { Get-Content -LiteralPath $stdout }
+            if (Test-Path $stderr) { Get-Content -LiteralPath $stderr }
             if ($second -and -not $second.HasExited) { taskkill /PID $second.Id /T /F }
             if ($app -and -not $app.HasExited) { taskkill /PID $app.Id /T /F }
             $listener.Stop()

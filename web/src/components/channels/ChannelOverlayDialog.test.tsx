@@ -12,7 +12,9 @@ const channel = {
 } as Channel;
 beforeEach(() => {
   vi.clearAllMocks();
-  useStore.setState((state) => { state.settings.ui.i18n.locale = 'en'; });
+  useStore.setState((state) => {
+    state.settings.ui.i18n.locale = 'en';
+  });
   api.get.mockImplementation(async (url: string) => ({
     data: url.endsWith('/transcode_config')
       ? { resolution: { widthPx: 1280, heightPx: 720 } }
