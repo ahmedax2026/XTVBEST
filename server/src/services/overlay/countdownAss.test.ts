@@ -9,11 +9,13 @@ import {
   ChannelOverlaySchema,
   ChannelOverlayStyles,
   DefaultChannelOverlay,
+  ChannelTitleSchema,
 } from '@tunarr/types';
 import {
   buildCountdownAss,
   countdownText,
   overlayGeometry,
+  overlayTitleGeometry,
   plainAssText,
   programOverlayForItem,
 } from './countdownAss.ts';
@@ -207,3 +209,53 @@ test.skipIf(process.env.XBEST_FFMPEG_TEST !== '1')(
   },
   60000,
 );
+
+test('applies custom title placement, font, color and opacity to ASS output', () => {
+  const config = {
+    ...presentation.config,
+    showTitle: true,
+    title: ChannelTitleSchema.parse({
+      text: 'عنوان مخصص {\\p1}',
+      fontFamily: 'Tahoma',
+      fontSize: 48,
+      color: '#12ab34',
+      opacity: 0.5,
+      bold: true,
+      outline: 3,
+      position: 'top-left',
+      horizontalMargin: 15,
+      verticalMargin: 20,
+    }),
+  };
+  const ass = buildCountdownAss({ ...presentation, config }, 640, 360, 1000);
+  expect(ass).toContain('Style: Title,Tahoma,48,');
+  expect(ass).toContain('\\an7\\pos(15,20)\\1c&H34ab12&\\alpha&H80&');
+  expect(ass).toContain('عنوان مخصص');
+  expect(ass).not.toContain('فيلم الاختبار العربي');
+  expect(ass).not.toContain('{\\p1}');
+  expect(overlayTitleGeometry(config, 640, 360).bold).toBe(true);
+});
+
+test('clamps title margins and rejects font-name injection or invalid sizes', () => {
+  const config = {
+    ...presentation.config,
+    title: ChannelTitleSchema.parse({
+      position: 'bottom-right',
+      horizontalMargin: 500,
+      verticalMargin: 500,
+    }),
+  };
+  expect(overlayTitleGeometry(config, 320, 180)).toMatchObject({
+    x: 160, y: 90, alignment: 3,
+  });
+  expect(ChannelTitleSchema.safeParse({ fontFamily: 'Arial,evil' }).success).toBe(false);
+  expect(ChannelTitleSchema.safeParse({ fontSize: -1 }).success).toBe(false);
+  expect(ChannelTitleSchema.safeParse({ text: 'x'.repeat(121) }).success).toBe(false);
+});
+
+test('keeps the old automatic title appearance when no title options were saved', () => {
+  expect(overlayTitleGeometry(presentation.config, 1920, 1080)).toMatchObject({
+    fontFamily: 'Arial', fontSize: 36, opacity: 0.9,
+    x: 960, y: 1048, alignment: 2,
+  });
+});

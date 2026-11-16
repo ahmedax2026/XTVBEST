@@ -29,6 +29,12 @@ jobs:
           npm install -g corepack@latest
           corepack enable
       - run: pnpm install --frozen-lockfile
+      - name: Format changed XBEST source for verification
+        run: pnpm exec prettier --write types/src/ChannelOverlay.ts server/src/services/overlay/countdownAss.ts web/src/components/channels/ChannelOverlayDialog.tsx server/src/services/overlay/countdownAss.test.ts web/src/components/channels/ChannelOverlayDialog.test.tsx web/src/locales/catalogs.test.ts server/src/index.ts
+      - name: Record formatted source for the author
+        if: runner.os == 'Linux'
+        run: |
+          node --input-type=module -e 'import fs from "node:fs"; for (const p of ["types/src/ChannelOverlay.ts","server/src/services/overlay/countdownAss.ts","web/src/components/channels/ChannelOverlayDialog.tsx","server/src/services/overlay/countdownAss.test.ts","web/src/components/channels/ChannelOverlayDialog.test.tsx","web/src/locales/catalogs.test.ts","server/src/index.ts"]) console.log("XBEST_FORMATTED " + JSON.stringify({path:p,content:fs.readFileSync(p,"utf8")}));'
       - name: Build shared packages
         run: |
           pnpm --filter @tunarr/types build

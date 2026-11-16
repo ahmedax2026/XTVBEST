@@ -1,5 +1,6 @@
 import type { ContentBackedStreamLineupItem } from '../../db/derived_types/StreamLineup.ts';
 import type { ChannelOverlay } from '@tunarr/types';
+import { ChannelTitleSchema } from '@tunarr/types';
 
 export type ProgramOverlay = {
   config: ChannelOverlay;
@@ -98,6 +99,32 @@ export function overlayGeometry(
     h,
   };
 }
+export function overlayTitleGeometry(
+  config: ChannelOverlay,
+  width: number,
+  height: number,
+) {
+  const style = ChannelTitleSchema.parse(config.title ?? {
+    fontSize: Math.min(200, Math.max(12, Math.round(height / 30))),
+    opacity: config.opacity,
+    horizontalMargin: Math.min(500, Math.round(width * 0.08)),
+    verticalMargin: Math.min(500, Math.round(height * 0.03)),
+  });
+  const [row, column] = style.position.split('-');
+  const marginX = Math.min(style.horizontalMargin, Math.max(0, width / 2));
+  const marginY = Math.min(style.verticalMargin, Math.max(0, height / 2));
+  const alignment =
+    (row === 'top' ? 7 : row === 'middle' ? 4 : 1) +
+    (column === 'right' ? 2 : column === 'center' ? 1 : 0);
+  return {
+    ...style,
+    alignment,
+    marginX,
+    marginY,
+    x: column === 'left' ? marginX : column === 'right' ? width - marginX : width / 2,
+    y: row === 'top' ? marginY : row === 'middle' ? height / 2 : height - marginY,
+  };
+}
 export function buildCountdownAss(
   overlay: ProgramOverlay,
   width: number,
@@ -124,6 +151,7 @@ export function buildCountdownAss(
   const { x, y, w, h } = overlayGeometry(c, width, height);
   const fontSize = Math.max(8, Math.floor(w / 8));
   const duration = streamDurationMs / 1000;
+  const title = overlayTitleGeometry(c, width, height);
   const lines = [
     '[Script Info]',
     'ScriptType: v4.00+',
@@ -134,7 +162,7 @@ export function buildCountdownAss(
     '[V4+ Styles]',
     'Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding',
     'Style: Counter,Consolas,20,&H00FFFFFF,&H00FFFFFF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,0,0,5,0,0,0,1',
-    `Style: Title,Arial,${Math.max(12, Math.round(height / 30))},&H00FFFFFF,&H00FFFFFF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,2,0,2,${Math.round(width * 0.08)},${Math.round(width * 0.08)},${Math.round(height * 0.03)},1`,
+    `Style: Title,${title.fontFamily},${title.fontSize},&H00FFFFFF,&H00FFFFFF,&H00000000,&H00000000,${title.bold ? -1 : 0},0,0,0,100,100,0,0,1,${title.outline},0,${title.alignment},${title.marginX},${title.marginX},${title.marginY},1`,
     '[Events]',
     'Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text',
   ];
@@ -200,13 +228,14 @@ export function buildCountdownAss(
       );
       break;
   }
-  if (c.showTitle && plainAssText(overlay.title))
+  const caption = plainAssText(title.text || overlay.title);
+  if (c.showTitle && caption)
     event(
       2,
       0,
       duration,
       'Title',
-      `{\\alpha&H${alpha(c.opacity)}&}${plainAssText(overlay.title)}`,
+      `{\\an${title.alignment}\\pos(${title.x},${title.y})\\1c${color(title.color)}\\alpha&H${alpha(title.opacity)}&}${caption}`,
     );
   let at = 0;
   while (at < duration) {

@@ -90,3 +90,31 @@ test('keeps saving disabled when settings could not be loaded', async () => {
     screen.getByRole('button', { name: 'Save countdown settings' }),
   ).toBeDisabled();
 });
+
+test('previews and saves custom title text and rejects invalid title sizes', async () => {
+  renderWithProviders(
+    <ChannelOverlayDialog channel={channel} open onClose={() => {}} />,
+  );
+  const save = await screen.findByRole('button', { name: 'Save countdown settings' });
+  await waitFor(() => expect(save).toBeEnabled());
+  fireEvent.click(screen.getByLabelText('Show countdown in video'));
+  fireEvent.click(screen.getByLabelText('Show current title in video'));
+  fireEvent.change(screen.getByLabelText('Custom title text'), {
+    target: { value: 'عنوان الاختبار' },
+  });
+  fireEvent.change(screen.getByLabelText('Title font size'), {
+    target: { value: '-1' },
+  });
+  expect(save).toBeDisabled();
+  fireEvent.change(screen.getByLabelText('Title font size'), {
+    target: { value: '48' },
+  });
+  expect(screen.getByText('عنوان الاختبار')).toHaveAttribute('font-size', '48');
+  fireEvent.click(save);
+  await waitFor(() => expect(api.put).toHaveBeenCalledWith(
+    '/api/channels/' + channel.id + '/overlay',
+    expect.objectContaining({
+      title: expect.objectContaining({ text: 'عنوان الاختبار', fontSize: 48 }),
+    }),
+  ));
+});

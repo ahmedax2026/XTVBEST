@@ -42,7 +42,7 @@ test('active product copy has no previous product branding in either language', 
 test('the Arabic welcome checklist has translated help and action text', () => {
   const arabic = catalogs['./ar/messages.po'];
   expect(arabic).toBeDefined();
-  const blocks = (arabic ?? '').split('\n\n').filter(
+  const blocks = (arabic ?? '').replaceAll('\r\n', '\n').split('\n\n').filter(
     (block) =>
       block.includes('src/pages/welcome/WelcomePage.tsx') &&
       !block.includes('#~ msgid'),
