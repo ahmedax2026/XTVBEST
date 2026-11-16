@@ -100,7 +100,8 @@ bind it to that customer installation. Customer copies verify those credentials
 online with the issuer; these accounts cannot log in to another customer's
 installation or the issuer itself. Disable/delete from the issuer takes effect
 after a maximum 30-second successful-login cache. Central account verification
-requires an active customer license. Leave the field empty for a local account;
+requires an active **online** customer license. Offline installations use the
+bootstrap owner or local operator accounts created on that installation. Leave the field empty for a local account;
 local account disable/delete is checked on each new login request. Ordinary users cannot call owner
 management endpoints. They otherwise retain access to application operations and
 must be trusted with that installation. Owner credentials remain the existing
@@ -126,18 +127,43 @@ Configure its owner login and set:
 - `XBEST_LICENSE_PUBLIC_KEY_FILE`: absolute path to a PEM file containing the
   issuer public key copied from your panel.
 - `XBEST_LICENSE_SERVER_URL`: HTTPS address of your reachable issuer (for example
-  `https://licenses.example.com`). Plain HTTP is accepted only for localhost tests.
+  `https://licenses.example.com`). Required for online activation and central
+  accounts; omit it for an offline-only customer. Plain HTTP is accepted only
+  for localhost tests.
 - Leave `XBEST_LICENSE_ISSUER` unset. Never include an issuer private key.
 
 Open `/web/settings/access`, copy the installation ID into your owner panel,
-issue a license, then paste the returned activation code into the customer panel.
-Renewing generates a new activation code and invalidates the old one. Disabled
+choose **Online** or **Offline** and issue a license, then paste the returned
+activation code into the customer panel. The validation mode is signed into the
+code and cannot be changed by editing its payload. Renewing an online license
+generates a new activation code and invalidates the old one. Disabled online
 licenses fail the next online check, with up to a 60-second success cache.
 After the cache expires, an unreachable issuer also blocks new protected
 requests. Expired/unactivated clients retain access to the activation page.
 Already-open continuous streams are not forcibly terminated; no files are erased.
 Use HTTPS for the entire application, including Basic Auth; the application does
 not provision TLS certificates or deploy your issuer service automatically.
+
+### Offline activation (no continuously reachable owner machine)
+
+Run the owner issuer on your Windows machine, copy its public key to the Linux
+customer installation, and leave `XBEST_LICENSE_SERVER_URL` unset there. In the
+owner panel choose **Offline — valid until expiry**, enter the Linux installation
+ID and expiry, then transfer the signed code manually into its activation page.
+The Windows machine may be turned off afterward. Verification is local: signature,
+installation identity and expiry are checked on activation and new protected
+requests, including after restart. Login offline uses that installation's owner
+or locally created accounts; central customer-bound users still need the online
+mode and a reachable issuer.
+
+**Offline codes cannot be revoked remotely.** Disabling the issuer record does
+not stop a copy that already has an offline code. Renewing issues another code
+but the older offline code remains valid until its original expiry. The panel
+labels the mode, explains this limit and disables its remote-revocation button.
+Existing codes without an explicit validation mode remain online, requiring a
+reachable issuer. Offline mode does not create an outage fallback for online
+licenses. Local-clock expiry cannot provide trusted time against a host
+administrator who rolls back the clock or patches checks.
 
 Unconfigured existing installations keep their previous behavior and do not
 require a license. A server administrator can change flags or patch the binary:

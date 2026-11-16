@@ -27,7 +27,14 @@ cache invalidated on persistence. Login failures are rate limited by client IP.
 Only the owner endpoints return account and license records. Cross-origin writes
 are denied. Public verification exposes only a boolean for a supplied signed token.
 
-Deployment needs a reachable HTTPS issuer. No central service is deployed by this
+Online deployment needs a reachable HTTPS issuer. Offline signed licenses can
+be issued on the owner Windows machine and manually transferred to a Linux
+customer without an issuer URL. The signed mode cannot be edited without breaking
+the signature; missing modes retain existing online semantics. Offline verifies
+signature, installation and expiry locally. It uses local accounts and cannot
+revoke already-issued codes, including after renewal or record disable; local
+clock rollback is not prevented against a server administrator. The panel explains
+these limits and disables offline remote revocation. No central service is deployed by this
 change. Existing installations retain their current unlicensed behavior until
 explicitly configured. This is backward compatibility, not tamper resistance.
 A customer server administrator can alter flags, extract packaged JavaScript,

@@ -152,10 +152,79 @@ test('issuer submits a server-bound expiring license and displays the signed cod
         customer: 'Customer',
         installation: 'b'.repeat(64),
         expiresAt: new Date('2030-12-01T10:00').toISOString(),
+        validation: 'online',
       },
     }),
   );
   expect(
     await screen.findByLabelText('License code — copy for customer'),
   ).toHaveValue('signed-code-fixture');
+});
+
+test('owner selects offline issuance and sees local-login and revocation limitations', async () => {
+  status.issuer = true;
+  renderWithProviders(<AccessSettingsPage />);
+  await screen.findByRole('button', { name: 'Issue license' });
+  fireEvent.mouseDown(
+    screen.getByRole('combobox', { name: 'Validation mode' }),
+  );
+  fireEvent.click(
+    await screen.findByRole('option', { name: 'Offline — valid until expiry' }),
+  );
+  expect(screen.getByText(/Use a local account/)).toBeInTheDocument();
+  fireEvent.change(screen.getByLabelText(/Customer name/), {
+    target: { value: 'Offline customer' },
+  });
+  fireEvent.change(screen.getByLabelText(/Customer installation ID/), {
+    target: { value: 'b'.repeat(64) },
+  });
+  fireEvent.change(screen.getByLabelText(/License expiry/), {
+    target: { value: '2030-12-01T10:00' },
+  });
+  fireEvent.click(screen.getByRole('button', { name: 'Issue license' }));
+  await waitFor(() =>
+    expect(api.request).toHaveBeenCalledWith({
+      method: 'post',
+      url: '/api/access/licenses',
+      data: {
+        customer: 'Offline customer',
+        installation: 'b'.repeat(64),
+        expiresAt: new Date('2030-12-01T10:00').toISOString(),
+        validation: 'offline',
+      },
+    }),
+  );
+});
+
+test('offline license card prevents presenting remote revocation as effective', async () => {
+  status.issuer = true;
+  api.get.mockImplementation((url: string) =>
+    Promise.resolve({
+      data: url.endsWith('/status')
+        ? status
+        : url.endsWith('/licenses')
+          ? [
+              {
+                enabled: true,
+                payload: {
+                  id: 'license-id',
+                  customer: 'Offline customer',
+                  installation: 'b'.repeat(64),
+                  expiresAt: '2030-12-01T10:00:00Z',
+                  validation: 'offline',
+                },
+              },
+            ]
+          : url.endsWith('/public-key')
+            ? { publicKey: 'public fixture' }
+            : [],
+    }),
+  );
+  renderWithProviders(<AccessSettingsPage />);
+  expect(
+    await screen.findByRole('button', { name: 'Disable license' }),
+  ).toBeDisabled();
+  expect(
+    screen.getByText(/This license cannot be revoked remotely/),
+  ).toBeInTheDocument();
 });

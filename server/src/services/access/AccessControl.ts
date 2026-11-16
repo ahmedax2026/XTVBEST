@@ -27,6 +27,7 @@ export const LicenseInput = z.object({
   customer: z.string().trim().min(1).max(120),
   installation: z.string().regex(/^[a-f0-9]{64}$/),
   expiresAt: z.iso.datetime(),
+  validation: z.enum(['online', 'offline']).optional(),
 });
 const License = LicenseInput.extend({
   id: z.uuid(),
@@ -133,10 +134,11 @@ export class AccessControl {
         .toString();
     } else if (options.publicKeyFile) {
       instance.publicKey = await fs.readFile(options.publicKeyFile, 'utf8');
-      if (!options.licenseServer)
-        throw new Error('Licensed customer requires XBEST_LICENSE_SERVER_URL');
-      const url = new URL(options.licenseServer);
+      const url = options.licenseServer
+        ? new URL(options.licenseServer)
+        : undefined;
       if (
+        url &&
         url.protocol !== 'https:' &&
         !['localhost', '127.0.0.1', '[::1]'].includes(url.hostname)
       ) {
@@ -389,7 +391,12 @@ export class AccessControl {
     if (!this.options.publicKeyFile || !this.options.licenseServer || !token)
       return false;
     try {
-      if (this.decode(token).installation !== this.installation) return false;
+      const payload = this.decode(token);
+      if (
+        payload.installation !== this.installation ||
+        payload.validation === 'offline'
+      )
+        return false;
     } catch {
       return false;
     }
@@ -435,6 +442,7 @@ export class AccessControl {
   async verifyCustomerLogin(token: string, authorization: string) {
     if (!this.verifyIssued(token)) return false;
     const payload = this.decode(token);
+    if (payload.validation === 'offline') return false;
     // A customer-bound account cannot log in to the owner's issuer installation.
     return this.authenticate(authorization, payload.installation);
   }
@@ -442,7 +450,7 @@ export class AccessControl {
     const payload = this.decode(token);
     if (
       payload.installation !== this.installation ||
-      !(await this.remoteValid(token))
+      (payload.validation !== 'offline' && !(await this.remoteValid(token)))
     )
       throw new Error(
         'License does not match this installation, is disabled, or issuer is unreachable',
@@ -457,7 +465,9 @@ export class AccessControl {
     const token = this.state.activation;
     if (!token) return false;
     try {
-      if (this.decode(token).installation !== this.installation) return false;
+      const payload = this.decode(token);
+      if (payload.installation !== this.installation) return false;
+      if (payload.validation === 'offline') return true;
       if (Date.now() < this.validUntil) return true;
       if (!this.licenseCheck) {
         this.licenseCheck = this.remoteValid(token)

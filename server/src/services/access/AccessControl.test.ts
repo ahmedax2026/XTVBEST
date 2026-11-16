@@ -355,3 +355,115 @@ test('central owner creates customer-bound users; accounts cannot cross installa
   vi.spyOn(Date, 'now').mockReturnValue(Date.now() + 31_000);
   expect(await customer.authenticate(header)).toBe(false);
 });
+
+test('offline license activates and survives restart without an issuer URL or network; local users can sign in', async () => {
+  const authority = await issuer();
+  const key = path.join(dir, 'offline-public.pem');
+  await fs.writeFile(key, authority.issuerPublicKey() ?? '');
+  const options = {
+    directory: path.join(dir, 'offline'),
+    owner,
+    publicKeyFile: key,
+  };
+  const customer = await AccessControl.open(options);
+  const fetch = vi.fn().mockRejectedValue(new Error('No network allowed'));
+  vi.stubGlobal('fetch', fetch);
+  const issued = await authority.issue({
+    customer: 'Offline',
+    installation: customer.installation,
+    expiresAt: future(),
+    validation: 'offline',
+  });
+  await customer.activate(issued.token);
+  expect(await customer.licensed()).toBe(true);
+  await customer.addUser({
+    username: 'local',
+    password: 'local-long-password',
+  });
+  expect(
+    await customer.authenticate(auth('local', 'local-long-password')),
+  ).toBe(true);
+  const reopened = await AccessControl.open(options);
+  expect(await reopened.licensed()).toBe(true);
+  expect(reopened.status().license?.validation).toBe('offline');
+  expect(fetch).not.toHaveBeenCalled();
+});
+
+test('online licenses still fail closed without the issuer; signed mode cannot be altered to offline', async () => {
+  const authority = await issuer();
+  const key = path.join(dir, 'public.pem');
+  await fs.writeFile(key, authority.issuerPublicKey() ?? '');
+  const customer = await AccessControl.open({
+    directory: path.join(dir, 'no-server'),
+    owner,
+    publicKeyFile: key,
+  });
+  const issued = await authority.issue({
+    customer: 'Online',
+    installation: customer.installation,
+    expiresAt: future(),
+  });
+  await expect(customer.activate(issued.token)).rejects.toThrow();
+  const body = Buffer.from(
+    JSON.stringify({ ...issued.payload, validation: 'offline' }),
+  ).toString('base64url');
+  const signature = issued.token.split('.')[1];
+  await expect(customer.activate(`${body}.${signature}`)).rejects.toThrow(
+    'signature',
+  );
+  expect(await customer.licensed()).toBe(false);
+});
+
+test('offline binding, signature and expiry are enforced, with no central user authentication', async () => {
+  const { authority, customer, options } = await pair();
+  const issued = await authority.issue({
+    customer: 'Offline',
+    installation: customer.installation,
+    expiresAt: future(),
+    validation: 'offline',
+  });
+  const fetch = vi.fn().mockRejectedValue(new Error('No network'));
+  vi.stubGlobal('fetch', fetch);
+  await customer.activate(issued.token);
+  expect(
+    await customer.authenticate(auth('remote', 'remote-long-password')),
+  ).toBe(false);
+  expect(
+    await authority.verifyCustomerLogin(
+      issued.token,
+      auth(owner.username, owner.password),
+    ),
+  ).toBe(false);
+  const other = await AccessControl.open({
+    ...options,
+    directory: path.join(dir, 'other-offline'),
+  });
+  await expect(other.activate(issued.token)).rejects.toThrow();
+  vi.spyOn(Date, 'now').mockReturnValue(Date.now() + 2 * 86_400_000);
+  expect(await customer.licensed()).toBe(false);
+  await expect(customer.activate(issued.token)).rejects.toThrow('expired');
+  expect(fetch).not.toHaveBeenCalled();
+});
+
+test('issuer disable and renewal cannot revoke an already-issued offline code', async () => {
+  const { authority, customer } = await pair();
+  const issued = await authority.issue({
+    customer: 'Offline',
+    installation: customer.installation,
+    expiresAt: future(),
+    validation: 'offline',
+  });
+  await customer.activate(issued.token);
+  await authority.changeLicense(issued.payload.id, false);
+  expect(await customer.licensed()).toBe(true);
+  const renewed = await authority.changeLicense(
+    issued.payload.id,
+    true,
+    new Date(Date.now() + 3 * 86_400_000).toISOString(),
+  );
+  expect(authority.verifyIssued(issued.token)).toBe(false);
+  await customer.activate(issued.token);
+  expect(await customer.licensed()).toBe(true);
+  await customer.activate(renewed.token);
+  expect(customer.status().license?.validation).toBe('offline');
+});

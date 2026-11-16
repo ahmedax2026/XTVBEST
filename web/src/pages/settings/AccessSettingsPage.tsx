@@ -2,6 +2,7 @@ import {
   Alert,
   Button,
   Divider,
+  MenuItem,
   Stack,
   TextField,
   Typography,
@@ -16,6 +17,7 @@ type License = {
   customer: string;
   installation: string;
   expiresAt: string;
+  validation?: 'online' | 'offline';
 };
 type Status = {
   owner: boolean;
@@ -39,6 +41,7 @@ export default function AccessSettingsPage() {
   const [customer, setCustomer] = useState('');
   const [installation, setInstallation] = useState('');
   const [expires, setExpires] = useState('');
+  const [validation, setValidation] = useState<'online' | 'offline'>('online');
   const [token, setToken] = useState('');
   const [output, setOutput] = useState('');
   const [renewals, setRenewals] = useState<Record<string, string>>({});
@@ -283,8 +286,19 @@ export default function AccessSettingsPage() {
           {data.license && (
             <Typography>
               {data.license.customer} ·{' '}
-              {new Date(data.license.expiresAt).toLocaleString()}
+              {data.license.validation === 'offline'
+                ? label('أوفلاين', 'Offline')
+                : label('أونلاين', 'Online')}{' '}
+              · {new Date(data.license.expiresAt).toLocaleString()}
             </Typography>
+          )}
+          {data.license?.validation === 'offline' && (
+            <Alert severity="info">
+              {label(
+                'تفعيل أوفلاين: لا يلزم اتصال بالمالك. الدخول بدون إنترنت يحتاج حسابًا محليًا؛ الحساب المركزي يظل محتاجًا اتصالًا.',
+                'Offline activation: no issuer connection required. Offline sign-in needs a local account; central accounts still require a connection.',
+              )}
+            </Alert>
           )}
           {data.required && (
             <>
@@ -316,8 +330,8 @@ export default function AccessSettingsPage() {
               </Typography>
               <Alert severity="info">
                 {label(
-                  'الإيقاف يصل خلال دقيقة أثناء عمل سيرفر التفعيل. التجديد يصدر كودًا جديدًا يجب إدخاله عند العميل.',
-                  'Revocation takes up to one minute while the issuer is reachable. Renewal issues a new code that the customer must activate.',
+                  'الأونلاين يدعم الإيقاف عن بُعد. الأوفلاين يعمل حتى تاريخ الانتهاء دون اتصال بالمالك، ولا يمكن إيقاف أكواده السابقة عن بُعد.',
+                  'Online supports remote revocation. Offline runs until expiry without the issuer and previously issued codes cannot be revoked remotely.',
                 )}
               </Alert>
               <TextField
@@ -338,9 +352,41 @@ export default function AccessSettingsPage() {
                     customer,
                     installation,
                     expiresAt: new Date(expires).toISOString(),
+                    validation,
                   });
                 }}
               >
+                <TextField
+                  select
+                  label={label('طريقة التحقق', 'Validation mode')}
+                  value={validation}
+                  onChange={(e) =>
+                    setValidation(
+                      e.target.value === 'offline' ? 'offline' : 'online',
+                    )
+                  }
+                >
+                  <MenuItem value="online">
+                    {label(
+                      'أونلاين — تحكم وإيقاف عن بُعد',
+                      'Online — remote control and revocation',
+                    )}
+                  </MenuItem>
+                  <MenuItem value="offline">
+                    {label(
+                      'أوفلاين — حتى تاريخ الانتهاء',
+                      'Offline — valid until expiry',
+                    )}
+                  </MenuItem>
+                </TextField>
+                {validation === 'offline' && (
+                  <Alert severity="warning">
+                    {label(
+                      'استخدم حسابًا محليًا على نسخة العميل للدخول دون إنترنت. اليوزرات المركزية تحتاج اتصالًا بنسخة المالك. التجديد لا يلغي الكود الأوفلاين القديم قبل انتهائه.',
+                      'Use a local account on the customer installation to sign in offline. Central users require the issuer connection. Renewal does not invalidate an older offline code before its expiry.',
+                    )}
+                  </Alert>
+                )}
                 <TextField
                   required
                   label={label('اسم العميل', 'Customer name')}
@@ -398,6 +444,10 @@ export default function AccessSettingsPage() {
                 >
                   <Typography>
                     {entry.payload.customer} ·{' '}
+                    {entry.payload.validation === 'offline'
+                      ? label('أوفلاين', 'Offline')
+                      : label('أونلاين', 'Online')}{' '}
+                    ·{' '}
                     {entry.enabled
                       ? label('نشط', 'Enabled')
                       : label('موقوف', 'Disabled')}{' '}
@@ -409,8 +459,16 @@ export default function AccessSettingsPage() {
                   >
                     {entry.payload.installation}
                   </Typography>
+                  {entry.payload.validation === 'offline' && (
+                    <Alert severity="warning">
+                      {label(
+                        'هذا الليسانس لا يدعم الإيقاف عن بُعد؛ الكود القديم يظل صالحًا حتى انتهائه.',
+                        'This license cannot be revoked remotely; the old code remains valid until expiry.',
+                      )}
+                    </Alert>
+                  )}
                   <Button
-                    disabled={busy}
+                    disabled={busy || entry.payload.validation === 'offline'}
                     onClick={() =>
                       run('patch', `/licenses/${entry.payload.id}`, {
                         enabled: !entry.enabled,
