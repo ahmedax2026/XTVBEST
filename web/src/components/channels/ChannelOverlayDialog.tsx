@@ -165,6 +165,18 @@ export function OverlayPreview({
           {title.text || <Trans>Current movie title</Trans>}
         </text>
       )}
+      {value.enabled && value.showNextTitle && (
+        <text
+          x={width / 2}
+          y={height * 0.08}
+          textAnchor="middle"
+          dominantBaseline="hanging"
+          fill={value.color}
+          fontSize={Math.max(16, Math.round(height / 30))}
+        >
+          <Trans>Next program title</Trans>
+        </text>
+      )}
     </Box>
   );
 }
@@ -269,6 +281,65 @@ function OverlayControls({ channel }: { channel: Channel }) {
         </Alert>
       )}
       <OverlayPreview value={value} resolution={profile.data} />
+      {value.studioBumper && (
+        <Box
+          component="img"
+          src="/images/xbest-bumper.png"
+          alt={label('معاينة فاصل XBEST', 'XBEST bumper preview')}
+          sx={{ width: '100%', borderRadius: 2 }}
+        />
+      )}
+      <FormControlLabel
+        control={
+          <Switch
+            checked={value.showNextTitle}
+            disabled={busy}
+            onChange={(_, showNextTitle) =>
+              setValue({ ...value, showNextTitle })
+            }
+          />
+        }
+        label={label(
+          'عرض عنوان البرنامج التالي داخل البث',
+          'Show the next program title in video',
+        )}
+      />
+      {value.showNextTitle && (
+        <TextField
+          type="number"
+          label={label(
+            'إظهار التالي قبل النهاية (ثوانٍ)',
+            'Show next before the end (seconds)',
+          )}
+          value={value.nextTitleSeconds}
+          disabled={busy}
+          slotProps={{ htmlInput: { min: 5, max: 120 } }}
+          onChange={(e) =>
+            setValue({ ...value, nextTitleSeconds: Number(e.target.value) })
+          }
+        />
+      )}
+      <FormControlLabel
+        control={
+          <Switch
+            checked={value.studioBumper}
+            disabled={busy}
+            onChange={(_, studioBumper) => setValue({ ...value, studioBumper })}
+          />
+        }
+        label={label(
+          'فاصل XBEST حقيقي لمدة ٥ ثوانٍ',
+          'Five-second XBEST studio bumper',
+        )}
+      />
+      {(value.studioBumper || value.showNextTitle) && (
+        <Alert severity="info">
+          {label(
+            'للبث المباشر بالمحرك الأساسي فقط. لإضافة الفواصل افتح تحرير برامج القناة ثم إضافة فواصل واختر فاصل XBEST؛ احفظ جدول القناة. يضيف كل فاصل ٥ ثوانٍ للجدول. أزل قوائم الفواصل العشوائية واضبط توقف القناة على وضع الصورة أولًا. القنوات المحفوظة تتطلب تعطيل هذين الخيارين.',
+            'Built-in live streaming only. To insert bumpers, edit channel programming, open Add Breaks and select the XBEST bumper, then save the channel schedule. Each bumper adds five seconds to the schedule. Remove random filler lists and select picture-mode offline playback first. Saved channels require both options disabled.',
+          )}
+        </Alert>
+      )}
       <FormControlLabel
         control={
           <Switch

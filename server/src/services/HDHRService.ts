@@ -42,7 +42,7 @@ export class HdhrService {
       FirmwareName: 'hdhomeruntc_atsc',
       TunerCount: this.db.hdhrSettings().tunerCount,
       FirmwareVersion: '20170930',
-      DeviceID: 'Tunarr',
+      DeviceID: 'XBEST',
       DeviceAuth: '',
       BaseURL: `${host}`,
       LineupURL: `${host}/lineup.json`,

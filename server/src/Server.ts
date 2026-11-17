@@ -710,6 +710,12 @@ export class Server {
     return this.app.swagger();
   }
 
+  async prepareOpenApiDocument() {
+    await this.configureServer();
+    await this.app.ready();
+    return this.getOpenApiDocument();
+  }
+
   close() {
     if (this.app) {
       return this.app.close();

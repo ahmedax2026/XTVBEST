@@ -286,6 +286,20 @@ test('archive identity follows output settings but ignores worker counts', () =>
   );
 });
 
+test('new optional broadcast controls preserve old archive identities until enabled', () => {
+  const current = { ...DefaultChannelOverlay, enabled: true };
+  const legacy: Partial<ChannelOverlay> = { ...current };
+  delete legacy.showNextTitle;
+  delete legacy.nextTitleSeconds;
+  delete legacy.studioBumper;
+  expect(archiveChannelKey(channel, config, legacy as ChannelOverlay)).toBe(
+    archiveChannelKey(channel, config, current),
+  );
+  expect(
+    archiveChannelKey(channel, config, { ...current, showNextTitle: true }),
+  ).not.toBe(archiveChannelKey(channel, config, current));
+});
+
 describe.skipIf(process.env.XBEST_FFMPEG_TEST !== '1')(
   'archive service with real FFmpeg',
   () => {

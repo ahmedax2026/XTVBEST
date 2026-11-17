@@ -586,6 +586,7 @@ export class StreamProgramCalculator {
         streamDuration,
         // beginningOffset,
         duration: streamDuration,
+        ...(program.duration === 5000 ? { studioBumper: true } : {}),
         startOffset: 0,
         programBeginMs: program.programBeginMs,
       };

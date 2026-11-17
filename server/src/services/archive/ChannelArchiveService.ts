@@ -55,8 +55,19 @@ export function archiveChannelKey(
   config: TranscodeConfigOrm,
   overlay?: ChannelOverlay,
 ) {
+  const overlayKey =
+    overlay &&
+    (() => {
+      const { showNextTitle, nextTitleSeconds, studioBumper, ...existing } =
+        overlay;
+      return {
+        ...existing,
+        ...(showNextTitle ? { showNextTitle, nextTitleSeconds } : {}),
+        ...(studioBumper ? { studioBumper } : {}),
+      };
+    })();
   return archiveKey({
-    ...(overlay?.enabled ? { overlay } : {}),
+    ...(overlay?.enabled ? { overlay: overlayKey } : {}),
     channel: {
       watermark: channel.watermark,
       icon: channel.icon,
@@ -214,6 +225,11 @@ export class ChannelArchiveService {
         );
       }
       const overlay = await this.overlays.get(channelId);
+      if (overlay.enabled && (overlay.showNextTitle || overlay.studioBumper)) {
+        throw new Error(
+          'Next-title graphics and studio bumpers require live mode. Disable them before preparing a saved channel.',
+        );
+      }
       if (overlay.enabled) {
         for (const item of lineup.items) {
           if (item.type !== 'content') continue;

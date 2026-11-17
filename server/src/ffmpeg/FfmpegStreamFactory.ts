@@ -835,6 +835,7 @@ export class FfmpegStreamFactory {
         opts.outputFormat,
         ptsOffset,
         realtime,
+        opts.kind === 'bumper',
       );
     }
 
@@ -959,12 +960,15 @@ export class FfmpegStreamFactory {
     outputFormat: OutputFormat,
     ptsOffset: number = 0,
     realtime: boolean = true,
+    studioBumper: boolean = false,
   ): Promise<Maybe<FfmpegTranscodeSession>> {
     const offlineInput = VideoInputSource.withStream(
       new HttpStreamSource(
-        isNonEmptyString(this.channel.offline?.picture)
-          ? this.channel.offline?.picture
-          : makeLocalUrl('/images/xbest-offline.png'),
+        studioBumper
+          ? makeLocalUrl('/images/xbest-bumper.png')
+          : isNonEmptyString(this.channel.offline?.picture)
+            ? this.channel.offline?.picture
+            : makeLocalUrl('/images/xbest-offline.png'),
       ),
       VideoStream.create({
         inputKind: 'stillimage',
@@ -993,8 +997,9 @@ export class FfmpegStreamFactory {
     );
 
     const audioInput =
-      (await this.createOfflineSoundtrackInput(audioState)) ??
-      this.createPlaceholderAudioInput(audioState);
+      (!studioBumper
+        ? await this.createOfflineSoundtrackInput(audioState)
+        : undefined) ?? this.createPlaceholderAudioInput(audioState);
 
     const builder = await this.pipelineBuilderFactory(this.transcodeConfig)
       .setHardwareAccelerationMode(

@@ -99,9 +99,29 @@ removed after encoder exit or cancellation, including cancellation before start.
 
 ## Remaining acceptance criteria
 
+### Next-program graphics and five-second bumpers
+
+The video-overlay editor now provides an optional next-program announcement for
+the last 5–120 seconds of a scheduled program. Lookup follows the fixed channel
+lineup, skips offline gaps and wraps its cycle. Titles are sanitized before ASS
+rendering; resuming mid-program preserves the scheduled announcement window.
+
+Enable the studio-bumper control, then use **Add Breaks > Insert five-second XBEST
+bumpers** in the programming editor and save the channel. This inserts real
+five-second flex entries between content programs, including the cycle boundary,
+without clipping source content. Repeating the action does not duplicate gaps.
+Picture-mode offline playback renders the branded silent bumper for these gaps.
+Random filler lists and clip-mode offline playback are not compatible.
+
+These two controls require live built-in HLS/MPEG-TS playback. Disable them before
+preparing a saved channel. Their default-off settings preserve old archive keys.
+Customer archives include protected launchers and an Arabic setup guide.
+
+### Environment acceptance still required
+
 - Arabic locale and RTL layout; preserve English fallback.
 - Verify video countdown playback on actual GPU hardware and an external IPTV panel; extend saved countdowns to edited excerpts and filler variants.
-- Add the next-title graphic and a real five-second inter-program bumper; the optional current-title graphic is implemented.
+- Verify next-title graphics and five-second bumpers with the customer's player.
 - Live, direct, hybrid, archived and standby modes; explicit preparation progress and limits on concurrent jobs, threads and storage.
 - Extend the local saved-channel implementation to remote sources, random fillers and additional playback engines; verify complete HLS playback on Windows and actual GPU hardware.
 - Preserve schedule and permit switching back to live. Provide start, stop, skip, restart and scheduled content replacement.

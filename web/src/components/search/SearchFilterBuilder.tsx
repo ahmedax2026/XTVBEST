@@ -5,7 +5,6 @@ import {
   FormHelperText,
   IconButton,
   InputAdornment,
-  Link,
   Stack,
   TextField,
   Tooltip,
@@ -76,14 +75,9 @@ export function SearchFilterBuilder({
                         fieldState.error?.type === 'validExpression' ? (
                           <span>
                             <Trans>
-                              Could not parse this filter expression. Check the{' '}
-                              <Link
-                                href="https://tunarr.com/misc/search"
-                                target="_blank"
-                              >
-                                documentation
-                              </Link>{' '}
-                              for information about filter expressions.
+                              Could not parse this filter expression. Switch to
+                              Basic mode to build a filter using fields and
+                              conditions.
                             </Trans>
                           </span>
                         ) : (

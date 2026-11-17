@@ -29,7 +29,10 @@ export type PlaceholderSessionOpts = {
   outputFormat: OutputFormat;
   realtime?: boolean;
   ptsOffset?: number;
-} & ({ kind: 'error'; title: string; subtitle?: string } | { kind: 'offline' });
+} & (
+  | { kind: 'error'; title: string; subtitle?: string }
+  | { kind: 'offline' | 'bumper' }
+);
 
 /**
  * Whether a concat mode's child already emits normalized HLS, so the concat

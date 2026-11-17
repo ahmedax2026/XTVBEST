@@ -43,6 +43,33 @@ const presentation = {
   title: 'فيلم الاختبار العربي',
 };
 describe('video countdown', () => {
+  test('shows the sanitized next title only within the scheduled final window, including a resumed session', () => {
+    const config = {
+      ...presentation.config,
+      showNextTitle: true,
+      nextTitleSeconds: 5,
+    };
+    const ass = buildCountdownAss(
+      { ...presentation, config, nextTitle: 'التالي {\\p1}\\Nفيلم' },
+      640,
+      360,
+      8000,
+    );
+    expect(ass).toContain('Dialogue: 3,0:00:03.00,0:00:08.00');
+    expect(ass).toContain('UP NEXT\\N');
+    expect(ass).toContain('\\an8\\pos(320,29)');
+    expect(ass).not.toContain('{\\p1}');
+    const resumed = buildCountdownAss(
+      { ...presentation, config, elapsedMs: 7000, nextTitle: 'فيلم' },
+      640,
+      360,
+      3000,
+    );
+    expect(resumed).toContain('Dialogue: 3,0:00:00.00,0:00:03.00');
+    expect(
+      buildCountdownAss({ ...presentation, config }, 640, 360, 8000),
+    ).not.toContain('Dialogue: 3,');
+  });
   test('uses the scheduled remaining time, clamps the end and carries hours', () => {
     expect(countdownText(3661000)).toBe('01:01:01');
     expect(countdownText(1)).toBe('00:00:01');

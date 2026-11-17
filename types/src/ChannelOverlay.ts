@@ -56,6 +56,9 @@ export const ChannelOverlaySchema = z.object({
     .default('#ffcc66'),
   hideOnFillers: z.boolean().default(true),
   showTitle: z.boolean().default(false),
+  showNextTitle: z.boolean().default(false),
+  nextTitleSeconds: z.number().int().min(5).max(120).default(30),
+  studioBumper: z.boolean().default(false),
   title: ChannelTitleSchema.optional(),
 });
 export type ChannelOverlay = z.infer<typeof ChannelOverlaySchema>;

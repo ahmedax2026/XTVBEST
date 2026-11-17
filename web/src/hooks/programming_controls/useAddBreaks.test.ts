@@ -7,7 +7,11 @@ import dayjs from 'dayjs';
 import duration from 'dayjs/plugin/duration';
 import { afterEach, beforeEach, describe, expect, test, vi } from 'vitest';
 import { makeContentProgram, makeMovie } from '../../test/programFixtures.ts';
-import { addBreaks, type AddBreaksConfig } from './useAddBreaks';
+import {
+  addBreaks,
+  insertStudioBumpers,
+  type AddBreaksConfig,
+} from './useAddBreaks';
 
 dayjs.extend(duration);
 
@@ -47,6 +51,24 @@ const createConfig = (
 });
 
 describe('addBreaks', () => {
+  test('inserts real five-second schedule entries without replacing content or duplicating breaks', () => {
+    const programs = [
+      createContentProgram(60000, 'A'),
+      createContentProgram(90000, 'B'),
+    ];
+    const result = insertStudioBumpers(programs);
+    expect(result).toEqual([
+      programs[0],
+      { type: 'flex', duration: 5000 },
+      programs[1],
+      { type: 'flex', duration: 5000 },
+    ]);
+    expect(insertStudioBumpers(result)).toEqual(result);
+    expect(result.reduce((total, program) => total + program.duration, 0)).toBe(
+      160000,
+    );
+    expect(insertStudioBumpers([])).toEqual([]);
+  });
   beforeEach(() => {
     vi.clearAllMocks();
   });

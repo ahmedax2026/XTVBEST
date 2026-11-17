@@ -150,6 +150,20 @@ export class ProgramStream extends events.EventEmitter<ProgramStreamEvents> {
     const programOverlay = archived
       ? undefined
       : programOverlayForItem(overlay, lineupItem);
+    if (programOverlay && overlay.showNextTitle) {
+      programOverlay.nextTitle = await this.overlays
+        .upcomingTitle(
+          this.context.targetChannel.uuid,
+          lineupItem.programBeginMs + lineupItem.duration,
+        )
+        .catch((error: unknown) => {
+          this.logger.warn(
+            error,
+            'XBEST: could not resolve the next program title',
+          );
+          return undefined;
+        });
+    }
     const resolvedOptions = {
       startTime: start,
       duration: dayjs.duration(lineupItem.streamDuration),
@@ -207,19 +221,19 @@ export class ProgramStream extends events.EventEmitter<ProgramStreamEvents> {
       this.context.targetChannel,
     );
 
-    let duration = dayjs.duration(lineupItem.streamDuration);
-    const start = dayjs.duration(lineupItem.startOffset ?? 0);
-    if (+duration > +start) {
-      duration = duration.subtract(start);
-    }
+    const duration = dayjs.duration(lineupItem.streamDuration);
 
     this.logger.debug(
       'starting offline session of %d ms',
       duration.asMilliseconds(),
     );
 
+    const overlay = await this.overlays.get(this.context.targetChannel.uuid);
     const result = await ffmpeg.createPlaceholderSession({
-      kind: 'offline',
+      kind:
+        overlay.enabled && overlay.studioBumper && lineupItem.studioBumper
+          ? 'bumper'
+          : 'offline',
       duration,
       outputFormat: this.outputFormat,
       ptsOffset: this.opts?.ptsOffset,

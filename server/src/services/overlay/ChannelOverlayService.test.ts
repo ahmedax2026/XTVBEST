@@ -11,9 +11,24 @@ import { ChannelOverlayService } from './ChannelOverlayService.ts';
 const id = '11111111-1111-4111-8111-111111111111';
 type Deps = ConstructorParameters<typeof ChannelOverlayService>;
 let root: string;
-const channel = { uuid: id, streamMode: 'hls', useEtvNext: false };
+const channel = {
+  uuid: id,
+  startTime: 1000,
+  streamMode: 'hls',
+  useEtvNext: false,
+  fillerShows: [],
+};
 function fixture() {
-  const channels = { getChannelOrm: vi.fn(async () => channel) };
+  const channels = {
+    getChannelOrm: vi.fn(async () => channel),
+    loadLineup: vi.fn(async () => ({
+      items: [
+        { type: 'content' as const, id: 'first', durationMs: 10000 },
+        { type: 'offline' as const, durationMs: 5000 },
+        { type: 'content' as const, id: 'second', durationMs: 10000 },
+      ],
+    })),
+  };
   const settings = {
     ffmpegSettings: () => ({
       ffmpegExecutablePath: 'ffmpeg',
@@ -25,6 +40,11 @@ function fixture() {
     service: new ChannelOverlayService(
       channels as unknown as Deps[0],
       settings as unknown as Deps[1],
+      {
+        getProgramById: async (id: string) => ({
+          title: id === 'first' ? 'الأول' : 'الثاني',
+        }),
+      } as unknown as Deps[2],
     ),
   };
 }
@@ -39,6 +59,11 @@ beforeEach(async () => {
       new Set(),
     ),
   );
+});
+test('next title follows the scheduled boundary, skips a bumper and wraps the fixed lineup', async () => {
+  const { service } = fixture();
+  expect(await service.upcomingTitle(id, 11000)).toBe('الثاني');
+  expect(await service.upcomingTitle(id, 26000)).toBe('الأول');
 });
 afterEach(async () => {
   vi.restoreAllMocks();

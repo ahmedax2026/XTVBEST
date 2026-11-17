@@ -7404,6 +7404,9 @@ export type GetApiChannelsByIdOverlayResponses = {
         color: string;
         hideOnFillers: boolean;
         showTitle: boolean;
+        showNextTitle: boolean;
+        nextTitleSeconds: number;
+        studioBumper: boolean;
         title?: {
             text: string;
             fontFamily: 'Arial' | 'Tahoma' | 'Verdana' | 'DejaVu Sans' | 'Noto Sans Arabic';
@@ -7433,6 +7436,9 @@ export type PutApiChannelsByIdOverlayData = {
         color?: string;
         hideOnFillers?: boolean;
         showTitle?: boolean;
+        showNextTitle?: boolean;
+        nextTitleSeconds?: number;
+        studioBumper?: boolean;
         title?: {
             text?: string;
             fontFamily?: 'Arial' | 'Tahoma' | 'Verdana' | 'DejaVu Sans' | 'Noto Sans Arabic';
@@ -7479,6 +7485,9 @@ export type PutApiChannelsByIdOverlayResponses = {
         color: string;
         hideOnFillers: boolean;
         showTitle: boolean;
+        showNextTitle: boolean;
+        nextTitleSeconds: number;
+        studioBumper: boolean;
         title?: {
             text: string;
             fontFamily: 'Arial' | 'Tahoma' | 'Verdana' | 'DejaVu Sans' | 'Noto Sans Arabic';

@@ -7,6 +7,7 @@ export type ProgramOverlay = {
   elapsedMs: number;
   durationMs: number;
   title: string;
+  nextTitle?: string;
 };
 export function programOverlayForItem(
   config: ChannelOverlay,
@@ -164,6 +165,11 @@ export function buildCountdownAss(
   const fontSize = Math.max(8, Math.floor(w / 8));
   const duration = streamDurationMs / 1000;
   const title = overlayTitleGeometry(c, width, height);
+  const nextFontSize = Math.max(18, Math.round(height / 24));
+  const nextMargin = Math.min(
+    Math.round(width * 0.35),
+    Math.round(w + c.horizontalMargin + width * 0.02),
+  );
   const lines = [
     '[Script Info]',
     'ScriptType: v4.00+',
@@ -175,6 +181,7 @@ export function buildCountdownAss(
     'Format: Name, Fontname, Fontsize, PrimaryColour, SecondaryColour, OutlineColour, BackColour, Bold, Italic, Underline, StrikeOut, ScaleX, ScaleY, Spacing, Angle, BorderStyle, Outline, Shadow, Alignment, MarginL, MarginR, MarginV, Encoding',
     'Style: Counter,Consolas,20,&H00FFFFFF,&H00FFFFFF,&H00000000,&H00000000,0,0,0,0,100,100,0,0,1,0,0,5,0,0,0,1',
     `Style: Title,${title.fontFamily},${title.fontSize},&H00FFFFFF,&H00FFFFFF,&H00000000,&H00000000,${title.bold ? -1 : 0},0,0,0,100,100,0,0,1,${title.outline},0,${title.alignment},${title.marginX},${title.marginX},${title.marginY},1`,
+    `Style: Next,${title.fontFamily},${nextFontSize},&H00FFFFFF,&H00FFFFFF,&H00000000,&H00000000,-1,0,0,0,100,100,0,0,1,2,0,8,${nextMargin},${nextMargin},0,1`,
     '[Events]',
     'Format: Layer, Start, End, Style, Name, MarginL, MarginR, MarginV, Effect, Text',
   ];
@@ -241,6 +248,26 @@ export function buildCountdownAss(
       break;
   }
   const caption = plainAssText(title.text || overlay.title);
+  const nextCaption = plainAssText(overlay.nextTitle ?? '');
+  if (c.showNextTitle && nextCaption) {
+    const start = Math.max(
+      0,
+      (overlay.durationMs - overlay.elapsedMs) / 1000 - c.nextTitleSeconds,
+    );
+    const end = Math.min(
+      duration,
+      (overlay.durationMs - overlay.elapsedMs) / 1000,
+    );
+    if (end > start) {
+      event(
+        3,
+        start,
+        end,
+        'Next',
+        `{\\an8\\pos(${width / 2},${Math.round(height * 0.08)})\\fs${Math.max(12, Math.round(nextFontSize * 0.65))}\\1c${color(c.color)}\\bord2\\fad(300,300)}التالي | UP NEXT\\N{\\fs${nextFontSize}}${nextCaption}`,
+      );
+    }
+  }
   if (c.showTitle && caption)
     event(
       2,

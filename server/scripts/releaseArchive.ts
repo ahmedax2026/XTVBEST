@@ -47,7 +47,26 @@ export function releaseArchiveEntries(
             name: inFolder('XBEST-OWNER-AR.md'),
           },
         ]
-      : []),
+      : [
+          ...(isWindows
+            ? [
+                { source: '../scripts/XBEST.cmd', name: inFolder('XBEST.cmd') },
+                {
+                  source: '../scripts/start-xbest.ps1',
+                  name: inFolder('start-xbest.ps1'),
+                },
+              ]
+            : [
+                {
+                  source: '../scripts/start-xbest.sh',
+                  name: inFolder('start-xbest.sh'),
+                },
+              ]),
+          {
+            source: '../docs/XBEST-CUSTOMER-AR.md',
+            name: inFolder('XBEST-CUSTOMER-AR.md'),
+          },
+        ]),
     ...files.etvNextCompanions.map((source) => ({
       source,
       name: inFolder(path.basename(source)),

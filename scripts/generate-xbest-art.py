@@ -21,6 +21,7 @@ def mark(size):
 logo = Image.open(root/'web/public/xbest.png').convert('RGBA')
 logo.save(out/'xbest-logo.png')
 for name, title, subtitle in [
+    ('bumper', 'لحظات ونبدأ', 'XBEST CHANNELS STUDIO'),
     ('offline', 'القناة متوقفة مؤقتًا', 'سيعود البث قريبًا.'),
     ('error', 'تعذر تشغيل المحتوى', 'جارٍ تجهيز محاولة جديدة للبث.'),
     ('loading', 'جارٍ تجهيز البث', 'يرجى الانتظار حتى يبدأ تشغيل القناة.'),

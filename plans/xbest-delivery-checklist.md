@@ -1,5 +1,57 @@
 # XBEST delivery checkpoint — 2026-11-17
 
+## Current implementation checkpoint — supersedes historical notes below
+
+- The user explicitly requested completion of the remaining work and removal of
+  previous product references from customer-facing surfaces. Existing license
+  notices and stable compatibility identifiers must remain intact.
+- Previous baseline dc77900 passed the full Build job (3992 tests, 10 skipped)
+  and both packaged Windows customer and owner acceptance jobs. Historical
+  SQLite/owner working-directory failures below were resolved before this work.
+- Arabic catalogs now cover all 1309 active messages, retaining only technical
+  names and parameter-only templates. 830 previously English catalog entries,
+  additional short labels and newly extracted messages were translated.
+  Strict catalog compilation and the new coverage regression are required.
+- Removed legacy external help links; replaced them with in-app explanations.
+  Feature descriptions have Arabic labels/help. HDHR identity and XMLTV generator
+  metadata use XBEST. Internal wire keys, old guide IDs and license notices remain.
+- Added live next-program graphics with a 5–120-second announcement window,
+  schedule-based lookup, cycle wrap, offline-gap skipping and ASS sanitization.
+- Added actual five-second, silent XBEST bumpers: explicit insertion into the
+  editable lineup, idempotent insertion, added schedule duration and a branded
+  still-image stream. A resumed bumper uses its remaining duration exactly once.
+  Requires the built-in live engine, picture-mode offline playback and no random
+  filler lists. The user must save the edited schedule to apply inserted gaps.
+- Saved-channel preparation rejects the two new live-only controls. Default-off
+  controls preserve existing archive identities. Do not claim these features work
+  in prepared archives, direct-copy mode or the secondary engine.
+- Customer archives now include a protected launcher and Arabic setup guide.
+  Windows uses XBEST.cmd; Linux uses bash start-xbest.sh ./XBEST. Direct executable
+  startup preserves manual mode; license enforcement requires the issuer public
+  key configuration. Do not claim an unconfigured customer archive enforces auth
+  or activation, or that local checks are tamper-proof.
+- OpenAPI generation now prepares Fastify routes without opening an HTTP listener
+  or starting multicast discovery. Generated API documents/types must be current.
+- CI now checks committed formatting and strict catalogs; temporary source
+  formatting/snapshot steps were removed. Native/customer/owner checks stay enabled.
+- Local evidence: 593 frontend unit tests passed; 34 real-FFmpeg archive/overlay
+  tests passed; focused service/bumper tests passed. A real FFmpeg bumper was
+  probed at exactly 5.000000 seconds; an Arabic next-title frame was rendered.
+  Check the latest exact commit in CI before delivering new downloads.
+- Still requires external hardware/environment acceptance: actual GPU playback,
+  a real external IPTV panel and a reachable HTTPS issuer for online customers.
+  No external issuer was deployed and no production release/main merge authorized.
+- Fresh data directories use XBEST. Existing legacy data paths are preserved so
+  upgrades do not lose settings, sources or saved channels.
+- Network regression tests now use mocked transports for blocked destinations;
+  image downloads reject blocked URLs before invoking Axios. Focused checks
+  passed (48 outbound-guard tests and 4 image-download tests). The earlier local
+  full-suite attempt was stopped by automatic review and is not a passing result.
+- The old commit-message lint failure is historical. Do not disable checks or
+  rewrite user history to conceal it.
+
+## Historical context (not the current acceptance verdict)
+
 User authorizes continued implementation on feature/xbest-studio, including scheduled follow-up while their laptop is closed. Do not merge main or publish a production release without separate direction.
 
 ## Required scope

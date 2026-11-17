@@ -91,6 +91,7 @@ export type MinimalPlexBackedStreamLineupItem = SpecificProgramSourceOrmType<
 export type OfflineStreamLineupItem = BaseStreamLineupItem & {
   type: 'offline';
   duration: number;
+  studioBumper?: boolean;
   fillerConfig?: OfflineFillerConfig;
 };
 

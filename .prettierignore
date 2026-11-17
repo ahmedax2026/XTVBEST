@@ -31,4 +31,5 @@ server/temp
 # web
 web/src/generated/*
 web/src/locales/**/messages.ts
+web/src/locales/**/messages.js
 web/src/routeTree.gen.ts

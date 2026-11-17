@@ -175,14 +175,8 @@ export default function ChannelTranscodingConfig() {
                   The streaming mode affects the type of underlying transcoding
                   process used to create the channel's video stream.
                   <br />
-                  Learn more about XBest's stream modes{' '}
-                  <Link
-                    target="_blank"
-                    href="https://tunarr.com/configure/channels/transcoding/#stream-mode"
-                  >
-                    here
-                  </Link>
-                  !
+                  Use HLS for segmented playback or MPEG-TS for a continuous
+                  transport stream. Direct modes copy compatible source streams.
                 </Trans>
               </FormHelperText>
             </FormControl>

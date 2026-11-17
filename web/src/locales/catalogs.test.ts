@@ -56,3 +56,59 @@ test('the Arabic welcome checklist has translated help and action text', () => {
     expect(translated).toMatch(/[\u0600-\u06ff]/);
   }
 });
+
+test('active Arabic product copy is translated, preserving technical names and ICU-only templates', () => {
+  const allowed = new Set([
+    'CEL',
+    'Emby',
+    'FFmpeg',
+    'FFmpeg {0}',
+    'HDHR',
+    'Jellyfin',
+    'URL',
+    'XMLTV',
+    'XBest {0}',
+    '{count} {programLabel}, {0}',
+    '{count, plural, one {{0}} other {{1}}}',
+  ]);
+  const contents = catalogs['./ar/messages.po'] ?? '';
+  const read = (block: string, field: string) => {
+    const match = block.match(new RegExp(`^${field} (".*"(?:\\n".*")*)`, 'm'));
+    return (
+      match?.[1]
+        ?.split('\n')
+        .map((line) => JSON.parse(line) as string)
+        .join('') ?? ''
+    );
+  };
+  const untranslated = contents
+    .split('\n\n')
+    .filter((block) => {
+      const source = read(block, 'msgid');
+      const translation = read(block, 'msgstr');
+      return (
+        source &&
+        /[a-zA-Z]{2}/.test(translation) &&
+        !/[\u0600-\u06ff]/.test(translation) &&
+        !allowed.has(source)
+      );
+    })
+    .map((block) => read(block, 'msgid'));
+  expect(untranslated).toEqual([]);
+});
+
+test('customer screens contain no links to the previous product', () => {
+  const screens = import.meta.glob<string>(
+    [
+      '../components/**/*.tsx',
+      '../pages/**/*.tsx',
+      '!../**/*.test.tsx',
+      '!../**/*.stories.tsx',
+    ],
+    { query: '?raw', import: 'default', eager: true },
+  );
+  for (const text of Object.values(screens))
+    expect(text).not.toMatch(
+      /https?:\/\/[^\s"']*(?:tunarr\.com|chrisbenincasa\/tunarr)/i,
+    );
+});

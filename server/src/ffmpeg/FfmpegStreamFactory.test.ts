@@ -455,6 +455,40 @@ describe('FfmpegStreamFactory', () => {
       expect(frameState!.videoPreset).toBeNull();
     });
 
+    test('studio bumper uses branded artwork and silence for exactly five seconds', async () => {
+      const {
+        factory,
+        getCapturedVideoInput,
+        getCapturedAudioInput,
+        getCapturedFfmpegState,
+      } = createCapturingPipelineBuilderFactory();
+      const sut = new FfmpegStreamFactory(
+        makeMockFfmpegInfo(),
+        makeMockSettingsDB(makeFfmpegSettings()),
+        factory,
+        makeMockFeatureFlagService(),
+        makeMockStreamSelector(),
+        makeTranscodeConfig(),
+        makeChannel({
+          offline: {
+            mode: 'pic',
+            picture: 'http://example.test/custom.png',
+            soundtrack: 'http://example.test/audio.mp3',
+          },
+        }),
+      );
+      const result = await sut.createPlaceholderSession({
+        kind: 'bumper',
+        duration: dayjs.duration(5, 'seconds'),
+        outputFormat: MpegTsOutputFormat,
+      });
+      expect(getCapturedVideoInput()?.path).toContain(
+        '/images/xbest-bumper.png',
+      );
+      expect(getCapturedAudioInput()).toBeInstanceOf(NullAudioInputSource);
+      expect(getCapturedFfmpegState()?.duration.asMilliseconds()).toBe(5000);
+      expect(result?.session.streamDuration.asMilliseconds()).toBe(5000);
+    });
     test('createPlaceholderSession (offline) wires videoPreset into FrameState', async () => {
       const config = makeTranscodeConfig({
         hardwareAccelerationMode: 'none',

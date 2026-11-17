@@ -173,7 +173,7 @@ export class XmlTvWriter {
     );
     return {
       generatorInfoName: 'tunarr',
-      generatorInfoUrl: 'https://tunarr.com',
+      generatorInfoUrl: 'https://xiptv.live',
       sourceInfoName: 'tunarr',
       sourceInfoUrl: `{{host}}/web`,
       sourceDataUrl: `{{host}}/api/xmltv.xml`,

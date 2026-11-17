@@ -42,7 +42,7 @@ export const GenerateOpenApiCommand: CommandModule<
     const tempDir = await bootstrapForTooling(args);
     setServerOptions(args);
     const server = container.get<Server>(Server);
-    await server.runServer();
+    const document = await server.prepareOpenApiDocument();
     await server.close();
     const version = getTunarrVersion();
     const docsOutPath = path.join(
@@ -53,10 +53,7 @@ export const GenerateOpenApiCommand: CommandModule<
       path.resolve(process.cwd(), '..'),
       'tunarr-openapi.json',
     );
-    await fs.writeFile(
-      rootOutPath,
-      JSON.stringify(server.getOpenApiDocument()),
-    );
+    await fs.writeFile(rootOutPath, JSON.stringify(document));
     await fs.copyFile(rootOutPath, docsOutPath);
     console.log(`Wrote OpenAPI document to ${rootOutPath}`);
     await fs.rm(tempDir, { recursive: true, force: true });

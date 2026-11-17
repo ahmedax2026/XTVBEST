@@ -2,7 +2,7 @@
 set -euo pipefail
 
 if [[ $# -lt 1 ]]; then
-  echo 'Usage: bash scripts/start-xbest.sh /path/to/tunarr [server arguments...]' >&2
+  echo 'Usage: bash start-xbest.sh /path/to/XBEST [server arguments...]' >&2
   exit 1
 fi
 if [[ -z "${TUNARR_BASIC_AUTH_USER:-}" ]]; then
