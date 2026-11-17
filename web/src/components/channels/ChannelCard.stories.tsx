@@ -51,7 +51,9 @@ type Story = StoryObj<typeof meta>;
 // title and detail line.
 const noHeroOverlap: Story['play'] = async ({ canvasElement, args }) => {
   const canvas = within(canvasElement);
-  const badge = canvas.getByText(args.channel.number.toString());
+  const badge = canvas.getByText(
+    `CH ${String(args.channel.number).padStart(2, '0')}`,
+  );
   const nowPlaying = canvas.getByText('Now playing').parentElement;
   if (!nowPlaying) {
     throw new Error('Now playing label has no container');
