@@ -1,4 +1,10 @@
-import { fireEvent, renderWithProviders, screen, waitFor } from '@/test/utils';
+import {
+  fireEvent,
+  renderWithProviders,
+  screen,
+  waitFor,
+  seededQueryClient,
+} from '@/test/utils';
 import { beforeEach, expect, test, vi } from 'vitest';
 import AccessSettingsPage from './AccessSettingsPage.tsx';
 
@@ -235,39 +241,47 @@ test('offline license card prevents presenting remote revocation as effective', 
 
 function ownerFixture() {
   status.issuer = true;
-  api.get.mockImplementation((url: string) =>
-    Promise.resolve({
-      data: url.endsWith('/status')
-        ? status
-        : url.endsWith('/users')
+  const response = (url: string) => ({
+    data: url.endsWith('/status')
+      ? status
+      : url.endsWith('/users')
+        ? [
+            {
+              username: 'client@example.com',
+              enabled: true,
+              installation: 'b'.repeat(64),
+            },
+          ]
+        : url.endsWith('/licenses')
           ? [
               {
-                username: 'client@example.com',
                 enabled: true,
-                installation: 'b'.repeat(64),
+                payload: {
+                  id: 'issued-id',
+                  customer: 'Client',
+                  installation: 'b'.repeat(64),
+                  expiresAt: '2035-01-01T00:00:00Z',
+                },
               },
             ]
-          : url.endsWith('/licenses')
-            ? [
-                {
-                  enabled: true,
-                  payload: {
-                    id: 'issued-id',
-                    customer: 'Client',
-                    installation: 'b'.repeat(64),
-                    expiresAt: '2035-01-01T00:00:00Z',
-                  },
-                },
-              ]
-            : url.endsWith('/public-key')
-              ? { publicKey: 'public fixture' }
-              : [],
-    }),
+          : url.endsWith('/public-key')
+            ? { publicKey: 'public fixture' }
+            : [],
+  });
+  api.get.mockImplementation((url: string) => Promise.resolve(response(url)));
+  return seededQueryClient(
+    ['status', 'users', 'licenses', 'public-key', 'audit'].map((name) => [
+      [`access-${name}`],
+      name === 'public-key'
+        ? 'public fixture'
+        : response(`/api/access/${name}`).data,
+    ]),
   );
 }
+
 test('owner resets a password and server binding through the account dialog', async () => {
-  ownerFixture();
-  renderWithProviders(<AccessSettingsPage />);
+  const queryClient = ownerFixture();
+  renderWithProviders(<AccessSettingsPage />, { queryClient });
   fireEvent.click(await screen.findByRole('button', { name: 'Edit account' }));
   fireEvent.change(screen.getByLabelText('New password'), {
     target: { value: 'new-customer-password' },
@@ -292,9 +306,9 @@ test('owner resets a password and server binding through the account dialog', as
   );
 });
 test('viewing an issued code uses a read request and never enables or renews the license', async () => {
-  ownerFixture();
+  const queryClient = ownerFixture();
   api.request.mockResolvedValue({ data: { token: 'existing-code' } });
-  renderWithProviders(<AccessSettingsPage />);
+  renderWithProviders(<AccessSettingsPage />, { queryClient });
   fireEvent.click(
     await screen.findByRole('button', { name: 'Show license code' }),
   );
@@ -310,8 +324,8 @@ test('viewing an issued code uses a read request and never enables or renews the
   ).toHaveValue('existing-code');
 });
 test('search filters account and customer records without losing the loaded totals', async () => {
-  ownerFixture();
-  renderWithProviders(<AccessSettingsPage />);
+  const queryClient = ownerFixture();
+  renderWithProviders(<AccessSettingsPage />, { queryClient });
   await screen.findByRole('button', { name: 'Edit account' });
   fireEvent.change(
     screen.getByLabelText('Search customer, account or server ID'),
