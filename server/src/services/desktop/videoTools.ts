@@ -170,7 +170,11 @@ export async function ensureVideoTools(
   dependencies = { probe: probeVideoTool, install: installWindowsVideoTools },
 ): Promise<VideoTools> {
   const suffix = process.platform === 'win32' ? '.exe' : '';
-  const locate = async (name: 'ffmpeg' | 'ffprobe', configuredPath: string, sibling?: string) => {
+  const locate = async (
+    name: 'ffmpeg' | 'ffprobe',
+    configuredPath: string,
+    sibling?: string,
+  ) => {
     const candidates = [
       ...new Set(
         [
@@ -187,7 +191,11 @@ export async function ensureVideoTools(
     return;
   };
   const ffmpeg = await locate('ffmpeg', configured.ffmpegExecutablePath);
-  const ffprobe = await locate('ffprobe', configured.ffprobeExecutablePath, ffmpeg);
+  const ffprobe = await locate(
+    'ffprobe',
+    configured.ffprobeExecutablePath,
+    ffmpeg,
+  );
   if (ffmpeg && ffprobe) {
     console.log('XBEST: أدوات الفيديو الموجودة صالحة؛ لا حاجة إلى تنزيل.');
     return { ffmpegExecutablePath: ffmpeg, ffprobeExecutablePath: ffprobe };
