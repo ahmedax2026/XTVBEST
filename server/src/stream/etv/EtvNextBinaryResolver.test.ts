@@ -14,6 +14,8 @@ import {
 import { pinnedEtvNextVersion } from './EtvNextVersion.ts';
 
 const ENV_VAR = 'TUNARR_ERSATZTV_NEXT_PATH';
+const fixtureBinaryName =
+  process.platform === 'win32' ? `${ETV_NEXT_BINARY_NAME}.exe` : ETV_NEXT_BINARY_NAME;
 
 const exampleDescribePath = path.join(
   path.dirname(fileURLToPath(import.meta.url)),
@@ -117,7 +119,7 @@ describe('resolveChecked', () => {
     probes: { describe: ProbeOutput; version?: ProbeOutput },
   ) {
     const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'etv-resolver-'));
-    const binary = path.join(dir, ETV_NEXT_BINARY_NAME);
+    const binary = path.join(dir, fixtureBinaryName);
     await fs.writeFile(binary, '');
 
     if (source === 'env') {
@@ -125,7 +127,7 @@ describe('resolveChecked', () => {
       vi.spyOn(process, 'cwd').mockReturnValue(path.join(dir, 'elsewhere'));
     } else {
       await fs.mkdir(path.join(dir, 'bin'));
-      await fs.rename(binary, path.join(dir, 'bin', ETV_NEXT_BINARY_NAME));
+      await fs.rename(binary, path.join(dir, 'bin', fixtureBinaryName));
       vi.spyOn(process, 'cwd').mockReturnValue(dir);
     }
 
@@ -245,7 +247,7 @@ describe('getInstalledVersion', () => {
     version?: ProbeOutput;
   }) {
     const dir = await fs.mkdtemp(path.join(os.tmpdir(), 'etv-resolver-'));
-    await fs.writeFile(path.join(dir, ETV_NEXT_BINARY_NAME), '');
+    await fs.writeFile(path.join(dir, fixtureBinaryName), '');
     vi.spyOn(process, 'cwd').mockReturnValue(dir);
     const childProcessHelper = fakeChildProcessHelper(probes);
 
