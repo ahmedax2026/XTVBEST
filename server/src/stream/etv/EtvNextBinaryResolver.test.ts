@@ -15,7 +15,9 @@ import { pinnedEtvNextVersion } from './EtvNextVersion.ts';
 
 const ENV_VAR = 'TUNARR_ERSATZTV_NEXT_PATH';
 const fixtureBinaryName =
-  process.platform === 'win32' ? `${ETV_NEXT_BINARY_NAME}.exe` : ETV_NEXT_BINARY_NAME;
+  process.platform === 'win32'
+    ? `${ETV_NEXT_BINARY_NAME}.exe`
+    : ETV_NEXT_BINARY_NAME;
 
 const exampleDescribePath = path.join(
   path.dirname(fileURLToPath(import.meta.url)),
