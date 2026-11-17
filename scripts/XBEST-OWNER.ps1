@@ -8,6 +8,7 @@ try {
     if (-not (Test-Path -LiteralPath $Executable)) {
         throw 'لم يتم العثور على XBEST.exe بجوار ملف تشغيل الأونر.'
     }
+    $Executable = (Resolve-Path -LiteralPath $Executable).Path
     New-Item -ItemType Directory -Path $DataDirectory -Force | Out-Null
     $credentialsFile = Join-Path $DataDirectory 'owner.credentials.xml'
     if (-not $env:TUNARR_BASIC_AUTH_USER -or -not $env:TUNARR_BASIC_AUTH_PASSWORD) {
@@ -36,8 +37,13 @@ try {
     $env:XBEST_OWNER_ADMIN_ONLY = '1'
     $env:XBEST_AUTOSTART = '1'
     Write-Host 'جارٍ تشغيل لوحة الأونر والحسابات والليسانسات...'
-    & $Executable
-    if ($LASTEXITCODE -ne 0) { throw "تعذر تشغيل الأونر. رمز الخطأ: $LASTEXITCODE" }
+    Push-Location -LiteralPath (Split-Path -Parent $Executable)
+    try {
+        & $Executable
+        if ($LASTEXITCODE -ne 0) { throw "تعذر تشغيل الأونر. رمز الخطأ: $LASTEXITCODE" }
+    } finally {
+        Pop-Location
+    }
 } catch {
     Write-Error $_
     exit 1
