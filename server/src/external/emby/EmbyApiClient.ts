@@ -133,7 +133,7 @@ function getEmbyAuthorization(apiKey: Maybe<string>, clientId: Maybe<string>) {
     parts.push(`DeviceId="${clientId}"`);
   }
   parts.push(
-    'Client="Tunarr", Device="Web Browser"',
+    'Client="XBEST", Device="Web Browser"',
     `Version="${getTunarrVersion()}"`,
   );
 

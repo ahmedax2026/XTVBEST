@@ -13,7 +13,7 @@ export type BackupTaskFactory = (
 ) => () => BackupTask;
 
 @simpleTaskDef({
-  description: 'Performs a backup of Tunarr data per user configuration',
+  description: 'Performs a backup of XBEST data per user configuration',
   injectKey: autoFactoryKey(BackupTask),
 })
 export class BackupTask extends SimpleTask {

@@ -56,7 +56,7 @@ export const videoApiRouter: RouterPluginAsyncCallback = async (fastify) => {
           );
       }
 
-      logger.info(`\r\nStream starting. Channel: 1 (Tunarr)`);
+      logger.info(`\r\nStream starting. Channel: 1 (XBEST)`);
 
       const defaultConfig =
         await req.serverCtx.transcodeConfigDB.getDefaultConfig();
@@ -68,8 +68,8 @@ export const videoApiRouter: RouterPluginAsyncCallback = async (fastify) => {
       const ffmpeg = new FfmpegText(
         defaultConfig,
         ffmpegSettings,
-        'Tunarr (No Channels Configured)',
-        'Configure your channels using the Tunarr Web UI',
+        'XBEST (لم تتم إضافة قنوات)',
+        'أضف قنواتك من واجهة XBEST',
       );
 
       const buffer = new Readable();
@@ -93,7 +93,7 @@ export const videoApiRouter: RouterPluginAsyncCallback = async (fastify) => {
       res.raw.on('close', () => {
         // on HTTP close, kill ffmpeg
         ffmpeg.kill();
-        logger.info(`\r\nStream ended. Channel: 1 (Tunarr)`);
+        logger.info(`\r\nStream ended. Channel: 1 (XBEST)`);
       });
 
       return res.send(buffer);

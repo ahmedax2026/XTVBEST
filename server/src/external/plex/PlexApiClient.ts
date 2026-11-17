@@ -1015,7 +1015,7 @@ export class PlexApiClient extends MediaSourceApiClient<PlexTypes> {
           if (!parsed.success) {
             const identity = PlexMetadataIdentitySchema.safeParse(raw);
             this.logger.warn(
-              'Dropping unsupported Plex item from %s (ratingKey=%s, type=%s, title=%s). Tunarr cannot model this item type. Issues: %s',
+              'Dropping unsupported Plex item from %s (ratingKey=%s, type=%s, title=%s). XBEST cannot model this item type. Issues: %s',
               path,
               identity.data?.ratingKey ?? '<unknown>',
               identity.data?.type ?? '<unknown>',
@@ -1086,7 +1086,7 @@ export class PlexApiClient extends MediaSourceApiClient<PlexTypes> {
       : null;
     if (!library) {
       this.logger.debug(
-        'Dropping Plex item %s (type=%s) — no matching library for librarySectionID=%s. Ensure the library is synced in Tunarr.',
+        'Dropping Plex item %s (type=%s) — no matching library for librarySectionID=%s. Ensure the library is synced in XBEST.',
         item.ratingKey,
         item.type,
         externalLibraryId ?? '<missing>',

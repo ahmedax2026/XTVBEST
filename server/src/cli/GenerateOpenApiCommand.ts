@@ -19,12 +19,12 @@ export const GenerateOpenApiCommand: CommandModule<
   GenerateOpenApiCommandArgs
 > = {
   command: ['generate-openapi'],
-  describe: 'Generates the OpenAPI JSON definition of the Tunarr API',
+  describe: 'Generates the OpenAPI JSON definition of the XBEST API',
   builder: {
     port: {
       alias: 'p',
       type: 'number',
-      desc: 'The port to run the Tunarr server on',
+      desc: 'The port to run the XBEST server on',
       default: 0,
     },
     printRoutes: {

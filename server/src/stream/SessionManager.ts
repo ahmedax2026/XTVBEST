@@ -24,6 +24,7 @@ import type {
   EtvNextSessionProvider,
 } from './etv/EtvNextSession.js';
 import { Session } from './Session.js';
+import { isInternalStudioUserAgent } from './internalStudioUserAgent.ts';
 import type { HlsSession, HlsSessionOptions } from './hls/HlsSession.js';
 import {
   type HlsSessionProvider,
@@ -520,7 +521,7 @@ export class SessionManager {
 
       const nonTunarrConnections = filter(
         sessionToCheck.connections(),
-        (conn) => !(conn.userAgent?.includes('Tunarr') ?? false),
+        (conn) => !isInternalStudioUserAgent(conn.userAgent),
       ).length;
 
       // Pause the channel as soon as there are no connections

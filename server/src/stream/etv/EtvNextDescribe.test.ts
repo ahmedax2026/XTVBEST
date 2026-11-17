@@ -124,7 +124,7 @@ describe('findContractMismatches', () => {
     });
 
     expect(findContractMismatches(described)).toEqual([
-      'output file ready: the worker writes .done, Tunarr expects .ready',
+      'output file ready: the worker writes .done, XBEST expects .ready',
     ]);
   });
 

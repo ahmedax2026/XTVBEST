@@ -4,7 +4,7 @@ import type { CommandModule } from 'yargs';
 
 export const DatabaseListMigrationsCommand: CommandModule = {
   command: 'list',
-  describe: 'Tunarr database migration commands',
+  describe: 'XBEST database migration commands',
 
   handler: async () => {
     const migrator = new DBAccess().getOrCreateConnection().getMigrator();

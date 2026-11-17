@@ -275,7 +275,7 @@ export class FfmpegStreamFactory {
       FfmpegState.create({
         version: await this.ffmpegInfo.getVersion(),
         outputFormat: opts.outputFormat ?? MpegTsOutputFormat,
-        metadataServiceProvider: 'Tunarr',
+        metadataServiceProvider: 'XBEST',
         metadataServiceName: this.channel.name,
         ptsOffset: 0,
         vaapiDevice: this.getVaapiDevice(),

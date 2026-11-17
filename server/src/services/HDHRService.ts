@@ -18,7 +18,7 @@ export class HdhrService {
       },
       udn: `uuid:d936e232-6671-4cd7-a8ab-34b5956ff4d6`,
       allowWildcards: true,
-      ssdpSig: 'Tunarr/0.1 UPnP/1.0',
+      ssdpSig: 'XBEST/0.1 UPnP/1.0',
       customLogger: process.env['ENABLE_SSDP_DEBUG_LOGGING']
         ? console.debug
         : undefined,
@@ -35,8 +35,8 @@ export class HdhrService {
 
   getHdhrDevice(host: string) {
     return {
-      FriendlyName: 'XBest',
-      Manufacturer: 'XBest',
+      FriendlyName: 'XBEST',
+      Manufacturer: 'XBEST',
       ManufacturerURL: host,
       ModelNumber: 'HDTC-2US',
       FirmwareName: 'hdhomeruntc_atsc',
@@ -58,7 +58,7 @@ export class HdhrService {
           </specVersion>
           <device>
             <deviceType>urn:schemas-upnp-org:device:MediaServer:1</deviceType>
-            <friendlyName>Tunarr</friendlyName>
+            <friendlyName>XBEST</friendlyName>
             <manufacturer>Silicondust</manufacturer>
             <modelName>HDTC-2US</modelName>
             <modelNumber>HDTC-2US</modelNumber>

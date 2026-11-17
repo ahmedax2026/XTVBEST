@@ -72,7 +72,7 @@ function splitVersionUri(uri: string) {
 export function findContractMismatches(describe: Describe): string[] {
   if (describe.describe_version !== DescribeVersion) {
     return [
-      `describe_version is ${describe.describe_version}, but Tunarr reads ${DescribeVersion}`,
+      `describe_version is ${describe.describe_version}, but XBEST reads ${DescribeVersion}`,
     ];
   }
 
@@ -81,7 +81,7 @@ export function findContractMismatches(describe: Describe): string[] {
 
   if (!acceptsSchemaVersion(contract.playout_schema, PlayoutVersion)) {
     mismatches.push(
-      `playout schema: Tunarr writes ${PlayoutVersion}, the worker accepts up to ${contract.playout_schema.uri}`,
+      `playout schema: XBEST writes ${PlayoutVersion}, the worker accepts up to ${contract.playout_schema.uri}`,
     );
   }
 
@@ -89,7 +89,7 @@ export function findContractMismatches(describe: Describe): string[] {
     !acceptsSchemaVersion(contract.channel_config_schema, ChannelConfigVersion)
   ) {
     mismatches.push(
-      `channel config schema: Tunarr writes ${ChannelConfigVersion}, the worker accepts up to ${contract.channel_config_schema.uri}`,
+      `channel config schema: XBEST writes ${ChannelConfigVersion}, the worker accepts up to ${contract.channel_config_schema.uri}`,
     );
   }
 
@@ -114,7 +114,7 @@ export function findContractMismatches(describe: Describe): string[] {
   for (const [name, actual, expected] of files) {
     if (actual !== expected) {
       mismatches.push(
-        `output file ${name}: the worker writes ${actual}, Tunarr expects ${expected}`,
+        `output file ${name}: the worker writes ${actual}, XBEST expects ${expected}`,
       );
     }
   }

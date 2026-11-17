@@ -269,7 +269,7 @@ export abstract class BasePipelineBuilder implements PipelineBuilder {
       new ConcatInputFormatOption(),
       new ReadrateInputOption(this.ffmpegCapabilities, 0),
       new InfiniteLoopInputOption(),
-      new UserAgentInputOption(`Ffmpeg Tunarr/${getTunarrVersion()}`),
+      new UserAgentInputOption(`Ffmpeg XBEST/${getTunarrVersion()}`),
     );
 
     if (input.protocol === 'http') {

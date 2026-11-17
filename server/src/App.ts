@@ -26,9 +26,9 @@ export class App {
   ) {}
 
   async start() {
-    this.logger.info('Starting Tunarr version %s', getTunarrVersion());
+    this.logger.info('Starting XBEST version %s', getTunarrVersion());
     this.logger.info(
-      'Using Tunarr database directory: %s',
+      'Using XBEST database directory: %s',
       this.globalOptions.databaseDirectory,
     );
 

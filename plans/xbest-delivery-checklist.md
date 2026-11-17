@@ -31,3 +31,11 @@ User authorizes continued implementation on feature/xbest-studio, including sche
 4. Replace simple X mark still embedded in default status artwork generator; use actual original logo there as well.
 5. Remove temporary CI source snapshot formatting steps after committing formatted files; keep useful verification.
 6. Only provide new download links after relevant checks and actual native acceptance pass. State precise remaining limitations and Cairo build time.
+
+## Branding audit — 2026-11-17
+
+- Fixed visible startup/worker messages, stream service-provider metadata, FFmpeg User-Agent, HDHR/UPnP friendly names and SSDP signature, Jellyfin/Emby client name, empty XMLTV guide text, task descriptions and worker/database error messages to use XBEST.
+- Internal viewer detection recognizes both XBEST and legacy agents to preserve on-demand pause behavior. Legacy data/API identifiers and original copyright notices are intentionally retained; do not claim zero origin traces in source or compatibility fields.
+- Local Node 24: 85 focused stream/worker tests passed and server typecheck passed before the final extra message-only replacements. CI runs Node 22 and remains required for native delivery.
+- Native customer acceptance passed in workflow 43982404235 at b575a21. Owner acceptance in that run failed due caller working directory; 1ff275a fixes owner executable directory selection. Recheck current workflow before delivery.
+- Actual server logo is already installed in status-artwork generator. Arabic coverage remains incomplete.
