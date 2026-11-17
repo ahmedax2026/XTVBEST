@@ -64,7 +64,7 @@ jobs:
           XBEST_FFMPEG_TEST: '1'
         run: pnpm --filter @tunarr/server test src/services/archive/ArchiveStore.test.ts src/services/archive/ChannelArchiveService.test.ts src/services/overlay/countdownAss.test.ts
       - name: Test live monitor, countdown, links and Arabic catalog
-        run: pnpm --filter @tunarr/web exec vitest run --project unit src/hooks/programming_controls/useAddBreaks.test.ts src/components/channels/ChannelSessionsDialog.test.tsx src/components/channels/ChannelArchiveDialog.test.tsx src/components/channels/ChannelOverlayDialog.test.tsx src/components/channels/ChannelNowPlayingCard.test.tsx src/components/channels/ChannelMenuButton.test.tsx src/components/channels/channelSummary.test.ts src/locales/catalogs.test.ts src/test/i18n.test.ts src/store/settings/store.test.ts src/components/settings/general/WebSettings.test.tsx src/pages/settings/AccessSettingsPage.test.tsx src/pages/studio/StudioDashboard.test.tsx src/components/shell/XBestShell.test.tsx src/components/channels/ChannelCard.test.tsx src/components/channels/ChannelsView.test.tsx
+        run: pnpm --filter @tunarr/web exec vitest run --project unit src/hooks/programming_controls/useAddBreaks.test.ts src/components/channels/ChannelSessionsDialog.test.tsx src/components/channels/ChannelArchiveDialog.test.tsx src/components/channels/ChannelOverlayDialog.test.tsx src/components/channels/ChannelNowPlayingCard.test.tsx src/components/channels/ChannelMenuButton.test.tsx src/components/channels/channelSummary.test.ts src/locales/catalogs.test.ts src/test/i18n.test.ts src/store/settings/store.test.ts src/components/settings/general/WebSettings.test.tsx src/pages/settings/AccessSettingsPage.test.tsx src/pages/settings/ownerPanel.test.ts src/pages/studio/StudioDashboard.test.tsx src/components/shell/XBestShell.test.tsx src/components/channels/ChannelCard.test.tsx src/components/channels/ChannelsView.test.tsx
       - name: Generate Arabic broadcast artwork using the original server logo
         if: runner.os == 'Linux'
         run: |
@@ -80,6 +80,7 @@ jobs:
         run: |
           pnpm --filter @tunarr/web exec node src/test/live-monitor-smoke.mjs
           pnpm --filter @tunarr/web exec node src/test/studio-smoke.mjs
+          pnpm --filter @tunarr/web exec node src/test/owner-panel-smoke.mjs
       - name: Upload monitor screenshots
         if: always() && runner.os == 'Linux'
         uses: actions/upload-artifact@v4
@@ -88,6 +89,7 @@ jobs:
           path: |
             web/test-results/live-monitor/
             web/test-results/studio/
+            web/test-results/owner/
           if-no-files-found: ignore
       - name: Check Linux launcher syntax
         if: runner.os == 'Linux'
@@ -304,7 +306,13 @@ jobs:
             if (-not $issued.token) { throw 'Offline signed license was not issued' }
             $verified = Invoke-RestMethod -Method Post -Uri "http://localhost:$port/api/access/verify" -ContentType 'application/json' -Body (@{ token = $issued.token } | ConvertTo-Json)
             if (-not $verified.valid) { throw 'Owner license signature verification failed' }
-            Write-Host 'XBEST owner login, email account and offline issuance passed'
+            $updated = @{ password = [guid]::NewGuid().ToString('N'); installation = ('a' * 64) } | ConvertTo-Json
+            Invoke-RestMethod -Method Patch -Uri "http://localhost:$port/api/access/users/customer%40example.test" -Headers $headers -ContentType 'application/json' -Body $updated | Out-Null
+            $code = Invoke-RestMethod -Uri "http://localhost:$port/api/access/licenses/$($issued.payload.id)/code" -Headers $headers
+            if ($code.token -ne $issued.token) { throw 'Read-only code retrieval changed the license' }
+            $audit = Invoke-RestMethod -Uri "http://localhost:$port/api/access/audit" -Headers $headers
+            if (-not ($audit | Where-Object action -eq 'user-updated')) { throw 'Owner audit did not persist the account update' }
+            Write-Host 'XBEST owner login, email account, password reset, server binding, audit and offline issuance passed'
           } finally {
             if (Test-Path $stdout) { Get-Content $stdout }
             if (Test-Path $stderr) { Get-Content $stderr }

@@ -43,3 +43,7 @@ of packaging. Removing source maps and publishing independent checksums reduces
 accidental disclosure and detects changed downloads; neither prevents reverse
 engineering. Code-signing certificates, native obfuscation and hosted proprietary
 processing are not implemented by this phase.
+
+## Owner panel completion — 2026-11-17
+
+The user explicitly requests a complete owner panel and separate customer/owner distributions in their custom fork. Extend the existing access screen and API with account password/binding updates, read-only signed-code retrieval, backward-compatible optional audit entries in the existing atomic sidecar, dashboard statistics, expiry filters, search, quick renewal periods and safe CSV export. No runtime dependency or SQLite migration. Existing owner-only and same-origin gates apply to every new endpoint. Keep original credentials and issuer private keys out of the customer distribution. Regenerate API artifacts and verify UI interactions, browser layout and native owner/customer startup before delivering replacement archives.

@@ -29,6 +29,32 @@ export const LicenseInput = z.object({
   expiresAt: z.iso.datetime(),
   validation: z.enum(['online', 'offline']).optional(),
 });
+export const UserUpdate = z
+  .object({
+    enabled: z.boolean().optional(),
+    password: UserInput.shape.password.optional(),
+    installation: UserInput.shape.installation.unwrap().nullable().optional(),
+  })
+  .refine(
+    (input) => Object.values(input).some((value) => value !== undefined),
+    {
+      message: 'No account changes supplied',
+    },
+  );
+const AuditEntry = z.object({
+  id: z.uuid(),
+  at: z.iso.datetime(),
+  action: z.enum([
+    'user-created',
+    'user-updated',
+    'user-deleted',
+    'license-issued',
+    'license-renewed',
+    'license-enabled',
+    'license-disabled',
+  ]),
+  target: z.string(),
+});
 const License = LicenseInput.extend({
   id: z.uuid(),
   issuedAt: z.iso.datetime(),
@@ -46,6 +72,7 @@ const State = z.object({
   users: z.array(User),
   licenses: z.array(z.object({ payload: License, enabled: z.boolean() })),
   activation: z.string().optional(),
+  audit: z.array(AuditEntry).default([]),
 });
 type StateData = z.infer<typeof State>;
 export type LicenseData = z.infer<typeof License>;
@@ -94,6 +121,7 @@ export class AccessControl {
         installationId: crypto.randomUUID(),
         users: [],
         licenses: [],
+        audit: [],
       };
     }
     let machine = os.hostname();
@@ -213,7 +241,10 @@ export class AccessControl {
           !ok ||
           !this.state.users.some(
             (u) =>
-              u.username === user.username && u.enabled && u.hash === user.hash,
+              u.username === user.username &&
+              u.enabled &&
+              u.hash === user.hash &&
+              (u.installation ?? this.installation) === installation,
           )
         )
           return false;
@@ -236,6 +267,15 @@ export class AccessControl {
       enabled,
       ...(installation ? { installation } : {}),
     }));
+  }
+  audit() {
+    return [...this.state.audit].reverse();
+  }
+  private record(action: z.infer<typeof AuditEntry>['action'], target: string) {
+    return [
+      ...this.state.audit,
+      { id: crypto.randomUUID(), at: new Date().toISOString(), action, target },
+    ].slice(-1000);
   }
   async addUser(input: z.infer<typeof UserInput>) {
     const { username, password, installation } = UserInput.parse(input);
@@ -263,20 +303,47 @@ export class AccessControl {
             ...(installation ? { installation } : {}),
           },
         ],
+        audit: this.record('user-created', username),
       });
     });
   }
   async changeUser(username: string, enabled?: boolean) {
+    if (enabled !== undefined) return this.updateUser(username, { enabled });
     return this.mutex.runExclusive(async () => {
       if (!this.state.users.some((u) => u.username === username))
         throw new Error('User not found');
-      const users =
-        enabled === undefined
-          ? this.state.users.filter((u) => u.username !== username)
-          : this.state.users.map((u) =>
-              u.username === username ? { ...u, enabled } : u,
-            );
-      await this.persist({ ...this.state, users });
+      const users = this.state.users.filter((u) => u.username !== username);
+      await this.persist({
+        ...this.state,
+        users,
+        audit: this.record('user-deleted', username),
+      });
+    });
+  }
+  async updateUser(username: string, input: z.infer<typeof UserUpdate>) {
+    const parsed = UserUpdate.parse(input);
+    if (parsed.installation && !this.options.issuer)
+      throw new Error('Remote users must be managed on the issuer');
+    return this.mutex.runExclusive(async () => {
+      const user = this.state.users.find((u) => u.username === username);
+      if (!user) throw new Error('User not found');
+      const next = { ...user };
+      if (parsed.enabled !== undefined) next.enabled = parsed.enabled;
+      if (parsed.installation !== undefined)
+        next.installation = parsed.installation ?? undefined;
+      if (parsed.password) {
+        next.salt = crypto.randomBytes(16).toString('hex');
+        next.hash = (
+          (await scrypt(parsed.password, next.salt, 64)) as Buffer
+        ).toString('hex');
+      }
+      await this.persist({
+        ...this.state,
+        users: this.state.users.map((u) =>
+          u.username === username ? next : u,
+        ),
+        audit: this.record('user-updated', username),
+      });
     });
   }
   licenses() {
@@ -298,6 +365,7 @@ export class AccessControl {
       this.persist({
         ...this.state,
         licenses: [...this.state.licenses, { payload, enabled: true }],
+        audit: this.record('license-issued', payload.customer),
       }),
     );
     return { payload, token: this.sign(payload) };
@@ -324,9 +392,22 @@ export class AccessControl {
         licenses: this.state.licenses.map((l) =>
           l.payload.id === id ? { payload, enabled } : l,
         ),
+        audit: this.record(
+          expiresAt
+            ? 'license-renewed'
+            : enabled
+              ? 'license-enabled'
+              : 'license-disabled',
+          entry.payload.customer,
+        ),
       });
       return { payload, token: this.sign(payload) };
     });
+  }
+  licenseCode(id: string) {
+    const entry = this.state.licenses.find((l) => l.payload.id === id);
+    if (!entry || !this.privateKey) throw new Error('License not found');
+    return { payload: entry.payload, token: this.sign(entry.payload) };
   }
   decode(token: string): LicenseData {
     const [body, signature, extra] = token.split('.');

@@ -1,5 +1,9 @@
 import { z } from 'zod/v4';
-import { LicenseInput, UserInput } from '../services/access/AccessControl.ts';
+import {
+  LicenseInput,
+  UserInput,
+  UserUpdate,
+} from '../services/access/AccessControl.ts';
 import type { AccessControl } from '../services/access/AccessControl.ts';
 import type { RouterPluginAsyncCallback } from '../types/serverType.js';
 
@@ -58,11 +62,11 @@ export const accessApi =
       {
         schema: {
           params: userParams,
-          body: z.object({ enabled: z.boolean() }),
+          body: UserUpdate,
         },
       },
       async (req) => {
-        await access.changeUser(req.params.username, req.body.enabled);
+        await access.updateUser(req.params.username, req.body);
         return { ok: true };
       },
     );
@@ -75,6 +79,12 @@ export const accessApi =
       },
     );
     app.get('/licenses', (_req, reply) => reply.send(access.licenses()));
+    app.get('/audit', (_req, reply) => reply.send(access.audit()));
+    app.get(
+      '/licenses/:id/code',
+      { schema: { params: z.object({ id: z.uuid() }) } },
+      (req) => access.licenseCode(req.params.id),
+    );
     app.get('/public-key', (_req, reply) =>
       reply.send({ publicKey: access.issuerPublicKey() ?? null }),
     );

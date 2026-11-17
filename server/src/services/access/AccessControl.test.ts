@@ -467,3 +467,162 @@ test('issuer disable and renewal cannot revoke an already-issued offline code', 
   await customer.activate(renewed.token);
   expect(customer.status().license?.validation).toBe('offline');
 });
+
+test('owner can reset password and rebind an account without keeping cached access', async () => {
+  const service = await issuer();
+  await service.addUser({
+    username: 'customer@example.com',
+    password: 'old-long-password',
+  });
+  expect(
+    await service.authenticate(
+      auth('customer@example.com', 'old-long-password'),
+    ),
+  ).toBe(true);
+  await service.updateUser('customer@example.com', {
+    password: 'new-long-password',
+    installation: 'b'.repeat(64),
+  });
+  expect(
+    await service.authenticate(
+      auth('customer@example.com', 'old-long-password'),
+    ),
+  ).toBe(false);
+  expect(
+    await service.authenticate(
+      auth('customer@example.com', 'new-long-password'),
+    ),
+  ).toBe(false);
+  expect(
+    await service.authenticate(
+      auth('customer@example.com', 'new-long-password'),
+      'b'.repeat(64),
+    ),
+  ).toBe(true);
+  await service.updateUser('customer@example.com', { installation: null });
+  expect(
+    await service.authenticate(
+      auth('customer@example.com', 'new-long-password'),
+    ),
+  ).toBe(true);
+  await expect(
+    service.updateUser('customer@example.com', { password: 'short' }),
+  ).rejects.toThrow();
+  await expect(service.updateUser('owner', { enabled: false })).rejects.toThrow(
+    'User not found',
+  );
+  expect((await issuer()).users()).toEqual([
+    { username: 'customer@example.com', enabled: true },
+  ]);
+  const persisted = await fs.readFile(
+    path.join(dir, 'issuer/access/state.json'),
+    'utf8',
+  );
+  expect(persisted).not.toContain('new-long-password');
+});
+test('reading a signed license code leaves status and audit untouched; changes are audited without secrets', async () => {
+  const service = await issuer();
+  const issued = await service.issue({
+    customer: 'Customer',
+    installation: 'b'.repeat(64),
+    expiresAt: future(),
+  });
+  await service.changeLicense(issued.payload.id, false);
+  const before = service.audit();
+  const read = service.licenseCode(issued.payload.id);
+  expect(read.token).toBe(issued.token);
+  expect(service.verifyIssued(read.token)).toBe(false);
+  expect(service.audit()).toEqual(before);
+  expect(before.map((entry) => entry.action)).toEqual([
+    'license-disabled',
+    'license-issued',
+  ]);
+  expect(JSON.stringify(before)).not.toContain(issued.token);
+  expect((await issuer()).audit()).toEqual(before);
+});
+test('legacy access state without audit is upgraded on load without losing users or keys', async () => {
+  const service = await issuer();
+  const key = service.issuerPublicKey();
+  await service.addUser({ username: 'old', password: 'long-legacy-password' });
+  const file = path.join(dir, 'issuer/access/state.json');
+  const state = JSON.parse(await fs.readFile(file, 'utf8'));
+  delete state.audit;
+  await fs.writeFile(file, JSON.stringify(state));
+  const reopened = await issuer();
+  expect(reopened.audit()).toEqual([]);
+  expect(reopened.issuerPublicKey()).toBe(key);
+  expect(await reopened.authenticate(auth('old', 'long-legacy-password'))).toBe(
+    true,
+  );
+});
+test('audit and code retrieval require owner; account patch validates reset fields', async () => {
+  const service = await issuer();
+  await service.addUser({
+    username: 'operator',
+    password: 'long-operator-password',
+  });
+  const issued = await service.issue({
+    customer: 'Client',
+    installation: 'c'.repeat(64),
+    expiresAt: future(),
+  });
+  const app = Fastify()
+    .setValidatorCompiler(validatorCompiler)
+    .setSerializerCompiler(serializerCompiler);
+  await app.register(accessApi(service), { prefix: '/api/access' });
+  const headers = { authorization: auth(owner.username, owner.password) };
+  try {
+    for (const url of [
+      '/api/access/audit',
+      `/api/access/licenses/${issued.payload.id}/code`,
+    ]) {
+      expect((await app.inject({ url })).statusCode).toBe(403);
+      expect(
+        (
+          await app.inject({
+            url,
+            headers: {
+              authorization: auth('operator', 'long-operator-password'),
+            },
+          })
+        ).statusCode,
+      ).toBe(403);
+      expect((await app.inject({ url, headers })).statusCode).toBe(200);
+    }
+    expect(
+      (
+        await app.inject({
+          method: 'PATCH',
+          url: '/api/access/users/operator',
+          headers,
+          payload: {},
+        })
+      ).statusCode,
+    ).toBe(400);
+    expect(
+      (
+        await app.inject({
+          method: 'PATCH',
+          url: '/api/access/users/operator',
+          headers,
+          payload: { password: 'short' },
+        })
+      ).statusCode,
+    ).toBe(400);
+    expect(
+      (
+        await app.inject({
+          method: 'PATCH',
+          url: '/api/access/users/operator',
+          headers,
+          payload: { password: 'reset-long-password' },
+        })
+      ).statusCode,
+    ).toBe(200);
+    expect(
+      await service.authenticate(auth('operator', 'reset-long-password')),
+    ).toBe(true);
+  } finally {
+    await app.close();
+  }
+});
