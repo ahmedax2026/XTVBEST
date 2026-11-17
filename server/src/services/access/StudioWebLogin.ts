@@ -66,10 +66,7 @@ export class StudioWebLogin {
         .code(401)
         .send({ error: 'Login required', loginUrl: '/web/' });
     return reply
-      .header(
-        'WWW-Authenticate',
-        'Basic realm="XBEST", charset="UTF-8"',
-      )
+      .header('WWW-Authenticate', 'Basic realm="XBEST", charset="UTF-8"')
       .code(401)
       .send('Authentication required');
   }
