@@ -368,7 +368,7 @@ jobs:
         shell: bash
         run: |
           sudo apt-get update
-          sudo apt-get install -y --no-install-recommends qemu-system-x86 cloud-image-utils
+          sudo apt-get install -y --no-install-recommends qemu-system-x86 qemu-utils cloud-image-utils
           archive=$(realpath "$(find preview -name 'XBEST-*.tar.gz' -print -quit)")
           smoke=$(realpath scripts/test-xbest-ubuntu-install.sh)
           cd "$RUNNER_TEMP"
@@ -386,7 +386,8 @@ jobs:
           sudo qemu-system-x86_64 "${accel[@]}" -daemonize -display none -serial file:focal-serial.log \
             -pidfile focal.pid -m 4096 -smp 2 -drive "file=$image,if=virtio,format=qcow2" \
             -drive file=seed.iso,media=cdrom,readonly=on \
-            -nic user,model=virtio-net-pci,hostfwd=tcp:127.0.0.1:22020-:22
+            -netdev user,id=net0,hostfwd=tcp:127.0.0.1:22020-:22 \
+            -device virtio-net-pci,netdev=net0,romfile=
           trap 'sudo kill "$(sudo cat focal.pid)" || true' EXIT
           ssh_args=(-i xbest-ci -o BatchMode=yes -o ConnectTimeout=3 -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile="$RUNNER_TEMP/focal-known-hosts")
           ready=0

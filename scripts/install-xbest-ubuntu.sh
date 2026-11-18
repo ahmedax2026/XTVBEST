@@ -8,6 +8,8 @@ die() { printf 'XBEST: %s\n' "$*" >&2; exit 1; }
 source /etc/os-release
 [[ $ID == ubuntu && $(uname -m) == x86_64 ]] || die 'Ubuntu x86-64 is required.'
 [[ -d /run/systemd/system ]] || die 'Run this on the Ubuntu server with systemd.'
+legacy_runtime=0
+if [[ $VERSION_ID == 20.04 ]]; then legacy_runtime=1; fi
 
 app=/opt/xbest-studio
 config=/etc/xbest-studio
@@ -51,7 +53,13 @@ for required in XBEST meilisearch ersatztv-channel install-xbest-ubuntu.sh; do
 done
 
 packages=()
-for command_package in ffmpeg:ffmpeg ffprobe:ffmpeg curl:curl openssl:openssl nginx:nginx ss:iproute2 netstat:net-tools vainfo:vainfo; do
+commands=(curl:curl openssl:openssl nginx:nginx ss:iproute2)
+if (( legacy_runtime )); then
+  commands+=(docker:docker.io)
+else
+  commands+=(ffmpeg:ffmpeg ffprobe:ffmpeg netstat:net-tools vainfo:vainfo)
+fi
+for command_package in "${commands[@]}"; do
   if ! command -v "${command_package%%:*}" >/dev/null; then
     package=${command_package#*:}
     [[ " ${packages[*]} " == *" $package "* ]] || packages+=("$package")
@@ -67,8 +75,20 @@ if (( ${#packages[@]} )); then
     rm /etc/nginx/sites-enabled/default
   fi
 fi
-ffmpeg -version >/dev/null
-ffprobe -version >/dev/null
+if (( legacy_runtime )); then
+  systemctl enable --now docker
+  if ! docker image inspect xbest-studio-runtime:ubuntu22 >/dev/null 2>&1; then
+    docker build -t xbest-studio-runtime:ubuntu22 - <<'DOCKERFILE'
+FROM ubuntu:22.04
+RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
+    ca-certificates ffmpeg fonts-dejavu-core net-tools vainfo \
+    && rm -rf /var/lib/apt/lists/*
+DOCKERFILE
+  fi
+else
+  ffmpeg -version >/dev/null
+  ffprobe -version >/dev/null
+fi
 
 if [[ -z $saved_port && -n $(ss -Hlt "sport = :$port") ]]; then
   die "Port $port is busy. Choose another with XBEST_HTTPS_PORT."
@@ -76,7 +96,6 @@ fi
 if ! systemctl is-active --quiet xbest-studio && [[ -n $(ss -Hlt "sport = :$internal_port") ]]; then
   die "Local port $internal_port is busy."
 fi
-
 
 if ! id xbest-studio >/dev/null 2>&1; then
   useradd --system --user-group --home-dir "$data" --shell /usr/sbin/nologin xbest-studio
@@ -125,22 +144,56 @@ if [[ ! -s "$config/panel.crt" || ! -s "$config/panel.key" ]]; then
   install -m 0644 "$stage/panel.crt" "$config/panel.crt"
 fi
 
+start="ExecStart=$app/current/XBEST"
+stop=
+docker_dependency=
+identity=$'User=xbest-studio\nGroup=xbest-studio'
+if (( legacy_runtime )); then
+  identity=
+  docker_dependency=$'Requires=docker.service\nAfter=docker.service'
+  docker_args="--rm --name xbest-studio-runtime --network host --security-opt no-new-privileges --cap-drop ALL"
+  docker_args+=" --user $(id -u xbest-studio):$(id -g xbest-studio)"
+  docker_args+=" --mount type=bind,src=$app/current,dst=$app/current,readonly"
+  docker_args+=" --mount type=bind,src=$data,dst=$data --workdir $app/current"
+  docker_args+=" --volume /etc/localtime:/etc/localtime:ro --env HOME=$data"
+  if [[ -d /dev/dri ]]; then
+    docker_args+=" --device /dev/dri"
+    for group in video render; do
+      if entry=$(getent group "$group"); then
+        IFS=: read -r _ _ gid _ <<< "$entry"
+        docker_args+=" --group-add $gid"
+      fi
+    done
+  fi
+  for name in TUNARR_DATABASE_PATH TUNARR_BIND_ADDR TUNARR_SERVER_PORT \
+    TUNARR_SERVER_TRUST_PROXY TUNARR_BASIC_AUTH_USER TUNARR_BASIC_AUTH_PASSWORD \
+    MEILI_DUMP_DIR XBEST_LICENSE_PUBLIC_KEY_FILE XBEST_LICENSE_SERVER_URL; do
+    docker_args+=" --env $name"
+  done
+  docker_path=$(command -v docker)
+  start="ExecStartPre=-$docker_path rm -f xbest-studio-runtime"
+  start+=$'\n'"ExecStart=$docker_path run $docker_args xbest-studio-runtime:ubuntu22 $app/current/XBEST"
+  stop="ExecStop=$docker_path stop --time 10 xbest-studio-runtime"
+fi
+
 cat > "$stage/xbest-studio.service" <<UNIT
 [Unit]
 Description=XBEST Channels Studio
 After=network.target
+$docker_dependency
 
 [Service]
-User=xbest-studio
-Group=xbest-studio
+$identity
 WorkingDirectory=$app/current
 Environment=TUNARR_DATABASE_PATH=$data
 Environment=TUNARR_BIND_ADDR=127.0.0.1
 Environment=TUNARR_SERVER_PORT=$internal_port
 Environment=TUNARR_SERVER_TRUST_PROXY=127.0.0.1
+Environment=MEILI_DUMP_DIR=$data/dumps
 EnvironmentFile=$config/credentials.env
 EnvironmentFile=-$config/options.env
-ExecStart=$app/current/XBEST
+$start
+$stop
 Restart=on-failure
 RestartSec=3
 NoNewPrivileges=true
