@@ -55,6 +55,7 @@ describe('releaseArchiveEntries', () => {
       'tunarr-v2026.11.1-linux-x64/meilisearch',
       'tunarr-v2026.11.1-linux-x64/ersatztv-channel',
       'tunarr-v2026.11.1-linux-x64/start-xbest.sh',
+      'tunarr-v2026.11.1-linux-x64/install-xbest-ubuntu.sh',
       'tunarr-v2026.11.1-linux-x64/XBEST-CUSTOMER-AR.md',
     ]);
   });
@@ -76,6 +77,9 @@ test('owner archives contain launchers while customer archives do not', () => {
     'XBEST-customer/start-xbest.ps1',
   );
   expect(customer.some((file) => file.name.includes('OWNER'))).toBe(false);
+  expect(customer.some((file) => file.name.includes('install-xbest'))).toBe(
+    false,
+  );
   expect(owner.map((file) => file.name)).toContain(
     'XBEST-OWNER/XBEST-OWNER.cmd',
   );

@@ -4,7 +4,12 @@ on:
   push:
     branches: [feature/xbest-studio]
   pull_request:
-    branches: [feature/xbest-studio, feature/xbest-cpu-gpu-auth, feature/xbest-live-monitor]
+    branches:
+      [
+        feature/xbest-studio,
+        feature/xbest-cpu-gpu-auth,
+        feature/xbest-live-monitor,
+      ]
   workflow_dispatch:
 
 permissions:
@@ -325,3 +330,65 @@ jobs:
           name: XBEST-owner-startup-evidence
           path: owner-evidence
           if-no-files-found: ignore
+
+  ubuntu-acceptance:
+    needs: package
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: XBEST-preview-linux-x64
+          path: preview
+      - name: Install the Linux archive and test the protected panel
+        shell: bash
+        run: |
+          mkdir extracted
+          archive=$(find preview -name 'XBEST-*.tar.gz' -print -quit)
+          tar -xzf "$archive" -C extracted
+          installer=$(find extracted -name install-xbest-ubuntu.sh -print -quit)
+          bash -n "$installer"
+          sudo apt-get update
+          sudo apt-get install -y ufw
+          sudo ufw --force enable
+          sudo bash "$installer" > "$RUNNER_TEMP/xbest-install.log"
+          systemctl is-enabled xbest-studio nginx
+          systemctl is-active xbest-studio nginx
+          sudo ufw status > "$RUNNER_TEMP/xbest-ufw.log"
+          grep -Eq '^8444/tcp +ALLOW' "$RUNNER_TEMP/xbest-ufw.log"
+          ss -Hlt 'sport = :18737' > "$RUNNER_TEMP/xbest-backend.log"
+          grep -F '127.0.0.1:18737' "$RUNNER_TEMP/xbest-backend.log"
+          sudo install -o "$(id -u)" -m 600 /etc/xbest-studio/panel.crt "$RUNNER_TEMP/xbest.crt"
+          base=https://127.0.0.1:8444
+          curl_tls=(curl -sS --cacert "$RUNNER_TEMP/xbest.crt")
+          test "$("${curl_tls[@]}" -o /dev/null -w '%{redirect_url}' "$base/")" = "$base/web/"
+          test "$("${curl_tls[@]}" -H 'Accept: text/html' -o login.html -w '%{http_code}' "$base/web/")" = 401
+          grep -F 'id="login"' login.html > /dev/null
+          password=$(sudo sed -n 's/^TUNARR_BASIC_AUTH_PASSWORD=//p' /etc/xbest-studio/credentials.env)
+          printf '::add-mask::%s\n' "$password"
+          printf '{"username":"admin","password":"%s"}' "$password" |
+            "${curl_tls[@]}" --fail -H 'Content-Type: application/json' -H "Origin: $base" \
+              --data-binary @- -D headers -c cookies "$base/auth/session"
+          grep -Ei '^set-cookie:.*; Secure' headers > /dev/null
+          "${curl_tls[@]}" --fail -b cookies "$base/web/" -o studio.html
+          grep -F '<title>XBEST</title>' studio.html > /dev/null
+          before=$(systemctl show xbest-studio -p MainPID --value)
+          sudo bash "$installer" > "$RUNNER_TEMP/xbest-reinstall.log"
+          test "$before" = "$(systemctl show xbest-studio -p MainPID --value)"
+          test "$password" = "$(sudo sed -n 's/^TUNARR_BASIC_AUTH_PASSWORD=//p' /etc/xbest-studio/credentials.env)"
+          sudo systemctl restart xbest-studio
+          for attempt in {1..45}; do
+            if [[ $("${curl_tls[@]}" -H 'Accept: text/html' -o login.html -w '%{http_code}' "$base/web/") == 401 ]]; then
+              grep -F 'id="login"' login.html > /dev/null
+              exit 0
+            fi
+            sleep 1
+          done
+          exit 1
+      - name: Report service errors
+        if: failure()
+        run: sudo journalctl -u xbest-studio -u nginx -n 100 --no-pager

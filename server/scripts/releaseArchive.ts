@@ -61,6 +61,10 @@ export function releaseArchiveEntries(
                   source: '../scripts/start-xbest.sh',
                   name: inFolder('start-xbest.sh'),
                 },
+                {
+                  source: '../scripts/install-xbest-ubuntu.sh',
+                  name: inFolder('install-xbest-ubuntu.sh'),
+                },
               ]),
           {
             source: '../docs/XBEST-CUSTOMER-AR.md',
