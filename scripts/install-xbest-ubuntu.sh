@@ -51,7 +51,7 @@ for required in XBEST meilisearch ersatztv-channel install-xbest-ubuntu.sh; do
 done
 
 packages=()
-for command_package in ffmpeg:ffmpeg ffprobe:ffmpeg curl:curl openssl:openssl nginx:nginx ss:iproute2; do
+for command_package in ffmpeg:ffmpeg ffprobe:ffmpeg curl:curl openssl:openssl nginx:nginx ss:iproute2 netstat:net-tools vainfo:vainfo; do
   if ! command -v "${command_package%%:*}" >/dev/null; then
     package=${command_package#*:}
     [[ " ${packages[*]} " == *" $package "* ]] || packages+=("$package")
@@ -133,7 +133,7 @@ After=network.target
 [Service]
 User=xbest-studio
 Group=xbest-studio
-WorkingDirectory=$data
+WorkingDirectory=$app/current
 Environment=TUNARR_DATABASE_PATH=$data
 Environment=TUNARR_BIND_ADDR=127.0.0.1
 Environment=TUNARR_SERVER_PORT=$internal_port
