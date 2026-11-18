@@ -340,6 +340,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     timeout-minutes: 15
     steps:
+      - uses: actions/checkout@v7
       - uses: actions/download-artifact@v4
         with:
           name: XBEST-preview-linux-x64
@@ -347,48 +348,61 @@ jobs:
       - name: Install the Linux archive and test the protected panel
         shell: bash
         run: |
-          mkdir extracted
           archive=$(find preview -name 'XBEST-*.tar.gz' -print -quit)
-          tar -xzf "$archive" -C extracted
-          installer=$(find extracted -name install-xbest-ubuntu.sh -print -quit)
-          bash -n "$installer"
-          sudo apt-get update
-          sudo apt-get install -y ufw
-          sudo ufw --force enable
-          sudo bash "$installer" > "$RUNNER_TEMP/xbest-install.log"
-          systemctl is-enabled xbest-studio nginx
-          systemctl is-active xbest-studio nginx
-          sudo ufw status > "$RUNNER_TEMP/xbest-ufw.log"
-          grep -Eq '^8444/tcp +ALLOW' "$RUNNER_TEMP/xbest-ufw.log"
-          ss -Hlt 'sport = :18737' > "$RUNNER_TEMP/xbest-backend.log"
-          grep -F '127.0.0.1:18737' "$RUNNER_TEMP/xbest-backend.log"
-          sudo install -o "$(id -u)" -m 600 /etc/xbest-studio/panel.crt "$RUNNER_TEMP/xbest.crt"
-          base=https://127.0.0.1:8444
-          curl_tls=(curl -sS --cacert "$RUNNER_TEMP/xbest.crt")
-          test "$("${curl_tls[@]}" -o /dev/null -w '%{redirect_url}' "$base/")" = "$base/web/"
-          test "$("${curl_tls[@]}" -H 'Accept: text/html' -o login.html -w '%{http_code}' "$base/web/")" = 401
-          grep -F 'id="login"' login.html > /dev/null
-          password=$(sudo sed -n 's/^TUNARR_BASIC_AUTH_PASSWORD=//p' /etc/xbest-studio/credentials.env)
-          printf '::add-mask::%s\n' "$password"
-          printf '{"username":"admin","password":"%s"}' "$password" |
-            "${curl_tls[@]}" --fail -H 'Content-Type: application/json' -H "Origin: $base" \
-              --data-binary @- -D headers -c cookies "$base/auth/session"
-          grep -Ei '^set-cookie:.*; Secure' headers > /dev/null
-          "${curl_tls[@]}" --fail -b cookies "$base/web/" -o studio.html
-          grep -F '<title>XBEST</title>' studio.html > /dev/null
-          before=$(systemctl show xbest-studio -p MainPID --value)
-          sudo bash "$installer" > "$RUNNER_TEMP/xbest-reinstall.log"
-          test "$before" = "$(systemctl show xbest-studio -p MainPID --value)"
-          test "$password" = "$(sudo sed -n 's/^TUNARR_BASIC_AUTH_PASSWORD=//p' /etc/xbest-studio/credentials.env)"
-          sudo systemctl restart xbest-studio
-          for attempt in {1..45}; do
-            if [[ $("${curl_tls[@]}" -H 'Accept: text/html' -o login.html -w '%{http_code}' "$base/web/") == 401 ]]; then
-              grep -F 'id="login"' login.html > /dev/null
-              exit 0
-            fi
-            sleep 1
-          done
-          exit 1
+          bash scripts/test-xbest-ubuntu-install.sh "$archive"
       - name: Report service errors
         if: failure()
         run: sudo journalctl -u xbest-studio -u nginx -n 100 --no-pager
+
+  ubuntu-20-acceptance:
+    needs: package
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v4
+        with:
+          name: XBEST-preview-linux-x64
+          path: preview
+      - name: Test the packaged installer in an Ubuntu 20.04 VM
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends qemu-system-x86 cloud-image-utils
+          archive=$(realpath "$(find preview -name 'XBEST-*.tar.gz' -print -quit)")
+          smoke=$(realpath scripts/test-xbest-ubuntu-install.sh)
+          cd "$RUNNER_TEMP"
+          cloud=https://cloud-images.ubuntu.com/releases/focal/release
+          image=ubuntu-20.04-server-cloudimg-amd64.img
+          curl -fsSLO "$cloud/$image"
+          curl -fsS "$cloud/SHA256SUMS" | grep -E "[ *]$image$" | sha256sum --check
+          qemu-img resize "$image" 12G
+          ssh-keygen -q -t ed25519 -N '' -f xbest-ci
+          printf '#cloud-config\nssh_authorized_keys:\n  - %s\n' "$(cat xbest-ci.pub)" > user-data
+          printf 'instance-id: xbest-ci\nlocal-hostname: xbest-ci\n' > meta-data
+          cloud-localds seed.iso user-data meta-data
+          accel=(-accel tcg -cpu max)
+          if [[ -e /dev/kvm ]]; then accel=(-accel kvm -cpu host); fi
+          sudo qemu-system-x86_64 "${accel[@]}" -daemonize -display none -serial file:focal-serial.log \
+            -pidfile focal.pid -m 4096 -smp 2 -drive "file=$image,if=virtio,format=qcow2" \
+            -drive file=seed.iso,media=cdrom,readonly=on \
+            -nic user,model=virtio-net-pci,hostfwd=tcp:127.0.0.1:22020-:22
+          trap 'sudo kill "$(sudo cat focal.pid)" || true' EXIT
+          ssh_args=(-i xbest-ci -o BatchMode=yes -o ConnectTimeout=3 -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile="$RUNNER_TEMP/focal-known-hosts")
+          ready=0
+          for attempt in {1..120}; do
+            if ssh "${ssh_args[@]}" -p 22020 ubuntu@127.0.0.1 true 2>/dev/null; then
+              ready=1
+              break
+            fi
+            sleep 2
+          done
+          if (( ! ready )); then
+            sudo tail -100 focal-serial.log
+            exit 1
+          fi
+          ssh "${ssh_args[@]}" -p 22020 ubuntu@127.0.0.1 'cloud-init status --wait'
+          scp "${ssh_args[@]}" -P 22020 "$archive" ubuntu@127.0.0.1:xbest.tar.gz
+          scp "${ssh_args[@]}" -P 22020 "$smoke" ubuntu@127.0.0.1:test-install.sh
+          ssh "${ssh_args[@]}" -p 22020 ubuntu@127.0.0.1 \
+            'bash test-install.sh xbest.tar.gz || { sudo journalctl -u xbest-studio -u nginx -n 100 --no-pager; exit 1; }'
