@@ -1,93 +1,88 @@
-import { useBrowserInfo } from '@/hooks/useBrowserInfo';
-import { Trans } from '@lingui/react/macro';
-import GitHub from '@mui/icons-material/GitHub';
-import Refresh from '@mui/icons-material/Refresh';
-import { Box, Button, Collapse, Stack, Typography } from '@mui/material';
-import { isError } from 'lodash-es';
-import { useMemo } from 'react';
-import errorImage from '../assets/error_this_is_fine.png';
-import { RotatingLoopIcon } from '../components/base/LoadingIcon';
-import { useVersion } from '../hooks/useVersion.tsx';
+import { ErrorOutline, Refresh, ContentCopy } from '@mui/icons-material';
+import { Alert, Box, Button, Stack, Typography } from '@mui/material';
+import { useState } from 'react';
+import { useSettings } from '../store/settings/selectors.ts';
 
-type Props = {
-  error: unknown;
-  resetRoute: () => void;
-};
-
-export function ErrorPage({ error }: Props) {
-  const browser = useBrowserInfo();
-  const { data: version, isLoading: versionLoading } = useVersion();
-  const stack = (isError(error) ? error.stack : '') ?? '';
-
-  const bugReportLink = useMemo(() => {
-    const url = new URL(`https://github.com/chrisbenincasa/tunarr/issues/new`);
-    let browserString = browser.getBrowserName();
-    if (browser.getBrowserVersion()) {
-      browserString += ` (${browser.getBrowserVersion()})`;
-    }
-    let osString = browser.getOSName();
-    if (browser.getOSVersion()) {
-      osString += ` (${browser.getOSVersion()})`;
-    }
-    url.searchParams.append('template', 'bug_report.yaml');
-    url.searchParams.append('browser', browserString);
-    url.searchParams.append('os', osString);
-    url.searchParams.append('version', version?.tunarr ?? '');
-    url.searchParams.append('logs', stack);
-    return url;
-  }, [browser, stack, version?.tunarr]);
-
-  const handleRefresh = () => {
-    location.reload();
-  };
-
+type Props = { error: unknown; resetRoute: () => void };
+export function ErrorPage({ error, resetRoute }: Props) {
+  const ar = useSettings().ui.i18n.locale === 'ar';
+  const text = (arabic: string, english: string) => (ar ? arabic : english);
+  const [copied, setCopied] = useState(false);
+  const [copyFailed, setCopyFailed] = useState(false);
   return (
-    <Box sx={{ width: '100%' }}>
-      <Box
-        sx={{ margin: 'auto', display: 'block', pl: 3 }}
-        component="img"
-        src={errorImage}
-      />
-      <div style={{ textAlign: 'center' }}>
-        <Typography variant="h2" sx={{ pb: 1 }}>
-          <Trans>Oops!</Trans>
-        </Typography>
-        <Typography>
-          <Trans>Looks like something went wrong.</Trans>
-        </Typography>
-      </div>
-      <Stack direction="row" sx={{ justifyContent: 'center' }} gap={2}>
+    <Box
+      sx={{
+        mx: 'auto',
+        my: 6,
+        p: { xs: 3, md: 6 },
+        maxWidth: 680,
+        border: '1px solid',
+        borderColor: 'divider',
+        borderRadius: '18px',
+        bgcolor: 'background.paper',
+        textAlign: 'center',
+      }}
+    >
+      <ErrorOutline sx={{ color: 'primary.main', fontSize: 48, mb: 2 }} />
+      <Typography
+        sx={{
+          color: 'primary.main',
+          letterSpacing: 2,
+          fontSize: 10,
+          fontWeight: 800,
+        }}
+      >
+        XBEST CHANNELS STUDIO
+      </Typography>
+      <Typography component="h1" sx={{ fontSize: 26, fontWeight: 800, mt: 2 }}>
+        {text('تعذر فتح هذه الصفحة', 'This page could not be opened')}
+      </Typography>
+      <Typography sx={{ color: 'text.secondary', lineHeight: 1.9, my: 2 }}>
+        {text(
+          'جرّب تحميلها مرة أخرى. يمكنك نسخ تقرير الخطأ لمراجعته مع مسؤول البرنامج.',
+          'Try loading it again. You can copy an error report to review with your administrator.',
+        )}
+      </Typography>
+      <Stack direction="row" gap={1.5} justifyContent="center" flexWrap="wrap">
         <Button
-          onClick={handleRefresh}
+          onClick={resetRoute}
           variant="contained"
           startIcon={<Refresh />}
         >
-          <Trans>Refresh Page</Trans>
+          {text('إعادة المحاولة', 'Retry')}
         </Button>
         <Button
-          component="a"
-          href={bugReportLink.toString()}
-          target="_blank"
-          variant="contained"
-          startIcon={versionLoading ? <RotatingLoopIcon /> : <GitHub />}
-          disabled={versionLoading}
+          variant="outlined"
+          startIcon={<ContentCopy />}
+          onClick={async () => {
+            try {
+              await navigator.clipboard.writeText(
+                error instanceof Error
+                  ? `${error.name}: ${error.message}\n${error.stack ?? ''}`
+                  : String(error),
+              );
+              setCopied(true);
+              setCopyFailed(false);
+            } catch {
+              setCopyFailed(true);
+            }
+          }}
         >
-          {versionLoading ? (
-            <Trans>Generating Bug Report Link...</Trans>
-          ) : (
-            <Trans>File a Bug Report</Trans>
-          )}
+          {text('نسخ تقرير الخطأ', 'Copy error report')}
         </Button>
       </Stack>
-      {stack && (
-        <Collapse in={true}>
-          <Box
-            component="pre"
-            sx={{ width: '100%', overflowX: 'scroll', p: 1 }}
-          >
-            {stack}
-          </Box>
-        </Collapse>
+      {copied && (
+        <Alert severity="success" sx={{ mt: 2 }}>
+          {text('تم نسخ التقرير', 'Report copied')}
+        </Alert>
+      )}
+      {copyFailed && (
+        <Alert severity="error" sx={{ mt: 2 }}>
+          {text(
+            'تعذر النسخ. اسمح بالوصول للحافظة وحاول مجددًا.',
+            'Could not copy. Allow clipboard access and try again.',
+          )}
+        </Alert>
       )}
     </Box>
   );

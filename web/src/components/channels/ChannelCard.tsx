@@ -1,7 +1,7 @@
 import { betterHumanize } from '@/helpers/dayjs.ts';
 import { useThemeTokens } from '@/hooks/useTunarrTheme.ts';
 import { Plural, Trans, useLingui } from '@lingui/react/macro';
-import { PlayArrow } from '@mui/icons-material';
+import { PlayArrow, Tune, LiveTv } from '@mui/icons-material';
 import {
   Box,
   Chip,
@@ -10,7 +10,6 @@ import {
   Typography,
   alpha,
 } from '@mui/material';
-import { common } from '@mui/material/colors';
 import type { Channel } from '@tunarr/types';
 import dayjs from 'dayjs';
 import { type ReactNode, useState } from 'react';
@@ -38,21 +37,14 @@ export type ChannelCardChannel = Pick<
   | 'onDemand'
   | 'streamMode'
 >;
-
 export type ChannelCardProps = {
   channel: ChannelCardChannel;
   status: ChannelStatus;
   nowPlaying?: NowPlayingSummary;
   transcodeName?: string;
   onOpenSessions?: () => void;
-
-  // Overflow menu button for the channel's other actions.
   menu?: ReactNode;
 };
-
-// Text over artwork sits on a dark scrim, so it stays white in both schemes.
-const scrim = alpha(common.black, 0.55);
-const BLANK_LINE = '\u00a0';
 
 export const ChannelCard = ({
   channel,
@@ -63,21 +55,16 @@ export const ChannelCard = ({
   menu,
 }: ChannelCardProps) => {
   const { t } = useLingui();
-  const { theme, tokens, dense } = useThemeTokens();
+  const { tokens } = useThemeTokens();
   const [failedArtUrl, setFailedArtUrl] = useState<string>();
-  const artworkUrl =
+  const artwork =
     nowPlaying?.artworkUrl === failedArtUrl
       ? undefined
       : nowPlaying?.artworkUrl;
-  const heroHeight = dense ? 104 : 140;
-
-  const nowTitle =
+  const title =
     nowPlaying?.kind === 'redirect'
       ? t`Redirect to channel ${nowPlaying.redirectChannel}`
       : nowPlaying?.title;
-  const hasNowTitle = isNonEmptyString(nowTitle);
-  const nowDetail = nowPlaying?.detail;
-
   return (
     <Box
       component="article"
@@ -86,32 +73,68 @@ export const ChannelCard = ({
         width: '100%',
         display: 'flex',
         flexDirection: 'column',
+        border: '1px solid',
+        borderColor: 'divider',
+        borderRadius: '14px',
+        bgcolor: 'background.paper',
         overflow: 'hidden',
-        backgroundColor: tokens.surface,
-        border: `1px solid ${tokens.border}`,
-        borderRadius: `${theme.sizes.radiusCard}px`,
+        transition: 'border-color .2s',
+        '&:hover': { borderColor: 'primary.main' },
       }}
     >
+      <Stack
+        direction="row"
+        justifyContent="space-between"
+        alignItems="center"
+        sx={{ px: 2, py: 1.5, gap: 1 }}
+      >
+        <Stack direction="row" gap={1} alignItems="center">
+          <Box
+            sx={{
+              bgcolor: 'action.hover',
+              width: 36,
+              height: 36,
+              display: 'grid',
+              placeItems: 'center',
+              borderRadius: '8px',
+            }}
+          >
+            <ChannelIconDisplay
+              icon={channel.icon}
+              style={{ width: 28, height: 28 }}
+              imgStyle={{ maxWidth: 28, maxHeight: 28 }}
+            />
+          </Box>
+          <Typography
+            variant="mono"
+            sx={{ fontSize: 11, color: 'text.secondary', fontWeight: 700 }}
+          >
+            CH {String(channel.number).padStart(2, '0')}
+          </Typography>
+        </Stack>
+        <Stack direction="row" alignItems="center" gap={0.5}>
+          <ChannelStatusPill status={status} onOpenSessions={onOpenSessions} />
+          {menu}
+        </Stack>
+      </Stack>
       <Box
         sx={{
           position: 'relative',
-          minHeight: heroHeight,
+          minHeight: 170,
+          bgcolor: tokens.surfaceRaised,
           display: 'flex',
-          flexDirection: 'column',
-          justifyContent: 'space-between',
-          gap: 1,
-          p: dense ? 1 : 1.75,
-          backgroundColor: tokens.surfaceRaised,
-          color: common.white,
+          alignItems: 'flex-end',
+          p: 2.5,
+          color: '#fff',
         }}
       >
-        {artworkUrl ? (
+        {artwork ? (
           <Box
             component="img"
-            src={artworkUrl}
             alt=""
+            src={artwork}
             loading="lazy"
-            onError={() => setFailedArtUrl(artworkUrl)}
+            onError={() => setFailedArtUrl(artwork)}
             sx={{
               position: 'absolute',
               inset: 0,
@@ -128,109 +151,57 @@ export const ChannelCard = ({
               inset: 0,
               display: 'grid',
               placeItems: 'center',
-              opacity: 0.35,
+              background: `linear-gradient(130deg, ${tokens.surfaceRaised}, ${alpha(tokens.accent, 0.18)})`,
+              backgroundSize: 'cover',
             }}
           >
-            <ChannelIconDisplay
-              icon={channel.icon}
-              imgStyle={{ maxHeight: heroHeight / 2, maxWidth: '50%' }}
-              style={{ height: heroHeight / 2 }}
-            />
+            <LiveTv sx={{ fontSize: 80, opacity: 0.14 }} />
           </Box>
         )}
-
-        <Stack
-          direction="row"
-          justifyContent="space-between"
-          alignItems="center"
-          sx={{ position: 'relative' }}
-        >
-          <Box
-            sx={{
-              minWidth: dense ? 34 : 44,
-              height: dense ? 34 : 44,
-              px: 1,
-              boxSizing: 'border-box',
-              display: 'grid',
-              placeItems: 'center',
-              borderRadius: `${theme.sizes.radiusControl}px`,
-              backgroundColor: scrim,
-            }}
-          >
-            <MonoText sx={{ fontWeight: 600, fontSize: dense ? 15 : 18 }}>
-              {channel.number}
-            </MonoText>
-          </Box>
-          <Box sx={{ borderRadius: 999, backgroundColor: scrim }}>
-            <ChannelStatusPill
-              status={status}
-              onOpenSessions={onOpenSessions}
-            />
-          </Box>
-        </Stack>
-
-        {/* The box keeps all three lines, even when they are blank, so every
-            card's artwork area has the same height. */}
         <Box
-          aria-hidden={!hasNowTitle}
+          aria-hidden
           sx={{
-            visibility: hasNowTitle ? 'visible' : 'hidden',
+            position: 'absolute',
+            inset: 0,
+            background: 'linear-gradient(0deg, #08090fef, #08090f15)',
+          }}
+        />
+        <Box
+          sx={{
             position: 'relative',
-            alignSelf: 'flex-start',
-            maxWidth: '100%',
             minWidth: 0,
-            px: 1.5,
-            py: 1,
-            borderRadius: `${theme.sizes.radiusSmall}px`,
-            backgroundColor: scrim,
+            width: '100%',
+            borderInlineStart: '3px solid',
+            borderColor: 'primary.main',
+            paddingInlineStart: 1.5,
           }}
         >
           <Typography
             sx={{
-              fontSize: 11,
+              fontSize: 9,
+              letterSpacing: 1.2,
               fontWeight: 700,
-              textTransform: 'uppercase',
-              letterSpacing: '0.08em',
-              opacity: 0.85,
+              opacity: 0.7,
             }}
           >
-            {hasNowTitle ? <Trans>Now playing</Trans> : BLANK_LINE}
+            <Trans>Now playing</Trans>
           </Typography>
-          <Typography
-            noWrap
-            sx={{ fontWeight: 700, fontSize: dense ? 14 : 15 }}
-          >
-            {hasNowTitle ? nowTitle : BLANK_LINE}
+          <Typography noWrap sx={{ fontSize: 16, fontWeight: 800, mt: 0.5 }}>
+            {isNonEmptyString(title) ? title : '—'}
           </Typography>
-          <Typography noWrap sx={{ fontSize: 12, opacity: 0.85 }}>
-            {isNonEmptyString(nowDetail) ? nowDetail : BLANK_LINE}
+          <Typography noWrap sx={{ fontSize: 11, opacity: 0.7, minHeight: 17 }}>
+            {nowPlaying?.detail ?? ' '}
           </Typography>
         </Box>
       </Box>
-
       <LinearProgress
         variant="determinate"
         value={(nowPlaying?.progress ?? 0) * 100}
         aria-label={t`Program progress`}
-        sx={{
-          height: 3,
-          borderRadius: 0,
-          backgroundColor: tokens.borderStrong,
-        }}
+        sx={{ height: 3, borderRadius: 0, bgcolor: 'divider' }}
       />
-
-      <Stack
-        gap={dense ? 0.75 : 1.25}
-        sx={{ flex: 1, p: dense ? 1.25 : 2, pt: dense ? 1 : 1.75 }}
-      >
-        <Typography
-          variant="h2"
-          sx={{
-            fontSize: dense ? 15 : 17,
-            fontWeight: 700,
-            overflowWrap: 'anywhere',
-          }}
-        >
+      <Stack gap={1.5} sx={{ p: 2.5, flex: 1 }}>
+        <Typography component="h2" sx={{ fontSize: 18, fontWeight: 800 }}>
           <RouterLink
             to="/channels/$channelId"
             params={{ channelId: channel.id }}
@@ -240,25 +211,35 @@ export const ChannelCard = ({
             {channel.name}
           </RouterLink>
         </Typography>
-
-        <Typography sx={{ color: tokens.textMuted, fontSize: 13 }}>
-          <MonoText>{channel.programCount}</MonoText>{' '}
-          <Plural value={channel.programCount} one="program" other="programs" />{' '}
-          ·{' '}
+        <Stack
+          direction="row"
+          justifyContent="space-between"
+          gap={1}
+          sx={{ color: 'text.secondary', fontSize: 11 }}
+        >
+          <span>
+            <MonoText>{channel.programCount}</MonoText>{' '}
+            <Plural
+              value={channel.programCount}
+              one="program"
+              other="programs"
+            />
+          </span>
           <MonoText>
             {betterHumanize(dayjs.duration(channel.duration), {
               style: 'short',
             })}
           </MonoText>
-        </Typography>
-
+        </Stack>
         <Stack direction="row" gap={0.75} flexWrap="wrap">
           <Chip
             size="small"
+            variant="outlined"
             label={streamModeLabel(channel.streamMode)}
-            sx={{ fontFamily: theme.typography.mono.fontFamily }}
           />
-          {transcodeName && <Chip size="small" label={transcodeName} />}
+          {transcodeName && (
+            <Chip size="small" variant="outlined" label={transcodeName} />
+          )}
           {channel.stealth && (
             <Chip size="small" color="warning" label={t`Stealth`} />
           )}
@@ -266,13 +247,13 @@ export const ChannelCard = ({
             <Chip size="small" color="info" label={t`On-Demand`} />
           )}
         </Stack>
-
-        <Stack direction="row" gap={1} sx={{ mt: 'auto', pt: 0.5 }}>
+        <Stack direction="row" gap={1} sx={{ mt: 'auto', pt: 1 }}>
           <RouterButtonLink
             to="/channels/$channelId/watch"
             params={{ channelId: channel.id }}
-            variant="outlined"
+            variant="contained"
             startIcon={<PlayArrow />}
+            size="small"
             sx={{ flex: 1 }}
           >
             <Trans>Watch</Trans>
@@ -281,11 +262,12 @@ export const ChannelCard = ({
             to="/channels/$channelId/programming"
             params={{ channelId: channel.id }}
             variant="outlined"
-            sx={{ flex: 1 }}
+            startIcon={<Tune />}
+            size="small"
+            sx={{ flex: 1, color: 'text.primary', borderColor: 'divider' }}
           >
             <Trans>Programming</Trans>
           </RouterButtonLink>
-          {menu}
         </Stack>
       </Stack>
     </Box>

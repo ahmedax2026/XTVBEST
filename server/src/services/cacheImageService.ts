@@ -1,7 +1,11 @@
 import type { CachedImage } from '@/db/schema/CachedImage.js';
 import { InjectLogger } from '@/util/inject.js';
 import type { Logger } from '@/util/logging/LoggerFactory.js';
-import { outboundRequestGuard } from '@/util/outboundRequests.js';
+import {
+  outboundRequestGuard,
+  checkOutboundUrl,
+  BlockedOutboundUrlError,
+} from '@/util/outboundRequests.js';
 import type { AxiosHeaders } from 'axios';
 import axios from 'axios';
 import type { FastifyReply } from 'fastify';
@@ -32,6 +36,8 @@ export async function downloadImageToFile(
   path: string,
   maxBytes: number = MaxImageBytes,
 ): Promise<string | undefined> {
+  const rejection = await checkOutboundUrl(url);
+  if (rejection) throw new BlockedOutboundUrlError(rejection);
   const response = await axios.request<Readable>({
     method: 'get',
     url,

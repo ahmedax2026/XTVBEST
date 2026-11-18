@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useSnackbar } from 'notistack';
+import { useSettings } from '../../store/settings/selectors.ts';
 import type { SubmitHandler } from 'react-hook-form';
 import { Controller, useForm } from 'react-hook-form';
 import {
@@ -38,6 +39,41 @@ type MetaEntry = {
   envOverride: boolean;
 };
 
+const arabicFeatureHelp: Record<string, [string, string]> = {
+  proxyArtwork: [
+    'تمرير الصور عبر السيرفر',
+    'يجلب XBEST الصور بدلًا من اتصال المشغل المباشر بمصدر الوسائط.',
+  ],
+  tonemapEnabled: [
+    'تحويل ألوان HDR',
+    'تحويل HDR إلى SDR أثناء تحويل الفيديو باستخدام تسريع الهاردوير.',
+  ],
+  webvttSidecarEnabled: [
+    'ملفات ترجمة WebVTT',
+    'إنشاء ملفات ترجمة منفصلة أثناء البث.',
+  ],
+  xmltvCreditImagesEnabled: [
+    'صور طاقم العمل في XMLTV',
+    'إضافة صور الأشخاص لدليل البرامج. يلزم إعادة إنشاء الدليل.',
+  ],
+  disableSearchSnapshotInBackup: [
+    'استبعاد لقطة البحث من النسخ الاحتياطي',
+    'عدم تضمين لقطة فهرس البحث في النسخة الاحتياطية لقاعدة البيانات.',
+  ],
+  disableVulkan: [
+    'تعطيل Vulkan مع NVIDIA',
+    'تعطيل معالجة Vulkan ضمن مسار تسريع كارت الشاشة.',
+  ],
+  disableVaapiPad: [
+    'تعطيل المحاذاة باستخدام VAAPI',
+    'تعطيل إضافة الحواف المسرّعة في مسار VAAPI.',
+  ],
+  ersatzTvNextEnabled: [
+    'محرك البث الإضافي التجريبي',
+    'تطبيق المحرك الإضافي على جميع القنوات. اتركه معطلًا لاختيار المحرك لكل قناة على حدة.',
+  ],
+};
+
 function FlagSection({
   title,
   flags,
@@ -47,6 +83,7 @@ function FlagSection({
   flags: MetaEntry[];
   control: ReturnType<typeof useForm<FlagFormValues>>['control'];
 }) {
+  const ar = useSettings().ui.i18n.locale === 'ar';
   if (flags.length === 0) return null;
 
   return (
@@ -63,7 +100,11 @@ function FlagSection({
                 control={control}
                 render={({ field }) => (
                   <FormControlLabel
-                    label={meta.displayName}
+                    label={
+                      ar
+                        ? (arabicFeatureHelp[meta.key]?.[0] ?? meta.displayName)
+                        : meta.displayName
+                    }
                     control={
                       <Switch
                         {...field}
@@ -81,7 +122,11 @@ function FlagSection({
                 />
               )}
             </Stack>
-            <FormHelperText sx={{ ml: 0 }}>{meta.description}</FormHelperText>
+            <FormHelperText sx={{ ml: 0 }}>
+              {ar
+                ? (arabicFeatureHelp[meta.key]?.[1] ?? meta.description)
+                : meta.description}
+            </FormHelperText>
           </FormControl>
         ))}
       </Stack>

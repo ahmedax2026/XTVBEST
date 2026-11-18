@@ -28,7 +28,7 @@ export type UpdateXmlTvTaskRequest = z.infer<typeof UpdateXmlTvTaskRequest>;
 
 @injectable()
 @taskDef({
-  description: 'Generates Tunarr guide data and writes an updated EPG',
+  description: 'Generates XBEST guide data and writes an updated EPG',
   schema: UpdateXmlTvTaskRequest,
 })
 export class UpdateXmlTvTask extends Task2<typeof UpdateXmlTvTaskRequest> {

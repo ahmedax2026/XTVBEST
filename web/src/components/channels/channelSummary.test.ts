@@ -1,3 +1,4 @@
+import { channelStreamUrl, programCountdown } from './channelSummary.ts';
 import type { ChannelSession, TvGuideProgram } from '@tunarr/types';
 import { describe, expect, test } from 'vitest';
 import {
@@ -251,5 +252,34 @@ describe('channelsM3uUrl', () => {
     expect(channelsM3uUrl('http://tunarr.test/api/channels.m3u')).toBe(
       'http://tunarr.test/api/channels.m3u?download=true',
     );
+  });
+});
+
+describe('stable channel stream URL', () => {
+  test('uses the UUID regardless of channel name or number', () => {
+    expect(channelStreamUrl('https://stream.test/', 'a-channel-id')).toBe(
+      'https://stream.test/stream/channels/a-channel-id.m3u8',
+    );
+    expect(channelStreamUrl('https://stream.test///', 'a-channel-id')).toBe(
+      'https://stream.test/stream/channels/a-channel-id.m3u8',
+    );
+  });
+  test('uses the current origin for an unconfigured backend and retains a proxy path', () => {
+    expect(channelStreamUrl('', 'id')).toBe(
+      `${window.location.origin}/stream/channels/id.m3u8`,
+    );
+    expect(channelStreamUrl('https://stream.test/studio/', 'id')).toBe(
+      'https://stream.test/studio/stream/channels/id.m3u8',
+    );
+  });
+});
+
+describe('program countdown', () => {
+  test('keeps hours beyond 24, rounds partial seconds and clamps ended programs', () => {
+    expect(programCountdown(90_061_001, 0)).toBe('25:01:02');
+    expect(programCountdown(3_661_000, 0)).toBe('01:01:01');
+    expect(programCountdown(500, 0)).toBe('00:00:01');
+    expect(programCountdown(0, 500)).toBe('00:00:00');
+    expect(programCountdown(Number.NaN, 0)).toBe('00:00:00');
   });
 });

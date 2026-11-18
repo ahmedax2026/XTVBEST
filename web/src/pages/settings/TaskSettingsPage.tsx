@@ -247,7 +247,7 @@ export default function TaskSettingsPage() {
         </Typography>
         <Typography>
           <Trans>
-            Tunarr runs various tasks, sometimes on a schedule, for background
+            XBest runs various tasks, sometimes on a schedule, for background
             operations.
           </Trans>
         </Typography>

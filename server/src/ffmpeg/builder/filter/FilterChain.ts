@@ -5,5 +5,6 @@ export class FilterChain {
   videoFilterSteps: HasFilterOption[] = [];
   subtitleOverlayFilterSteps: FilterOption[] = [];
   watermarkOverlayFilterSteps: FilterOption[] = [];
+  presentationFilterSteps: FilterOption[] = [];
   pixelFormatFilterSteps: HasFilterOption[] = [];
 }

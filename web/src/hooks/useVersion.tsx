@@ -42,9 +42,9 @@ export const useVersion = (
           </strong>
           <br />
           <Trans>
-            The loaded version of the Tunarr UI does not match the server.
-            Reload the browser to get the latest. If this message persists,
-            clear your browser cache and reload.
+            The loaded version of the XBest UI does not match the server. Reload
+            the browser to get the latest. If this message persists, clear your
+            browser cache and reload.
           </Trans>
           <br />
           <Trans>

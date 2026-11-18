@@ -15,6 +15,7 @@ import type { ProgramType } from '../schema/Program.ts';
 type BaseStreamLineupItem = {
   streamDuration: number;
   startOffset?: number;
+  scheduleElapsedMs?: number;
   programBeginMs: number;
   duration: number;
 };
@@ -90,6 +91,7 @@ export type MinimalPlexBackedStreamLineupItem = SpecificProgramSourceOrmType<
 export type OfflineStreamLineupItem = BaseStreamLineupItem & {
   type: 'offline';
   duration: number;
+  studioBumper?: boolean;
   fillerConfig?: OfflineFillerConfig;
 };
 

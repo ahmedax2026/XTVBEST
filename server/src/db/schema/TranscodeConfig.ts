@@ -130,6 +130,7 @@ export const TranscodeConfigColumns: (keyof TranscodeConfigTable)[] = [
   'errorScreen',
   'errorScreenAudio',
   'hardwareAccelerationMode',
+  'autoHardwareAcceleration',
   'isDefault',
   'name',
   'normalizeFrameRate',
@@ -161,6 +162,7 @@ export const TranscodeConfig = sqliteTable(
     hardwareAccelerationMode: text({
       enum: HardwareAccelerationModes,
     }).notNull(),
+    autoHardwareAcceleration: integer({ mode: 'boolean' }).default(false),
     vaapiDriver: text({ enum: VaapiDrivers }).notNull().default('system'),
     vaapiDevice: text(),
     resolution: text({ mode: 'json' }).$type<Resolution>().notNull(),

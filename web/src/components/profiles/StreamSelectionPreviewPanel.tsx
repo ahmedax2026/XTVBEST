@@ -346,7 +346,7 @@ function PreviewResults({
               display="block"
             >
               <Trans>
-                Troubleshoot shows an embedded text subtitle only after Tunarr
+                Troubleshoot shows an embedded text subtitle only after XBest
                 has extracted it, so it can report no subtitle until then.
               </Trans>
             </Typography>
@@ -355,7 +355,7 @@ function PreviewResults({
       ) : (
         <Alert severity="info">
           <Trans>
-            No rule matched. On a real stream, Tunarr would move on to the next
+            No rule matched. On a real stream, XBest would move on to the next
             profile: the source, then the channel, then the default profile,
             then the built-in profile.
           </Trans>

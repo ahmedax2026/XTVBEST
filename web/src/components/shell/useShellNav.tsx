@@ -1,3 +1,4 @@
+import { useSettings } from '../../store/settings/selectors.ts';
 import type {
   ShellNav,
   ShellNavBadge,
@@ -7,6 +8,7 @@ import { useSystemHealthChecks } from '@/hooks/useSystemHealthChecks.ts';
 import { useLingui } from '@lingui/react/macro';
 import {
   Computer,
+  DashboardOutlined,
   Home,
   Settings,
   SettingsRemote,
@@ -36,6 +38,7 @@ const useHealthBadge = (): ShellNavBadge | undefined => {
 // The app's navigation tree. A new top-level section, such as Schedules, is
 // one more entry in `sections`.
 export const useShellNav = (): ShellNav => {
+  const ar = useSettings().ui.i18n.locale === 'ar';
   const { t } = useLingui();
   const onboardingComplete = useOnboardingComplete();
   const healthBadge = useHealthBadge();
@@ -43,6 +46,13 @@ export const useShellNav = (): ShellNav => {
   return useMemo<ShellNav>(
     () => ({
       sections: [
+        {
+          id: 'dashboard',
+          label: ar ? 'لوحة الاستوديو' : 'Studio overview',
+          to: '/',
+          icon: <DashboardOutlined />,
+          pages: [],
+        },
         {
           id: 'welcome',
           label: t`Welcome`,
@@ -57,7 +67,6 @@ export const useShellNav = (): ShellNav => {
           to: '/guide',
           icon: <Tv />,
           pages: [],
-          alsoMatches: ['/'],
         },
         {
           id: 'channels',
@@ -138,6 +147,11 @@ export const useShellNav = (): ShellNav => {
         alsoMatches: ['/settings'],
         pages: [
           { id: 'general', label: t`General`, to: '/settings/general' },
+          {
+            id: 'access',
+            label: ar ? 'اليوزرات والليسانسات' : 'Users and licenses',
+            to: '/settings/access',
+          },
           { id: 'sources', label: t`Sources`, to: '/settings/sources' },
           { id: 'xmltv', label: t`XMLTV`, to: '/settings/xmltv' },
           { id: 'ffmpeg', label: t`FFmpeg`, to: '/settings/ffmpeg' },
@@ -147,6 +161,6 @@ export const useShellNav = (): ShellNav => {
         ],
       },
     }),
-    [healthBadge, onboardingComplete, t],
+    [ar, healthBadge, onboardingComplete, t],
   );
 };

@@ -1014,6 +1014,9 @@ describe('the resolver silence watchdog', () => {
 
     await vi.waitFor(() => {
       expect(killed).toHaveBeenCalled();
+      // Killing starts async workspace cleanup. Wait for it before afterEach
+      // removes the same directory; Windows cannot unlink an open workspace.
+      expect(session.state).toBe('stopped');
     });
   });
 

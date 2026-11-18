@@ -267,7 +267,7 @@ type AgentWithCreateConnection = {
   ) => unknown;
 };
 
-function guardAgentConnections<T extends http.Agent>(agent: T): T {
+export function guardAgentConnections<T extends http.Agent>(agent: T): T {
   const target = agent as T & AgentWithCreateConnection;
   // bind() is untyped here (strictBindCallApply is off for this package), so the
   // bound function is narrowed back to the signature declared above.

@@ -37,7 +37,7 @@ export class TunarrWorker {
   }
 
   start() {
-    this.logger.info('Tunarr worker started');
+    this.logger.info('XBEST worker started');
     parentPort?.postMessage({
       type: 'event',
       eventType: 'started',

@@ -22,7 +22,16 @@ export const PageHeader = ({
       alignItems={{ xs: 'flex-start', sm: 'flex-end' }}
       justifyContent="space-between"
       gap={2}
-      sx={{ mb: 3 }}
+      sx={{
+        mb: 3,
+        p: { xs: 2.5, md: 3 },
+        border: '1px solid',
+        borderColor: 'divider',
+        borderInlineStart: '3px solid',
+        borderInlineStartColor: (theme) => theme.palette.primary.main,
+        borderRadius: '14px',
+        bgcolor: 'background.paper',
+      }}
     >
       <Box sx={{ minWidth: 0 }}>
         {eyebrow && (

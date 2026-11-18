@@ -424,8 +424,7 @@ describe('ProgramStreamDetailsFetcher', () => {
   });
 
   describe('getStream picks a placeholder image for audio-only programs', () => {
-    const GenericMusicScreen =
-      'http://localhost:8000/images/generic-music-screen.png';
+    const GenericMusicScreen = 'http://localhost:8000/images/xbest-music.png';
 
     function makeAudioOnlyProgram(): ProgramWithRelationsOrm {
       const program = makeProgram('local', '');

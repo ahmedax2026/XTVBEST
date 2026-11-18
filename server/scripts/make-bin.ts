@@ -1,3 +1,5 @@
+import { releaseChecksums } from './releaseChecksums.ts';
+import { copyCustomerAssets } from './customerAssets.ts';
 import dotenv from '@dotenvx/dotenvx';
 dotenv.config({ debug: false, quiet: true, ignore: ['MISSING_ENV_FILE'] });
 
@@ -7,6 +9,8 @@ import retry from 'async-retry';
 import axios from 'axios';
 import nodeAbi from 'node-abi';
 import { createWriteStream } from 'node:fs';
+import { execFile } from 'node:child_process';
+import { promisify } from 'node:util';
 import fs from 'node:fs/promises';
 import path from 'node:path';
 import stream from 'node:stream';
@@ -98,7 +102,7 @@ const args = await yargs(hideBin(process.argv))
 !(await fileExists('./bin')) && (await fs.mkdir('./bin'));
 
 if (args.clean) {
-  await rimraf('./bin/tunarr*', { glob: true });
+  await rimraf('./bin/XBEST*', { glob: true });
 }
 
 (await fileExists('./dist/web')) &&
@@ -189,7 +193,7 @@ for (const arch of args.target) {
       });
 
       // Move the dist directory over to the working directory
-      await fs.cp('./dist', `${dir.path}/dist`, { recursive: true });
+      await copyCustomerAssets('./dist', `${dir.path}/dist`);
 
       // Move the extracted better-sqlite3 to the right place in dist
       await fs.rename(
@@ -207,7 +211,7 @@ for (const arch of args.target) {
       );
       console.debug(`Wrote config`);
 
-      let execName = `tunarr`;
+      let execName = `XBEST`;
       if (args.includeVersion && !isEdgeBuild) {
         const version = process.env.TUNARR_VERSION ?? serverPackage.version;
         execName += `-${version}`;
@@ -249,36 +253,90 @@ for (const arch of args.target) {
       await fs.cp(`${dir.path}/dist/bin/${execName}`, `./bin/${execName}`);
 
       console.info(`Copied binary to bin/${execName}`);
+      if (osString === 'win') {
+        const executable = path.resolve('./bin', execName);
+        const branded = executable + '.branded.exe';
+        await promisify(execFile)(
+          'pnpm',
+          [
+            'dlx',
+            'resedit-cli@3.1.1',
+            executable,
+            branded,
+            '--no-grow',
+            '--delete-allicon',
+            '--icon',
+            '1,' + path.resolve('./bin/XBEST.ico'),
+            '--company-name',
+            'XBEST',
+            '--file-description',
+            'XBEST Channels Studio',
+            '--product-name',
+            'XBEST',
+            '--internal-name',
+            'XBEST',
+            '--original-filename',
+            'XBEST.exe',
+            '--file-version',
+            '2026.11.1.0',
+            '--product-version',
+            '2026.11.1.0',
+          ],
+          { timeout: 180000, maxBuffer: 10 * 1024 * 1024 },
+        );
+        await fs.rename(branded, executable);
+      }
 
       if (args.outputArchives) {
-        console.info('Creating release archive');
-
         const targetIsWindows = osString === 'win';
-        const format = targetIsWindows ? 'zip' : 'tar';
-        const archive = archiver(format, { gzip: !targetIsWindows });
-        const finishedPromise = new Promise<void>((resolve, reject) => {
-          archive.on('end', () => resolve(void 0));
-          archive.on('error', reject);
-          archive.on('entry', (entry) => {
-            console.debug('Added entry to backup: %s', entry.name);
-          });
-        });
+        for (const owner of targetIsWindows ? [false, true] : [false]) {
+          const distributionName = owner
+            ? releaseName.replace(/^XBEST-/, 'XBEST-OWNER-')
+            : releaseName;
+          console.info('Creating release archive');
 
-        const outStream = createWriteStream(
-          `./bin/${releaseName}.${format}${targetIsWindows ? '' : '.gz'}`,
-        );
-        archive.pipe(outStream);
-        const entries = releaseArchiveEntries(releaseName, targetIsWindows, {
-          tunarr: `./bin/${execName}`,
-          meilisearch: `./bin/meilisearch-${arch}`,
-          etvNext: etvNext.binaryPath,
-          etvNextCompanions: etvNext.companionPaths,
-        });
-        for (const { source, name } of entries) {
-          archive.file(source, { name });
+          const format = targetIsWindows ? 'zip' : 'tar';
+          const archive = archiver(format, { gzip: !targetIsWindows });
+          const finishedPromise = new Promise<void>((resolve, reject) => {
+            archive.on('end', () => resolve(void 0));
+            archive.on('error', reject);
+            archive.on('entry', (entry) => {
+              console.debug('Added entry to backup: %s', entry.name);
+            });
+          });
+
+          const outStream = createWriteStream(
+            `./bin/${distributionName}.${format}${targetIsWindows ? '' : '.gz'}`,
+          );
+          archive.pipe(outStream);
+          const entries = releaseArchiveEntries(
+            distributionName,
+            targetIsWindows,
+            {
+              tunarr: `./bin/${execName}`,
+              meilisearch: `./bin/meilisearch-${arch}`,
+              etvNext: etvNext.binaryPath,
+              etvNextCompanions: etvNext.companionPaths,
+            },
+            owner,
+          );
+          entries.push({
+            source: '../LICENSE',
+            name: `${distributionName}/LICENSE`,
+          });
+          entries.push({
+            source: '../docs/XBEST-START-AR.md',
+            name: `${distributionName}/XBEST-START-AR.md`,
+          });
+          const checksums = await releaseChecksums(entries);
+          await fs.writeFile(`./bin/${distributionName}.SHA256SUMS`, checksums);
+          archive.append(checksums, { name: `${distributionName}/SHA256SUMS` });
+          for (const { source, name } of entries) {
+            archive.file(source, { name });
+          }
+          await archive.finalize();
+          await finishedPromise;
         }
-        await archive.finalize();
-        await finishedPromise;
       }
     },
     { unsafeCleanup: true, mode: 0o755 },

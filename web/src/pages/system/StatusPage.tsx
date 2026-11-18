@@ -201,7 +201,7 @@ export const StatusPage = () => {
                     <TableCell>
                       <Typography>
                         <strong>
-                          <Trans>Tunarr Backend URL:</Trans>
+                          <Trans>XBest Backend URL:</Trans>
                         </strong>
                       </Typography>
                     </TableCell>

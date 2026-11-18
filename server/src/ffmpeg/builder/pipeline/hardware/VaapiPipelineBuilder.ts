@@ -236,6 +236,7 @@ export class VaapiPipelineBuilder extends SoftwarePipelineBuilder {
 
     // Watermark
     currentState = this.setWatermark(currentState);
+    currentState = this.setProgramOverlay(currentState);
 
     const noEncoderSteps = every(
       this.getEncoderSteps(),

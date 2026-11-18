@@ -114,7 +114,7 @@ export const useEmptyTrash = () => {
     ...deleteApiTrashMutation(),
     onSuccess: () => {
       snackbar.enqueueSnackbar({
-        message: t`Emptying trash in the background. You can keep using Tunarr.`,
+        message: t`Emptying trash in the background. You can keep using XBest.`,
         variant: 'info',
       });
       refetchStatus();

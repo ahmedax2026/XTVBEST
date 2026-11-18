@@ -41,7 +41,7 @@ type UpdatePlexPlayStatusTaskInvocation = z.infer<
 type PlayState = 'playing' | 'stopped';
 
 const StaticPlexHeaders = {
-  'X-Plex-Product': 'Tunarr',
+  'X-Plex-Product': 'XBest',
   'X-Plex-Platform': 'Generic',
   'X-Plex-Client-Platform': 'Generic',
   'X-Plex-Client-Profile-Name': 'Generic',
@@ -175,7 +175,7 @@ class UpdatePlexPlayStatusTask extends Task2<
       key: `/library/metadata/${request.ratingKey}`,
       time: request.startTime,
       duration: request.duration,
-      'X-Plex-Product': 'Tunarr',
+      'X-Plex-Product': 'XBest',
       'X-Plex-Version': getTunarrVersion(),
       'X-Plex-Device-Name': deviceName,
       'X-Plex-Device': deviceName,

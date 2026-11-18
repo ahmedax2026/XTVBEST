@@ -27,7 +27,7 @@ export const FeatureFlagMetadata: FeatureFlagMeta[] = [
     key: 'proxyArtwork',
     displayName: 'Proxy Artwork',
     description:
-      'Route artwork requests through the Tunarr server instead of using direct media source URLs.',
+      'Route artwork requests through the XBEST server instead of using direct media source URLs.',
     envVar: 'TUNARR_PROXY_ARTWORK',
     category: 'experimental',
   },
@@ -83,7 +83,7 @@ export const FeatureFlagMetadata: FeatureFlagMeta[] = [
     key: 'ersatzTvNextEnabled',
     displayName: 'ErsatzTV next Streaming Backend',
     description:
-      'Stream every channel through the ErsatzTV next backend instead of Tunarr’s own pipeline. Applies to the HLS, HLS Direct v2 and MPEG-TS stream modes; channel settings are unchanged. Leave this off to move channels over one at a time with the per-channel option in the channel editor.',
+      'Stream every channel through the experimental secondary backend instead of the XBEST pipeline. Applies to HLS, HLS Direct v2 and MPEG-TS. Leave this off to select the backend per channel.',
     envVar: 'TUNARR_ERSATZTV_NEXT_ENABLED',
     category: 'experimental',
   },

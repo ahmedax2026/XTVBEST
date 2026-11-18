@@ -1,3 +1,7 @@
+import { SubtitleFilter } from '../filter/SubtitleFilter.ts';
+import { HardwareDownloadFilter } from '../filter/HardwareDownloadFilter.ts';
+import { ExternalSubtitleStream } from '../MediaStream.ts';
+import { FileStreamSource } from '../../../stream/types.ts';
 import {
   HardwareAccelerationMode,
   TranscodeAudioOutputFormat,
@@ -89,7 +93,7 @@ import { AudioVolumeFilter } from '../filter/AudioVolumeFilter.ts';
 import type { FilterOption } from '../filter/FilterOption.ts';
 import { LoudnormFilter } from '../filter/LoudnormFilter.ts';
 import { StreamSeekFilter } from '../filter/StreamSeekFilter.ts';
-import type { SubtitlesInputSource } from '../input/SubtitlesInputSource.ts';
+import { SubtitlesInputSource } from '../input/SubtitlesInputSource.ts';
 import {
   AudioBitrateOutputOption,
   AudioBufferSizeOutputOption,
@@ -265,7 +269,7 @@ export abstract class BasePipelineBuilder implements PipelineBuilder {
       new ConcatInputFormatOption(),
       new ReadrateInputOption(this.ffmpegCapabilities, 0),
       new InfiniteLoopInputOption(),
-      new UserAgentInputOption(`Ffmpeg Tunarr/${getTunarrVersion()}`),
+      new UserAgentInputOption(`Ffmpeg XBEST/${getTunarrVersion()}`),
     );
 
     if (input.protocol === 'http') {
@@ -881,7 +885,31 @@ export abstract class BasePipelineBuilder implements PipelineBuilder {
     }
   }
 
+  protected setProgramOverlay(currentState: FrameState): FrameState {
+    const file = this.desiredState.programOverlayFile;
+    if (!file) return currentState;
+    const filters = this.filterChain.presentationFilterSteps;
+    if (currentState.frameDataLocation === FrameDataLocation.Hardware) {
+      const download = new HardwareDownloadFilter(currentState);
+      // Resolve the actual software pixel format before updating frame state.
+      void download.filter;
+      filters.push(download);
+      currentState = download.nextState(currentState);
+    }
+    filters.push(
+      new SubtitleFilter(
+        new SubtitlesInputSource(
+          new FileStreamSource(file),
+          [new ExternalSubtitleStream('ass', SubtitleMethods.Burn)],
+          SubtitleMethods.Burn,
+        ),
+      ),
+    );
+    return currentState.updateFrameLocation(FrameDataLocation.Software);
+  }
+
   protected setRealtime() {
+    if (this.desiredState.offlinePreparation) return;
     const initialBurst = this.desiredState.realtime ? 0 : 60;
     const option = new ReadrateInputOption(
       this.ffmpegCapabilities,

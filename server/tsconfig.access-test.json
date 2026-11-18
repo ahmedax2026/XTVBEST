@@ -1,0 +1,14 @@
+{
+  "extends": "./tsconfig.test.json",
+  "include": [
+    "src/services/access/AccessControl.test.ts",
+    "src/util/basicAuth.test.ts",
+    "scripts/customerAssets.test.ts",
+    "scripts/releaseChecksums.test.ts",
+    "src/types/**/*.d.ts",
+    "src/services/access/StudioWebLogin.test.ts"
+  ],
+  "compilerOptions": {
+    "incremental": false
+  }
+}

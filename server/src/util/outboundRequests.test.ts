@@ -1,5 +1,6 @@
 import { describe, expect, it, vi } from 'vitest';
-import axios from 'axios';
+import http from 'node:http';
+import type { LookupFunction } from 'node:net';
 import {
   BlockedOutboundUrlError,
   checkOutboundUrl,
@@ -7,6 +8,7 @@ import {
   isBlockedOutboundUrlError,
   outboundRedirectGuard,
   outboundRequestGuard,
+  guardAgentConnections,
 } from './outboundRequests.ts';
 
 vi.mock('node:dns/promises', () => ({
@@ -124,68 +126,52 @@ describe('outboundRedirectGuard', () => {
   );
 });
 
-describe('outboundRequestGuard agent lookup', () => {
-  // The unit tests above cover the pieces. This drives a real axios request
-  // through the agent, which is the only way to confirm the lookup is actually
-  // wired in and that the refusal survives axios's error wrapping.
-  it('refuses a connection to a host that resolves into a blocked range', async () => {
-    const error = await axios
-      .get('http://rebind.example/whatever', {
-        ...outboundRequestGuard,
-        timeout: 5000,
-      })
-      .then(() => undefined)
-      .catch((e: unknown) => e);
-
-    expect(error).toBeDefined();
+describe('outboundRequestGuard without live network access', () => {
+  it('refuses DNS records in a blocked range before returning an address', async () => {
+    const lookup = outboundRequestGuard.httpAgent.options
+      .lookup as LookupFunction;
+    const error = await new Promise<Error | null>((resolve) => {
+      lookup('rebind.example', {}, (error) => resolve(error));
+    });
     expect(isBlockedOutboundUrlError(error)).toBe(true);
   });
 
-  // Regression: Node skips DNS when the host is already an IP literal, so
-  // guardedLookup is never called for one. Before the createConnection guard
-  // this request connected and hung until timeout instead of being refused.
-  it('refuses a request straight to a blocked IP literal', async () => {
-    const error = await axios
-      .get('http://169.254.169.254/latest/meta-data', {
-        ...outboundRequestGuard,
-        timeout: 3000,
-      })
-      .then(() => undefined)
-      .catch((e: unknown) => e);
+  type TestAgent = http.Agent & {
+    createConnection: (
+      options: { host: string },
+      callback?: (error: Error | null) => void,
+    ) => unknown;
+  };
+  function fixture() {
+    const agent = new http.Agent() as TestAgent;
+    const transport = vi.fn();
+    agent.createConnection = transport;
+    return { agent: guardAgentConnections(agent), transport };
+  }
 
-    expect(error).toBeDefined();
-    expect(isBlockedOutboundUrlError(error)).toBe(true);
-  });
+  it.each(['169.254.169.254', 'fd00:ec2::254', '::ffff:169.254.169.254'])(
+    'refuses blocked IP literal %s without invoking the socket transport',
+    (host) => {
+      const { agent, transport } = fixture();
+      const callback = vi.fn();
+      agent.createConnection({ host }, callback);
+      expect(transport).not.toHaveBeenCalled();
+      expect(callback).toHaveBeenCalledWith(
+        expect.any(BlockedOutboundUrlError),
+      );
+    },
+  );
 
-  it('refuses a blocked IPv6 literal', async () => {
-    const error = await axios
-      .get('http://[fd00:ec2::254]/latest/meta-data', {
-        ...outboundRequestGuard,
-        timeout: 3000,
-      })
-      .then(() => undefined)
-      .catch((e: unknown) => e);
-
-    expect(error).toBeDefined();
-    expect(isBlockedOutboundUrlError(error)).toBe(true);
-  });
-
-  it('does not refuse a host that resolves to a private address', async () => {
-    // Connection is refused because nothing is listening, but it must not be
-    // refused by policy - that is the case we deliberately allow.
-    const error = await axios
-      .get('http://loopback.example:1/whatever', {
-        ...outboundRequestGuard,
-        timeout: 5000,
-      })
-      .then(() => undefined)
-      .catch((e: unknown) => e);
-
-    // It still fails - nothing is listening - but not by policy, which is the
-    // distinction that matters.
-    expect(error).toBeDefined();
-    expect(isBlockedOutboundUrlError(error)).toBe(false);
-  });
+  it.each(['127.0.0.1', '192.168.1.50', '10.0.0.5'])(
+    'passes an allowed address %s to the mocked transport',
+    (host) => {
+      const { agent, transport } = fixture();
+      const callback = vi.fn();
+      agent.createConnection({ host }, callback);
+      expect(transport).toHaveBeenCalledWith({ host }, callback);
+      expect(callback).not.toHaveBeenCalled();
+    },
+  );
 });
 
 describe('isBlockedOutboundUrlError', () => {

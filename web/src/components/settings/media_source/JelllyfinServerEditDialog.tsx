@@ -491,7 +491,7 @@ export function JellyfinServerEditDialog({ open, onClose, server }: Props) {
                 <Trans>
                   Enter your Jellyfin password to generate a new access token.
                   <br />
-                  <strong>NOTE:</strong> These are never saved to the Tunarr DB.
+                  <strong>NOTE:</strong> These are never saved to the XBest DB.
                   Instead they are sent to Jellyfin to exchange for a session
                   token.
                 </Trans>
@@ -571,7 +571,7 @@ export function JellyfinServerEditDialog({ open, onClose, server }: Props) {
                 />
                 <FormHelperText>
                   <Trans>
-                    Tunarr will update Jellyfin's "now playing" state while
+                    XBest will update Jellyfin's "now playing" state while
                     channels are active.
                   </Trans>
                 </FormHelperText>

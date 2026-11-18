@@ -1,3 +1,9 @@
+import { StudioWebLogin } from './services/access/StudioWebLogin.ts';
+import {
+  AccessControl,
+  createLicenseHook,
+} from './services/access/AccessControl.ts';
+import { accessApi } from './api/accessApi.ts';
 import { container } from '@/container.js';
 import { KEYS } from '@/types/inject.js';
 import type { ServerType } from '@/types/serverType.js';
@@ -103,7 +109,7 @@ export class Server {
         .with(true, () => `all proxies`)
         .exhaustive();
       this.logger.info(
-        'Initializing Tunarr with trust proxy setting: %s',
+        'Initializing XBest with trust proxy setting: %s',
         trustProxyString,
       );
     }
@@ -118,9 +124,31 @@ export class Server {
       .withTypeProvider<ZodTypeProvider>();
 
     const basicAuth = basicAuthConfigFromEnv();
+    const access = await AccessControl.open({
+      directory: this.serverOptions.databaseDirectory,
+      owner: basicAuth,
+      issuer: process.env.XBEST_LICENSE_ISSUER === '1',
+      publicKeyFile: process.env.XBEST_LICENSE_PUBLIC_KEY_FILE,
+      licenseServer: process.env.XBEST_LICENSE_SERVER_URL,
+    });
     if (basicAuth) {
-      this.app.addHook('onRequest', createTunarrBasicAuthHook(basicAuth));
+      const webLogin = new StudioWebLogin(access);
+      this.app.addHook('onRequest', (req, _reply, done) => {
+        webLogin.restore(req);
+        done();
+      });
+      this.app.addHook(
+        'onRequest',
+        createTunarrBasicAuthHook(
+          basicAuth,
+          (header) => access.authenticate(header),
+          (req, reply) => webLogin.unauthorized(req, reply),
+        ),
+      );
+      await this.app.register(webLogin.router);
     }
+    this.app.addHook('onRequest', createLicenseHook(access));
+    await this.app.register(accessApi(access), { prefix: '/api/access' });
 
     if (serverOptions().printRoutes) {
       await this.app.register(
@@ -152,8 +180,8 @@ export class Server {
       .register(fastifySwagger, {
         openapi: {
           info: {
-            title: 'Tunarr',
-            description: 'Tunarr API',
+            title: 'XBest',
+            description: 'XBest API',
             version: getTunarrVersion(),
           },
           servers: [],
@@ -346,18 +374,56 @@ export class Server {
             prefix: '/images',
             decorateReply: false,
           })
-          .get('/favicon.svg', async (_, res) => {
-            return res.sendFile(
-              'favicon.svg',
-              path.join(currentDirectory, 'resources', 'images'),
-            );
-          })
-          .get('/favicon.ico', async (_, res) => {
-            return res.sendFile(
-              'favicon.ico',
-              path.join(currentDirectory, 'resources', 'images'),
-            );
-          });
+          .get(
+            '/favicon.svg',
+            { config: { authRequired: false } },
+            async (_, res) => {
+              return res.sendFile(
+                'favicon.svg',
+                path.join(currentDirectory, 'resources', 'images'),
+              );
+            },
+          )
+          .get(
+            '/favicon.ico',
+            { config: { authRequired: false } },
+            async (_, res) => {
+              return res.sendFile(
+                'xbest-logo.png',
+                path.join(currentDirectory, 'resources', 'images'),
+              );
+            },
+          );
+        // Preserve saved image URLs while serving the new product artwork.
+        const imageAliases = {
+          'tunarr.png': 'xbest-logo.png',
+          'generic-offline-screen.png': 'xbest-offline.png',
+          'generic-error-screen.png': 'xbest-error.png',
+          'generic-music-screen.png': 'xbest-music.png',
+          'loading-screen.png': 'xbest-loading.png',
+        };
+        for (const file of Object.values(imageAliases)) {
+          f.get(
+            `/images/${file}`,
+            { config: { authRequired: false } },
+            async (_req, res) =>
+              res.sendFile(
+                file,
+                path.join(currentDirectory, 'resources', 'images'),
+              ),
+          );
+        }
+        for (const [oldName, newName] of Object.entries(imageAliases)) {
+          f.get(
+            `/images/${oldName}`,
+            { config: { authRequired: false } },
+            async (_req, res) =>
+              res.sendFile(
+                newName,
+                path.join(currentDirectory, 'resources', 'images'),
+              ),
+          );
+        }
         done();
       })
 
@@ -506,12 +572,12 @@ export class Server {
         });
 
       this.logger.info(
-        'Tunarr is ready! Access in your web browser at:\n%s',
+        'XBest is ready! Access in your web browser at:\n%s',
         ipv4Interfaces.join('\n'),
       );
     } else {
       this.logger.info(
-        'Tunarr is ready! Access in your web browser at:\n%s',
+        'XBest is ready! Access in your web browser at:\n%s',
         `http://${host}:${this.serverOptions.port}/web`,
       );
     }
@@ -642,6 +708,12 @@ export class Server {
 
   getOpenApiDocument() {
     return this.app.swagger();
+  }
+
+  async prepareOpenApiDocument() {
+    await this.configureServer();
+    await this.app.ready();
+    return this.getOpenApiDocument();
   }
 
   close() {

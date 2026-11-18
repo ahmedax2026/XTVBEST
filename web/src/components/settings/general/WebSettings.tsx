@@ -65,12 +65,8 @@ export const WebSettings = () => {
               handleLocaleChange(e.target.value as SupportedLocales)
             }
           >
+            <MenuItem value="ar">العربية</MenuItem>
             <MenuItem value="en">English</MenuItem>
-            <MenuItem value="es">Español</MenuItem>
-            <MenuItem value="zh-CN">简体中文</MenuItem>
-            {import.meta.env.DEV && (
-              <MenuItem value="pseudo-LOCALE">pseudo-LOCALE (dev)</MenuItem>
-            )}
           </Select>
         </FormControl>
       </Box>

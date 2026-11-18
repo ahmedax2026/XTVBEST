@@ -1,3 +1,6 @@
+import { programOverlayForItem } from '../services/overlay/countdownAss.ts';
+import { ChannelOverlayService } from '../services/overlay/ChannelOverlayService.ts';
+import { ChannelArchiveService } from '../services/archive/ChannelArchiveService.ts';
 import type { ISettingsDB } from '@/db/interfaces/ISettingsDB.js';
 import type { FfmpegTranscodeSession } from '@/ffmpeg/FfmpegTrancodeSession.js';
 import type { OutputFormat } from '@/ffmpeg/builder/constants.js';
@@ -57,6 +60,8 @@ export class ProgramStream extends events.EventEmitter<ProgramStreamEvents> {
     private programStreamDetails: ProgramStreamDetailsFetcher,
     @multiInjected(KEYS.ProgramStreamPlugin)
     private streamPlugins: ProgramStreamPlugin[],
+    @injected(ChannelArchiveService) private archives: ChannelArchiveService,
+    @injected(ChannelOverlayService) private overlays: ChannelOverlayService,
     @assisted public context: PlayerContext,
     @assisted protected outputFormat: OutputFormat,
     @assisted public opts?: Partial<StreamOptions>,
@@ -130,10 +135,35 @@ export class ProgramStream extends events.EventEmitter<ProgramStreamEvents> {
 
     // TODO: check if this was killed before actually starting.
 
-    const { streamDetails, streamSource } = streamDetailsResult.get();
+    const original = streamDetailsResult.get();
+    const archived = await this.archives.playback(
+      this.context.targetChannel,
+      this.context.transcodeConfig,
+      lineupItem,
+      original,
+    );
+    const { streamDetails, streamSource } = archived ?? original;
     streamDetails.duration = dayjs.duration(lineupItem.streamDuration);
 
     const start = dayjs.duration(lineupItem.startOffset ?? 0);
+    const overlay = await this.overlays.get(this.context.targetChannel.uuid);
+    const programOverlay = archived
+      ? undefined
+      : programOverlayForItem(overlay, lineupItem);
+    if (programOverlay && overlay.showNextTitle) {
+      programOverlay.nextTitle = await this.overlays
+        .upcomingTitle(
+          this.context.targetChannel.uuid,
+          lineupItem.programBeginMs + lineupItem.duration,
+        )
+        .catch((error: unknown) => {
+          this.logger.warn(
+            error,
+            'XBEST: could not resolve the next program title',
+          );
+          return undefined;
+        });
+    }
     const resolvedOptions = {
       startTime: start,
       duration: dayjs.duration(lineupItem.streamDuration),
@@ -143,6 +173,12 @@ export class ProgramStream extends events.EventEmitter<ProgramStreamEvents> {
       streamMode: this.context.streamMode,
       encoding: this.context.encoding,
       ...(this.opts ?? {}),
+      ...(programOverlay
+        ? { encoding: { mode: 'transcode' as const }, programOverlay }
+        : {}),
+      ...(archived
+        ? { encoding: { mode: 'remux' as const }, watermark: undefined }
+        : {}),
     };
     const sessionResult = await ffmpeg.createStreamSession({
       stream: {
@@ -185,19 +221,19 @@ export class ProgramStream extends events.EventEmitter<ProgramStreamEvents> {
       this.context.targetChannel,
     );
 
-    let duration = dayjs.duration(lineupItem.streamDuration);
-    const start = dayjs.duration(lineupItem.startOffset ?? 0);
-    if (+duration > +start) {
-      duration = duration.subtract(start);
-    }
+    const duration = dayjs.duration(lineupItem.streamDuration);
 
     this.logger.debug(
       'starting offline session of %d ms',
       duration.asMilliseconds(),
     );
 
+    const overlay = await this.overlays.get(this.context.targetChannel.uuid);
     const result = await ffmpeg.createPlaceholderSession({
-      kind: 'offline',
+      kind:
+        overlay.enabled && overlay.studioBumper && lineupItem.studioBumper
+          ? 'bumper'
+          : 'offline',
       duration,
       outputFormat: this.outputFormat,
       ptsOffset: this.opts?.ptsOffset,

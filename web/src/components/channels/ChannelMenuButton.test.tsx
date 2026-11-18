@@ -28,5 +28,8 @@ describe('ChannelMenuButton', () => {
     expect(
       screen.getByRole('menu', { name: 'More actions for Cartoons' }),
     ).toBeInTheDocument();
+    expect(
+      screen.getByRole('menuitem', { name: 'Live monitor' }),
+    ).toBeEnabled();
   });
 });

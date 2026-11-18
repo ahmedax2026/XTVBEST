@@ -6538,6 +6538,7 @@ export type GetApiChannelsByIdTranscodeConfigResponses = {
         name: string;
         threadCount: number;
         hardwareAccelerationMode: 'none' | 'cuda' | 'vaapi' | 'qsv' | 'videotoolbox';
+        autoHardwareAcceleration?: boolean;
         vaapiDriver: 'system' | 'ihd' | 'i965' | 'radeonsi' | 'nouveau';
         vaapiDevice: string | null;
         resolution: {
@@ -7218,6 +7219,291 @@ export type PostApiChannelsByChannelIdScheduleSlotsResponses = {
 };
 
 export type PostApiChannelsByChannelIdScheduleSlotsResponse = PostApiChannelsByChannelIdScheduleSlotsResponses[keyof PostApiChannelsByChannelIdScheduleSlotsResponses];
+
+export type GetApiChannelsByIdArchiveData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/channels/{id}/archive';
+};
+
+export type GetApiChannelsByIdArchiveErrors = {
+    /**
+     * Default Response
+     */
+    409: {
+        error: string;
+    };
+};
+
+export type GetApiChannelsByIdArchiveError = GetApiChannelsByIdArchiveErrors[keyof GetApiChannelsByIdArchiveErrors];
+
+export type GetApiChannelsByIdArchiveResponses = {
+    /**
+     * Default Response
+     */
+    200: {
+        state: 'live' | 'preparing' | 'ready' | 'pending' | 'archived' | 'returning' | 'failed';
+        completed: number;
+        total: number;
+        bytes: number;
+        currentTitle?: string;
+        error?: string;
+    };
+};
+
+export type GetApiChannelsByIdArchiveResponse = GetApiChannelsByIdArchiveResponses[keyof GetApiChannelsByIdArchiveResponses];
+
+export type PostApiChannelsByIdArchivePrepareData = {
+    body?: {
+        threads?: number;
+        storageLimitGiB?: number;
+    };
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/channels/{id}/archive/prepare';
+};
+
+export type PostApiChannelsByIdArchivePrepareErrors = {
+    /**
+     * Default Response
+     */
+    409: {
+        error: string;
+    };
+};
+
+export type PostApiChannelsByIdArchivePrepareError = PostApiChannelsByIdArchivePrepareErrors[keyof PostApiChannelsByIdArchivePrepareErrors];
+
+export type PostApiChannelsByIdArchivePrepareResponses = {
+    /**
+     * Default Response
+     */
+    200: {
+        state: 'live' | 'preparing' | 'ready' | 'pending' | 'archived' | 'returning' | 'failed';
+        completed: number;
+        total: number;
+        bytes: number;
+        currentTitle?: string;
+        error?: string;
+    };
+};
+
+export type PostApiChannelsByIdArchivePrepareResponse = PostApiChannelsByIdArchivePrepareResponses[keyof PostApiChannelsByIdArchivePrepareResponses];
+
+export type PostApiChannelsByIdArchiveCancelData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/channels/{id}/archive/cancel';
+};
+
+export type PostApiChannelsByIdArchiveCancelErrors = {
+    /**
+     * Default Response
+     */
+    409: {
+        error: string;
+    };
+};
+
+export type PostApiChannelsByIdArchiveCancelError = PostApiChannelsByIdArchiveCancelErrors[keyof PostApiChannelsByIdArchiveCancelErrors];
+
+export type PostApiChannelsByIdArchiveCancelResponses = {
+    /**
+     * Default Response
+     */
+    200: {
+        state: 'live' | 'preparing' | 'ready' | 'pending' | 'archived' | 'returning' | 'failed';
+        completed: number;
+        total: number;
+        bytes: number;
+        currentTitle?: string;
+        error?: string;
+    };
+};
+
+export type PostApiChannelsByIdArchiveCancelResponse = PostApiChannelsByIdArchiveCancelResponses[keyof PostApiChannelsByIdArchiveCancelResponses];
+
+export type PostApiChannelsByIdArchiveModeData = {
+    body: {
+        mode: 'archive' | 'live';
+    };
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/channels/{id}/archive/mode';
+};
+
+export type PostApiChannelsByIdArchiveModeErrors = {
+    /**
+     * Default Response
+     */
+    409: {
+        error: string;
+    };
+};
+
+export type PostApiChannelsByIdArchiveModeError = PostApiChannelsByIdArchiveModeErrors[keyof PostApiChannelsByIdArchiveModeErrors];
+
+export type PostApiChannelsByIdArchiveModeResponses = {
+    /**
+     * Default Response
+     */
+    200: {
+        state: 'live' | 'preparing' | 'ready' | 'pending' | 'archived' | 'returning' | 'failed';
+        completed: number;
+        total: number;
+        bytes: number;
+        currentTitle?: string;
+        error?: string;
+    };
+};
+
+export type PostApiChannelsByIdArchiveModeResponse = PostApiChannelsByIdArchiveModeResponses[keyof PostApiChannelsByIdArchiveModeResponses];
+
+export type GetApiChannelsByIdOverlayData = {
+    body?: never;
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/channels/{id}/overlay';
+};
+
+export type GetApiChannelsByIdOverlayErrors = {
+    /**
+     * Default Response
+     */
+    409: {
+        error: string;
+    };
+};
+
+export type GetApiChannelsByIdOverlayError = GetApiChannelsByIdOverlayErrors[keyof GetApiChannelsByIdOverlayErrors];
+
+export type GetApiChannelsByIdOverlayResponses = {
+    /**
+     * Default Response
+     */
+    200: {
+        enabled: boolean;
+        style: 'digital' | 'pill' | 'square' | 'bar' | 'circle' | 'ring';
+        position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+        size: number;
+        horizontalMargin: number;
+        verticalMargin: number;
+        opacity: number;
+        color: string;
+        hideOnFillers: boolean;
+        showTitle: boolean;
+        showNextTitle: boolean;
+        nextTitleSeconds: number;
+        studioBumper: boolean;
+        title?: {
+            text: string;
+            fontFamily: 'Arial' | 'Tahoma' | 'Verdana' | 'DejaVu Sans' | 'Noto Sans Arabic';
+            fontSize: number;
+            color: string;
+            opacity: number;
+            position: 'top-left' | 'top-center' | 'top-right' | 'middle-left' | 'middle-center' | 'middle-right' | 'bottom-left' | 'bottom-center' | 'bottom-right';
+            horizontalMargin: number;
+            verticalMargin: number;
+            bold: boolean;
+            outline: number;
+        };
+    };
+};
+
+export type GetApiChannelsByIdOverlayResponse = GetApiChannelsByIdOverlayResponses[keyof GetApiChannelsByIdOverlayResponses];
+
+export type PutApiChannelsByIdOverlayData = {
+    body?: {
+        enabled?: boolean;
+        style?: 'digital' | 'pill' | 'square' | 'bar' | 'circle' | 'ring';
+        position?: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+        size?: number;
+        horizontalMargin?: number;
+        verticalMargin?: number;
+        opacity?: number;
+        color?: string;
+        hideOnFillers?: boolean;
+        showTitle?: boolean;
+        showNextTitle?: boolean;
+        nextTitleSeconds?: number;
+        studioBumper?: boolean;
+        title?: {
+            text?: string;
+            fontFamily?: 'Arial' | 'Tahoma' | 'Verdana' | 'DejaVu Sans' | 'Noto Sans Arabic';
+            fontSize?: number;
+            color?: string;
+            opacity?: number;
+            position?: 'top-left' | 'top-center' | 'top-right' | 'middle-left' | 'middle-center' | 'middle-right' | 'bottom-left' | 'bottom-center' | 'bottom-right';
+            horizontalMargin?: number;
+            verticalMargin?: number;
+            bold?: boolean;
+            outline?: number;
+        };
+    };
+    path: {
+        id: string;
+    };
+    query?: never;
+    url: '/api/channels/{id}/overlay';
+};
+
+export type PutApiChannelsByIdOverlayErrors = {
+    /**
+     * Default Response
+     */
+    409: {
+        error: string;
+    };
+};
+
+export type PutApiChannelsByIdOverlayError = PutApiChannelsByIdOverlayErrors[keyof PutApiChannelsByIdOverlayErrors];
+
+export type PutApiChannelsByIdOverlayResponses = {
+    /**
+     * Default Response
+     */
+    200: {
+        enabled: boolean;
+        style: 'digital' | 'pill' | 'square' | 'bar' | 'circle' | 'ring';
+        position: 'top-left' | 'top-right' | 'bottom-left' | 'bottom-right';
+        size: number;
+        horizontalMargin: number;
+        verticalMargin: number;
+        opacity: number;
+        color: string;
+        hideOnFillers: boolean;
+        showTitle: boolean;
+        showNextTitle: boolean;
+        nextTitleSeconds: number;
+        studioBumper: boolean;
+        title?: {
+            text: string;
+            fontFamily: 'Arial' | 'Tahoma' | 'Verdana' | 'DejaVu Sans' | 'Noto Sans Arabic';
+            fontSize: number;
+            color: string;
+            opacity: number;
+            position: 'top-left' | 'top-center' | 'top-right' | 'middle-left' | 'middle-center' | 'middle-right' | 'bottom-left' | 'bottom-center' | 'bottom-right';
+            horizontalMargin: number;
+            verticalMargin: number;
+            bold: boolean;
+            outline: number;
+        };
+    };
+};
+
+export type PutApiChannelsByIdOverlayResponse = PutApiChannelsByIdOverlayResponses[keyof PutApiChannelsByIdOverlayResponses];
 
 export type GetApiChannelsByIdNativePlaybackData = {
     body?: never;
@@ -9630,6 +9916,7 @@ export type GetApiTranscodeConfigsResponses = {
         name: string;
         threadCount: number;
         hardwareAccelerationMode: 'none' | 'cuda' | 'vaapi' | 'qsv' | 'videotoolbox';
+        autoHardwareAcceleration?: boolean;
         vaapiDriver: 'system' | 'ihd' | 'i965' | 'radeonsi' | 'nouveau';
         vaapiDevice: string | null;
         resolution: {
@@ -9685,6 +9972,7 @@ export type PostApiTranscodeConfigsData = {
         name: string;
         threadCount: number;
         hardwareAccelerationMode: 'none' | 'cuda' | 'vaapi' | 'qsv' | 'videotoolbox';
+        autoHardwareAcceleration?: boolean;
         vaapiDriver: 'system' | 'ihd' | 'i965' | 'radeonsi' | 'nouveau';
         vaapiDevice: string | null;
         resolution: {
@@ -9745,6 +10033,7 @@ export type PostApiTranscodeConfigsResponses = {
         name: string;
         threadCount: number;
         hardwareAccelerationMode: 'none' | 'cuda' | 'vaapi' | 'qsv' | 'videotoolbox';
+        autoHardwareAcceleration?: boolean;
         vaapiDriver: 'system' | 'ihd' | 'i965' | 'radeonsi' | 'nouveau';
         vaapiDevice: string | null;
         resolution: {
@@ -9843,6 +10132,7 @@ export type GetApiTranscodeConfigsByIdResponses = {
         name: string;
         threadCount: number;
         hardwareAccelerationMode: 'none' | 'cuda' | 'vaapi' | 'qsv' | 'videotoolbox';
+        autoHardwareAcceleration?: boolean;
         vaapiDriver: 'system' | 'ihd' | 'i965' | 'radeonsi' | 'nouveau';
         vaapiDevice: string | null;
         resolution: {
@@ -9899,6 +10189,7 @@ export type PutApiTranscodeConfigsByIdData = {
         name: string;
         threadCount: number;
         hardwareAccelerationMode: 'none' | 'cuda' | 'vaapi' | 'qsv' | 'videotoolbox';
+        autoHardwareAcceleration?: boolean;
         vaapiDriver: 'system' | 'ihd' | 'i965' | 'radeonsi' | 'nouveau';
         vaapiDevice: string | null;
         resolution: {
@@ -9961,6 +10252,7 @@ export type PutApiTranscodeConfigsByIdResponses = {
         name: string;
         threadCount: number;
         hardwareAccelerationMode: 'none' | 'cuda' | 'vaapi' | 'qsv' | 'videotoolbox';
+        autoHardwareAcceleration?: boolean;
         vaapiDriver: 'system' | 'ihd' | 'i965' | 'radeonsi' | 'nouveau';
         vaapiDevice: string | null;
         resolution: {
@@ -10040,6 +10332,7 @@ export type PostApiTranscodeConfigsByIdCopyResponses = {
         name: string;
         threadCount: number;
         hardwareAccelerationMode: 'none' | 'cuda' | 'vaapi' | 'qsv' | 'videotoolbox';
+        autoHardwareAcceleration?: boolean;
         vaapiDriver: 'system' | 'ihd' | 'i965' | 'radeonsi' | 'nouveau';
         vaapiDevice: string | null;
         resolution: {
@@ -13297,6 +13590,7 @@ export type PostApiTroubleshootResponses = {
             name: string;
             threadCount: number;
             hardwareAccelerationMode: 'none' | 'cuda' | 'vaapi' | 'qsv' | 'videotoolbox';
+            autoHardwareAcceleration?: boolean;
             vaapiDriver: 'system' | 'ihd' | 'i965' | 'radeonsi' | 'nouveau';
             vaapiDevice: string | null;
             resolution: {

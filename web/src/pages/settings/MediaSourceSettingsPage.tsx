@@ -199,10 +199,10 @@ export default function MediaSourceSettingsPage() {
             <Box sx={{ flexBasis: '100%', width: 0 }}></Box>
             <Typography sx={{ width: '60%' }}>
               <Trans>
-                Media Sources are where Tunarr sources your content. Media can
+                Media Sources are where XBest sources your content. Media can
                 come from your filesystem or a remote server, like Plex or
                 Jellyfin. At least one Media Source is necessary to create
-                channels and play media in Tunarr.
+                channels and play media in XBest.
               </Trans>
             </Typography>
           </Stack>
@@ -247,7 +247,7 @@ export default function MediaSourceSettingsPage() {
         open={!!deletingMediaSource}
         onClose={() => setDeletingMediaSource(null)}
         title={t`Delete Media Source "${deletingMediaSource?.name}"?`}
-        body={t`Deleting a media source will remove all of its associated programs from Tunarr.`}
+        body={t`Deleting a media source will remove all of its associated programs from XBest.`}
         onConfirm={() => {
           if (deletingMediaSource) {
             deleteMediaSourceMut.mutate({

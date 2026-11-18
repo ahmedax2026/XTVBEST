@@ -101,7 +101,7 @@ export default function Video({ channelId }: VideoProps) {
       return (
         <Alert severity="warning" sx={{ my: 2 }}>
           <Trans>
-            Tunarr is currently configured to use the AC3 audio encoder. This
+            XBest is currently configured to use the AC3 audio encoder. This
             audio format is not supported by browsers. The resultant stream will
             likely not have audio or will not play at all.
           </Trans>

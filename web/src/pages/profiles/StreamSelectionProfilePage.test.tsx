@@ -110,21 +110,21 @@ describe('StreamSelectionProfilePage', () => {
   test('shows a locked profile read-only and duplicates it', async () => {
     sdk.profile = makeProfile({
       uuid: 'built-in',
-      name: 'Tunarr Default',
+      name: 'XBest Default',
       locked: true,
     });
     const { user } = renderWithProviders(
       <StreamSelectionProfilePage isNew={false} />,
     );
 
-    expect(await screen.findByDisplayValue('Tunarr Default')).toBeDisabled();
+    expect(await screen.findByDisplayValue('XBest Default')).toBeDisabled();
     expect(screen.queryByRole('button', { name: 'Save' })).toBeNull();
 
     await user.click(screen.getByRole('button', { name: 'Duplicate' }));
 
     expect(sdk.postProfile).toHaveBeenCalledWith(
       expect.objectContaining({
-        body: { name: 'Copy of Tunarr Default', rules: sdk.profile.rules },
+        body: { name: 'Copy of XBest Default', rules: sdk.profile.rules },
       }),
     );
     await vi.waitFor(() =>

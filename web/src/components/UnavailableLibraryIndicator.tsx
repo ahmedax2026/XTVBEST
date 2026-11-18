@@ -19,7 +19,7 @@ const UnavailableTooltip = ({
   return (
     <Tooltip
       placement="top"
-      title={t`The media server stopped reporting this library on ${since}. Its programs and channel schedules are preserved. Tunarr will not scan it until the server reports it again.`}
+      title={t`The media server stopped reporting this library on ${since}. Its programs and channel schedules are preserved. XBest will not scan it until the server reports it again.`}
     >
       {children}
     </Tooltip>

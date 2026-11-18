@@ -1,5 +1,6 @@
 import { isUndefined } from 'lodash-es';
 import path from 'node:path';
+import { existsSync } from 'node:fs';
 import { globalOptions } from '../globals.ts';
 import { isRunningInContainer } from './containerUtil.ts';
 import { DATABASE_LOCATION_ENV_VAR } from './env.ts';
@@ -41,7 +42,11 @@ export function getDefaultDatabaseDirectory(): string {
 
   const prefix = getRuntimeSpecificPrefix();
 
-  return path.join(prefix, 'tunarr');
+  const branded = path.join(prefix, 'XBEST');
+  const legacy = path.join(prefix, 'tunarr');
+  // Keep an existing installation in place so absolute media/cache paths and
+  // saved channels survive upgrades. Fresh installations use the studio name.
+  return existsSync(branded) || !existsSync(legacy) ? branded : legacy;
 }
 
 export function getDefaultDatabaseName() {

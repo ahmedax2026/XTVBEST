@@ -16,7 +16,7 @@ const ClientIdentifier = 'p86cy1w47clco3ro8t92nfy1';
 
 const PlexLoginHeaders = {
   Accept: 'application/json',
-  'X-Plex-Product': 'Tunarr',
+  'X-Plex-Product': 'XBest',
   'X-Plex-Version': 'Plex OAuth',
   'X-Plex-Client-Identifier': ClientIdentifier,
   'X-Plex-Model': 'Plex OAuth',

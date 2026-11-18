@@ -71,7 +71,7 @@ export const createTunarrTheme = (density: Density = 'comfortable') => {
       dark: { palette: makePalette(darkColors, 'dark') },
       light: { palette: makePalette(lightColors, 'light') },
     },
-    defaultColorScheme: 'light',
+    defaultColorScheme: 'dark',
     density,
     sizes: s,
     spacing: s.spacing,
@@ -150,7 +150,9 @@ export const createTunarrTheme = (density: Density = 'comfortable') => {
       MuiButton: {
         defaultProps: { disableElevation: true, size: small },
         styleOverrides: {
-          root: { borderRadius: radiusPill, paddingInline: 16 },
+          root: { borderRadius: 10, paddingInline: 16, columnGap: 8 },
+          startIcon: { margin: 0 },
+          endIcon: { margin: 0 },
           sizeSmall: { minHeight: s.controlHeightSmall, paddingInline: 12 },
           sizeMedium: { minHeight: s.controlHeight },
           outlined: ({ theme }) => ({

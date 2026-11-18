@@ -89,7 +89,7 @@ export const TypedController = <
   const extractor = props.valueExtractor ?? defaultValueExtractor;
   // Try this out and see if it works...
 
-  // TODO(http://github.com/chrisbenincasa/tunarr/issues/279) - fix decimal support
+  // TODO: fix decimal support.
   // const rawField = props.control?._getWatch(props.name, props.defaultValue);
   // const [rawValue, setRawValue] = useState<string | undefined>(
   //   toString(rawField),

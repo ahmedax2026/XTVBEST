@@ -10,10 +10,14 @@ describe('releaseArchiveEntries', () => {
       etvNextCompanions: ['/tmp/etv/libvpl.dll', '/tmp/etv/LICENSE-libvpl'],
     });
 
-    expect(entries).toEqual([
+    expect(
+      entries.filter(
+        (entry) => !/XBEST\.cmd|start-xbest|CUSTOMER-AR/.test(entry.name),
+      ),
+    ).toEqual([
       {
         source: './bin/tunarr-v2026.11.1-win-x64.exe',
-        name: 'tunarr-v2026.11.1-win-x64/tunarr.exe',
+        name: 'tunarr-v2026.11.1-win-x64/XBEST.exe',
       },
       {
         source: './bin/meilisearch-win-x64',
@@ -47,9 +51,42 @@ describe('releaseArchiveEntries', () => {
     );
 
     expect(entries.map((e) => e.name)).toEqual([
-      'tunarr-v2026.11.1-linux-x64/tunarr',
+      'tunarr-v2026.11.1-linux-x64/XBEST',
       'tunarr-v2026.11.1-linux-x64/meilisearch',
       'tunarr-v2026.11.1-linux-x64/ersatztv-channel',
+      'tunarr-v2026.11.1-linux-x64/start-xbest.sh',
+      'tunarr-v2026.11.1-linux-x64/install-xbest-ubuntu.sh',
+      'tunarr-v2026.11.1-linux-x64/XBEST-CUSTOMER-AR.md',
     ]);
   });
+});
+
+test('owner archives contain launchers while customer archives do not', () => {
+  const files = {
+    tunarr: './XBEST.exe',
+    meilisearch: './meilisearch.exe',
+    etvNext: './ersatztv-channel.exe',
+    etvNextCompanions: [],
+  };
+  const customer = releaseArchiveEntries('XBEST-customer', true, files);
+  const owner = releaseArchiveEntries('XBEST-OWNER', true, files, true);
+  expect(customer.map((file) => file.name)).toContain(
+    'XBEST-customer/XBEST.cmd',
+  );
+  expect(customer.map((file) => file.name)).toContain(
+    'XBEST-customer/start-xbest.ps1',
+  );
+  expect(customer.some((file) => file.name.includes('OWNER'))).toBe(false);
+  expect(customer.some((file) => file.name.includes('install-xbest'))).toBe(
+    false,
+  );
+  expect(owner.map((file) => file.name)).toContain(
+    'XBEST-OWNER/XBEST-OWNER.cmd',
+  );
+  expect(owner.map((file) => file.name)).toContain(
+    'XBEST-OWNER/XBEST-OWNER.ps1',
+  );
+  expect(
+    owner.some((file) => /private|credentials|state\.json/.test(file.name)),
+  ).toBe(false);
 });

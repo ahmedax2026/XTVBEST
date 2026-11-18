@@ -586,6 +586,7 @@ export class StreamProgramCalculator {
         streamDuration,
         // beginningOffset,
         duration: streamDuration,
+        ...(program.duration === 5000 ? { studioBumper: true } : {}),
         startOffset: 0,
         programBeginMs: program.programBeginMs,
       };
@@ -601,6 +602,7 @@ export class StreamProgramCalculator {
       // so seek to the matching position within the current loop.
       return {
         ...program,
+        scheduleElapsedMs: timeElapsed,
         startOffset:
           program.infiniteLoop && clipDuration > 0
             ? offset % clipDuration
@@ -612,6 +614,7 @@ export class StreamProgramCalculator {
     return {
       ...program,
       type: 'program',
+      scheduleElapsedMs: timeElapsed,
       startOffset: mediaStartOffset + (program.startOffset ?? 0),
       streamDuration,
     };

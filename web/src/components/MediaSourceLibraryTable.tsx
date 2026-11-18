@@ -209,7 +209,7 @@ const LibraryEnabledSwitch = ({
           ? t`Cannot disable libraries when they are locked`
           : library.enabled
             ? t`Stop syncing this library`
-            : t`Sync this library to Tunarr`
+            : t`Sync this library to XBest`
       }
     >
       <span>
@@ -550,7 +550,7 @@ export const MediaSourceLibraryTable = () => {
       )}
       <Typography variant="body2" align="center">
         <Trans>
-          Tunarr only syncs content from enabled libraries. Turn on a library's
+          XBest only syncs content from enabled libraries. Turn on a library's
           switch to sync it, or manage sources in{' '}
           <MuiLink component={Link} to="/settings/sources">
             Media Source Settings.

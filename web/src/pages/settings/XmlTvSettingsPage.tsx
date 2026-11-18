@@ -97,11 +97,11 @@ export default function XmlTvSettingsPage() {
                 <Trans>
                   <span>
                     You can edit this location in your settings.json within your
-                    Tunarr data directory
+                    XBest data directory
                     <br />
                     <strong>NOTE:</strong> When manually adding the XMLTV
                     location to a client like Plex, do not use this file
-                    directly. Instead, use the generated XMLTV from the Tunarr
+                    directly. Instead, use the generated XMLTV from the XBest
                     API endpoint:{' '}
                     {
                       new URL(
@@ -142,21 +142,7 @@ export default function XmlTvSettingsPage() {
           }}
         />
       </Stack>
-      {/* <FormControl>
-        <FormControlLabel
-          control={
-            <CheckboxFormController control={control} name="enableImageCache" />
-          }
-          label="Image Cache"
-        />
-        <FormHelperText>
-          If enabled the pictures used for Movie and TV Show posters will be
-          cached in Tunarr's .tunarr folder and will be delivered by Tunarr's
-          server instead of requiring calls to Plex. Note that using fixed xmltv
-          location in Plex (as opposed to url) will not work correctly in this
-          case.
-        </FormHelperText>
-      </FormControl> */}
+
       <Divider sx={{ my: 2 }} />
       <FormControl>
         <FormControlLabel

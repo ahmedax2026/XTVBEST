@@ -197,7 +197,7 @@ export const ProgrammingSelector = ({
           </Typography>
           <Typography sx={{ mb: 3 }} align="left">
             <Trans>
-              To use Tunarr, you need to first connect a media source. This will
+              To use XBest, you need to first connect a media source. This will
               allow you to build custom channels with your content.
             </Trans>
           </Typography>

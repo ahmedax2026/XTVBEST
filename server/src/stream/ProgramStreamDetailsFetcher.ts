@@ -291,9 +291,7 @@ export class ProgramStreamDetailsFetcher {
       }
     }
 
-    return new HttpStreamSource(
-      makeLocalUrl('/images/generic-music-screen.png'),
-    );
+    return new HttpStreamSource(makeLocalUrl('/images/xbest-music.png'));
   }
 
   private async resolveReachableArtwork(
@@ -381,7 +379,7 @@ export class ProgramStreamDetailsFetcher {
 
     if (isNonEmptyString(serverPath)) {
       this.logger.debug(
-        'Did not find %s file on disk relative to Tunarr. Using network path: %s',
+        'Did not find %s file on disk relative to XBEST. Using network path: %s',
         server.type,
         serverPath,
       );

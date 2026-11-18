@@ -14,6 +14,7 @@ export const defaultNewTranscodeConfig: TranscodeConfig = {
   audioSampleRate: 48,
   audioFormat: 'aac',
   hardwareAccelerationMode: 'none',
+  autoHardwareAcceleration: false,
   normalizeFrameRate: false,
   deinterlaceVideo: true,
   videoBitRate: 3500,

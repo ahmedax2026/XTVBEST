@@ -1,3 +1,5 @@
+import { isAxiosError } from 'axios';
+import { client } from './generated/client.gen.ts';
 import languages from '@cospired/i18n-iso-languages';
 import en from '@cospired/i18n-iso-languages/langs/en.json';
 import '@fontsource-variable/ibm-plex-sans';
@@ -10,7 +12,7 @@ import localeData from 'dayjs/plugin/localeData';
 import localizedFormat from 'dayjs/plugin/localizedFormat';
 import React from 'react';
 import ReactDOM from 'react-dom/client';
-import { Tunarr } from './Tunarr.tsx';
+import { XBestApp } from './XBestApp.tsx';
 import './helpers/dayjs.ts';
 import './index.css';
 
@@ -25,8 +27,22 @@ dayjs.extend(localeData);
 // TODO: localize this and make it a context provider
 languages.registerLocale(en);
 
+client.instance.interceptors.response.use(
+  (response) => response,
+  (error: unknown) => {
+    if (
+      isAxiosError<{ loginUrl?: unknown }>(error) &&
+      error.response?.status === 401 &&
+      error.response.data?.loginUrl === '/web/'
+    ) {
+      window.location.reload();
+    }
+    throw error instanceof Error ? error : new Error('API request failed');
+  },
+);
+
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
-    <Tunarr />
+    <XBestApp />
   </React.StrictMode>,
 );

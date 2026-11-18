@@ -58,7 +58,7 @@ export const StreamSelectionProfileSelect = ({
         <MenuItem value={Unassigned}>
           <em>
             {unassignedLabel ??
-              t`Default (${defaultProfile?.name ?? t`Tunarr Default`})`}
+              t`Default (${defaultProfile?.name ?? t`XBest Default`})`}
           </em>
         </MenuItem>
         {profiles.map((profile) => (

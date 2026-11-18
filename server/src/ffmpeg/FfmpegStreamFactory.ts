@@ -1,3 +1,8 @@
+import fs from 'node:fs/promises';
+import path from 'node:path';
+import { globalOptions } from '../globals.ts';
+import { buildCountdownAss } from '../services/overlay/countdownAss.ts';
+import { autoHardwareAcceleration } from './AutoHardwareAcceleration.ts';
 import type {
   ISettingsDB,
   ReadableFfmpegSettings,
@@ -131,6 +136,13 @@ export class FfmpegStreamFactory {
     this.ffmpegSettings = this.settingsDB.ffmpegSettings();
   }
 
+  private async resolveHardwareAcceleration() {
+    this.transcodeConfig = await autoHardwareAcceleration.resolve(
+      this.transcodeConfig,
+      this.ffmpegSettings.ffmpegExecutablePath,
+    );
+  }
+
   async createConcatSession(
     streamUrl: string,
     opts: DeepReadonly<ConcatOptions>,
@@ -138,6 +150,7 @@ export class FfmpegStreamFactory {
     if (ConcatStreamModeRemuxes[opts.mode]) {
       return this.createHlsWrapperSession(streamUrl, opts);
     }
+    await this.resolveHardwareAcceleration();
 
     const concatInput = new ConcatInputSource(
       new HttpStreamSource(streamUrl),
@@ -262,7 +275,7 @@ export class FfmpegStreamFactory {
       FfmpegState.create({
         version: await this.ffmpegInfo.getVersion(),
         outputFormat: opts.outputFormat ?? MpegTsOutputFormat,
-        metadataServiceProvider: 'Tunarr',
+        metadataServiceProvider: 'XBEST',
         metadataServiceName: this.channel.name,
         ptsOffset: 0,
         vaapiDevice: this.getVaapiDevice(),
@@ -318,6 +331,8 @@ export class FfmpegStreamFactory {
       isFirstTranscode,
       emitEndList,
       subtitleSegmentStartNumber,
+      offlinePreparation,
+      programOverlay,
     },
     lineupItem,
   }: StreamSessionCreateArgs): Promise<Maybe<TranscodeSessionResult>> {
@@ -325,12 +340,16 @@ export class FfmpegStreamFactory {
       throw new Error('Unsupported stream source format: ' + streamSource.type);
     }
 
+    if (programOverlay?.config.enabled && encoding?.mode === 'remux') {
+      throw new Error('A program overlay requires video encoding');
+    }
     const isRemux = encoding?.mode === 'remux';
     // Passthrough mode: copy all video/audio streams from the source without
     // re-encoding. Incompatible audio codecs get per-stream overrides.
     // Subtitles are still processed as WebVTT sidecar when available.
     const isPassthrough =
       isRemux || outputFormat.type === OutputFormatTypes.HlsDirectV2;
+    if (!isPassthrough) await this.resolveHardwareAcceleration();
     const playbackParams = isPassthrough
       ? null
       : new FfmpegPlaybackParamsCalculator(
@@ -423,71 +442,110 @@ export class FfmpegStreamFactory {
             this.transcodeConfig.disableHardwareFilters ?? false,
         };
 
-    const pipeline = builder.build(
-      FfmpegState.create({
-        version: await this.ffmpegInfo.getVersion(),
-        start: startTime,
+    let overlayDirectory: string | undefined;
+    let overlayFile: string | null = null;
+    try {
+      if (programOverlay?.config.enabled) {
+        const content = buildCountdownAss(
+          programOverlay,
+          this.transcodeConfig.resolution.widthPx,
+          this.transcodeConfig.resolution.heightPx,
+          duration.asMilliseconds(),
+        );
+        const root = path.join(
+          globalOptions().databaseDirectory,
+          'cache',
+          'program-overlays',
+        );
+        await fs.mkdir(root, { recursive: true });
+        overlayDirectory = await fs.mkdtemp(path.join(root, 'session-'));
+        overlayFile = path.join(overlayDirectory, 'overlay.ass');
+        await fs.writeFile(overlayFile, content);
+      }
+      const pipeline = builder.build(
+        FfmpegState.create({
+          version: await this.ffmpegInfo.getVersion(),
+          start: startTime,
+          duration,
+          ptsOffset,
+          isFirstTranscode,
+          subtitleSegmentStartNumber,
+          emitEndList: emitEndList ?? false,
+          threadCount: isPassthrough ? 0 : this.transcodeConfig.threadCount,
+          copyAllStreams: isPassthrough,
+          audioCodecOverrides,
+          outputFormat,
+          softwareDeinterlaceFilter: isPassthrough
+            ? undefined
+            : this.ffmpegSettings.deinterlaceFilter,
+          softwareScalingAlgorithm: isPassthrough
+            ? undefined
+            : this.ffmpegSettings.scalingAlgorithm,
+          vaapiDevice: isPassthrough ? null : this.getVaapiDevice(),
+          vaapiDriver: isPassthrough ? null : this.getVaapiDriver(),
+          logLevel: this.ffmpegSettings.logLevel,
+        }),
+        new FrameState({
+          isAnamorphic: false,
+          scaledSize,
+          paddedSize,
+          videoBitrate: isPassthrough
+            ? undefined
+            : playbackParams!.videoBitrate,
+          videoBufferSize: isPassthrough
+            ? undefined
+            : playbackParams!.videoBufferSize,
+          pixelFormat: isPassthrough
+            ? new PixelFormatYuv420P()
+            : (playbackParams!.pixelFormat ?? new PixelFormatYuv420P()),
+          bitDepth: 8,
+          frameRate: isPassthrough ? undefined : playbackParams!.frameRate,
+          videoTrackTimescale: isPassthrough
+            ? 90000
+            : playbackParams!.videoTrackTimeScale,
+          realtime,
+          offlinePreparation: offlinePreparation ?? false,
+          programOverlayFile: overlayFile,
+          videoFormat: isPassthrough
+            ? VideoFormats.Copy
+            : playbackParams!.videoFormat,
+          videoPreset: isPassthrough ? undefined : playbackParams!.videoPreset,
+          videoProfile: null,
+          deinterlace: isPassthrough ? false : playbackParams!.deinterlace,
+          infiniteLoop: lineupItem.infiniteLoop,
+        }),
+        pipelineOptions,
+      );
+
+      const transcodeSession = this.wrapInSession(
+        pipeline,
+        `channel-${this.channel.number}-transcode`,
         duration,
-        ptsOffset,
-        isFirstTranscode,
-        subtitleSegmentStartNumber,
-        emitEndList: emitEndList ?? false,
-        threadCount: isPassthrough ? 0 : this.transcodeConfig.threadCount,
-        copyAllStreams: isPassthrough,
-        audioCodecOverrides,
-        outputFormat,
-        softwareDeinterlaceFilter: isPassthrough
-          ? undefined
-          : this.ffmpegSettings.deinterlaceFilter,
-        softwareScalingAlgorithm: isPassthrough
-          ? undefined
-          : this.ffmpegSettings.scalingAlgorithm,
-        vaapiDevice: isPassthrough ? null : this.getVaapiDevice(),
-        vaapiDriver: isPassthrough ? null : this.getVaapiDriver(),
-        logLevel: this.ffmpegSettings.logLevel,
-      }),
-      new FrameState({
-        isAnamorphic: false,
-        scaledSize,
-        paddedSize,
-        videoBitrate: isPassthrough ? undefined : playbackParams!.videoBitrate,
-        videoBufferSize: isPassthrough
-          ? undefined
-          : playbackParams!.videoBufferSize,
-        pixelFormat: isPassthrough
-          ? new PixelFormatYuv420P()
-          : (playbackParams!.pixelFormat ?? new PixelFormatYuv420P()),
-        bitDepth: 8,
-        frameRate: isPassthrough ? undefined : playbackParams!.frameRate,
-        videoTrackTimescale: isPassthrough
-          ? 90000
-          : playbackParams!.videoTrackTimeScale,
-        realtime,
-        videoFormat: isPassthrough
-          ? VideoFormats.Copy
-          : playbackParams!.videoFormat,
-        videoPreset: isPassthrough ? undefined : playbackParams!.videoPreset,
-        videoProfile: null,
-        deinterlace: isPassthrough ? false : playbackParams!.deinterlace,
-        infiniteLoop: lineupItem.infiniteLoop,
-      }),
-      pipelineOptions,
-    );
+      );
 
-    const transcodeSession = this.wrapInSession(
-      pipeline,
-      `channel-${this.channel.number}-transcode`,
-      duration,
-    );
-
-    return {
-      session: transcodeSession,
-      renditions: this.buildRenditions(
-        streamDetails,
-        subtitleRendition,
-        isPassthrough,
-      ),
-    };
+      if (overlayDirectory) {
+        const directory = overlayDirectory;
+        transcodeSession.registerCleanup(() =>
+          fs.rm(directory, { recursive: true, force: true, maxRetries: 3 }),
+        );
+      }
+      return {
+        session: transcodeSession,
+        renditions: this.buildRenditions(
+          streamDetails,
+          subtitleRendition,
+          isPassthrough,
+        ),
+      };
+    } catch (error) {
+      if (overlayDirectory)
+        await fs.rm(overlayDirectory, {
+          recursive: true,
+          force: true,
+          maxRetries: 3,
+        });
+      throw error;
+    }
   }
 
   /**
@@ -603,7 +661,8 @@ export class FfmpegStreamFactory {
 
     let watermarkSource: Nullable<WatermarkInputSource> = null;
     if (watermark?.enabled) {
-      const watermarkUrl = watermark.url ?? makeLocalUrl('/images/tunarr.png');
+      const watermarkUrl =
+        watermark.url ?? makeLocalUrl('/images/xbest-logo.png');
       watermarkSource = new WatermarkInputSource(
         new HttpStreamSource(watermarkUrl),
         StillImageStream.create({
@@ -756,6 +815,7 @@ export class FfmpegStreamFactory {
   async createPlaceholderSession(
     opts: PlaceholderSessionOpts,
   ): Promise<Maybe<TranscodeSessionResult>> {
+    await this.resolveHardwareAcceleration();
     const realtime = opts.realtime ?? true;
     const ptsOffset = opts.ptsOffset ?? 0;
 
@@ -775,6 +835,7 @@ export class FfmpegStreamFactory {
         opts.outputFormat,
         ptsOffset,
         realtime,
+        opts.kind === 'bumper',
       );
     }
 
@@ -814,9 +875,7 @@ export class FfmpegStreamFactory {
           FrameSize.fromResolution(this.transcodeConfig.resolution),
         );
         errorInput = VideoInputSource.withStream(
-          new HttpStreamSource(
-            makeLocalUrl('/images/generic-error-screen.png'),
-          ),
+          new HttpStreamSource(makeLocalUrl('/images/xbest-error.png')),
           stream,
         );
         break;
@@ -901,12 +960,15 @@ export class FfmpegStreamFactory {
     outputFormat: OutputFormat,
     ptsOffset: number = 0,
     realtime: boolean = true,
+    studioBumper: boolean = false,
   ): Promise<Maybe<FfmpegTranscodeSession>> {
     const offlineInput = VideoInputSource.withStream(
       new HttpStreamSource(
-        isNonEmptyString(this.channel.offline?.picture)
-          ? this.channel.offline?.picture
-          : makeLocalUrl('/images/generic-offline-screen.png'),
+        studioBumper
+          ? makeLocalUrl('/images/xbest-bumper.png')
+          : isNonEmptyString(this.channel.offline?.picture)
+            ? this.channel.offline?.picture
+            : makeLocalUrl('/images/xbest-offline.png'),
       ),
       VideoStream.create({
         inputKind: 'stillimage',
@@ -935,8 +997,9 @@ export class FfmpegStreamFactory {
     );
 
     const audioInput =
-      (await this.createOfflineSoundtrackInput(audioState)) ??
-      this.createPlaceholderAudioInput(audioState);
+      (!studioBumper
+        ? await this.createOfflineSoundtrackInput(audioState)
+        : undefined) ?? this.createPlaceholderAudioInput(audioState);
 
     const builder = await this.pipelineBuilderFactory(this.transcodeConfig)
       .setHardwareAccelerationMode(

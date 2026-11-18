@@ -48,7 +48,7 @@ export const TranscodeConfigErrorOptions = ({
               formControlProps={{ sx: { mt: 2 }, fullWidth: true }}
               options={supportedErrorScreens}
               selectProps={{ label: t`Error Screen` }}
-              helperText={t`If there are issues playing a video, Tunarr will try to use an error screen as a placeholder while retrying loading the video every 60 seconds.`}
+              helperText={t`If there are issues playing a video, XBest will try to use an error screen as a placeholder while retrying loading the video every 60 seconds.`}
             />
           )}
         />

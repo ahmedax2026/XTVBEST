@@ -15,7 +15,7 @@ export const SettingsUpdateCommand: CommandModule<
   SettingsUpdateCommandArgs
 > = {
   command: 'update',
-  describe: 'Update Tunarr settings directly.',
+  describe: 'Update XBEST settings directly.',
   builder: (yargs) =>
     yargs
       .usage('$0 settings update ')

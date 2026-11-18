@@ -1,3 +1,5 @@
+import { ChannelOverlayService } from '../services/overlay/ChannelOverlayService.ts';
+import { ChannelArchiveService } from '../services/archive/ChannelArchiveService.ts';
 import { OnDemandChannelService } from '@/services/OnDemandChannelService.js';
 import type { ConcatSessionFactory } from '@/stream/ConcatSession.js';
 import { ConcatSession } from '@/stream/ConcatSession.js';
@@ -36,6 +38,8 @@ import { PlexPlayStatusUpdaterPlugin } from './plugins/PlexPlayStatusUpdaterPlug
 
 const configure = ({ bind }: ContainerModuleLoadOptions) => {
   bind(SessionManager).toSelf().inSingletonScope();
+  bind(ChannelArchiveService).toSelf().inSingletonScope();
+  bind(ChannelOverlayService).toSelf().inSingletonScope();
 
   bindAssistedFactory(bind, KEYS.ProgramStreamFactory, ProgramStream);
 

@@ -7,6 +7,7 @@ export function transcodeConfigOrmToDto(
   return {
     ...config,
     id: config.uuid,
+    autoHardwareAcceleration: config.autoHardwareAcceleration ?? false,
     disableChannelOverlay: config.disableChannelOverlay ?? false,
     normalizeFrameRate: config.normalizeFrameRate ?? false,
     deinterlaceVideo: config.deinterlaceVideo ?? false,

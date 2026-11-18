@@ -148,7 +148,10 @@ export function buildChannelsM3U(
       continue;
     }
     const channelId = getChannelId(channel.number);
-    const logoUrl = resolveIconUrl(channel.icon, '{{host}}/images/tunarr.png');
+    const logoUrl = resolveIconUrl(
+      channel.icon,
+      '{{host}}/images/xbest-logo.png',
+    );
     const logoAttr = logoUrl != null ? ` tvg-logo="${logoUrl}"` : '';
     data += `#EXTINF:-1 tvg-id="${channelId}" channel-id="${channelId}" CUID="${channelId}" tvg-chno="${channel.number}" tvg-name="${channel.name}"${logoAttr} group-title="${channel.groupTitle}",${channel.name}\n`;
 
@@ -156,7 +159,7 @@ export function buildChannelsM3U(
   }
 
   if (placeholderWhenEmpty && channels.length === 0) {
-    data += `#EXTINF:0 tvg-id="1" tvg-chno="1" tvg-name="tunarr" tvg-logo="{{host}}/images/tunarr.png" group-title="tunarr",tunarr\n`;
+    data += `#EXTINF:0 tvg-id="1" tvg-chno="1" tvg-name="XBest" tvg-logo="{{host}}/images/xbest-logo.png" group-title="XBest",XBest\n`;
     data += `{{host}}/setup\n`;
   }
 

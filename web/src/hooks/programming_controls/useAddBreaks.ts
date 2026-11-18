@@ -2,7 +2,7 @@ import useStore from '@/store';
 import { setCurrentLineup } from '@/store/channelEditor/actions';
 import { materializedProgramListSelector } from '@/store/selectors';
 import type { ChannelProgram } from '@tunarr/types';
-import { isFlexProgram } from '@tunarr/types';
+import { isFlexProgram, isContentProgram } from '@tunarr/types';
 import type { Duration } from 'dayjs/plugin/duration';
 import { random } from '../../helpers/random.ts';
 
@@ -12,6 +12,21 @@ export function useAddBreaks() {
   return (config: AddBreaksConfig) => {
     setCurrentLineup(addBreaks(programs, config), true);
   };
+}
+
+export function insertStudioBumpers(
+  programs: ChannelProgram[],
+): ChannelProgram[] {
+  return programs.flatMap((program, index) => {
+    const next = programs[(index + 1) % programs.length];
+    return isContentProgram(program) && next && isContentProgram(next)
+      ? [program, { type: 'flex' as const, duration: 5000 }]
+      : [program];
+  });
+}
+export function useAddStudioBumpers() {
+  const programs = useStore(materializedProgramListSelector);
+  return () => setCurrentLineup(insertStudioBumpers(programs), true);
 }
 
 export function addBreaks(

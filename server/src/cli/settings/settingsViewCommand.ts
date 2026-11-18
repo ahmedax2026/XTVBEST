@@ -14,7 +14,7 @@ export const SettingsViewCommand: CommandModule<
   SettingsViewCommandArgs
 > = {
   command: 'view',
-  describe: 'View tunarr settings.',
+  describe: 'View XBEST settings.',
   builder: (yargs) =>
     yargs
       .option('pretty', {

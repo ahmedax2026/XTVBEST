@@ -39,23 +39,23 @@ const VideoFormats: DropdownOption<SupportedTranscodeVideoOutputFormat>[] = [
 const VideoHardwareAccelerationOptions: DropdownOption<SupportedHardwareAccels>[] =
   [
     {
-      description: 'Software (no GPU)',
+      description: 'CPU (Software)',
       value: 'none',
     },
     {
-      description: 'Nvidia (CUDA)',
+      description: 'GPU — NVIDIA (CUDA / NVENC)',
       value: 'cuda',
     },
     {
-      description: 'Video Acceleration API (VA-API)',
+      description: 'GPU — VA-API (Linux)',
       value: 'vaapi',
     },
     {
-      description: 'Intel QuickSync',
+      description: 'GPU — Intel QuickSync',
       value: 'qsv',
     },
     {
-      description: 'VideoToolbox',
+      description: 'GPU — Apple VideoToolbox',
       value: 'videotoolbox',
     },
   ] as const;
@@ -81,6 +81,11 @@ export const TranscodeConfigVideoSettingsForm = ({
     (state) => state.values.hardwareAccelerationMode,
   ); // watch('hardwareAccelerationMode');
 
+  const autoHardwareAcceleration = useStore(
+    form.store,
+    (state) => state.values.autoHardwareAcceleration,
+  );
+
   const hardwareAccelerationOptions = useMemo(() => {
     return VideoHardwareAccelerationOptions.filter(
       ({ value }) =>
@@ -101,11 +106,23 @@ export const TranscodeConfigVideoSettingsForm = ({
         )}
       />
       <form.AppField
+        name="autoHardwareAcceleration"
+        children={(field) => (
+          <field.BasicCheckboxInput
+            label={t`Auto — GPU with CPU fallback`}
+            helperText={t`Tests GPU encoding before starting playback. Uses CPU if no compatible GPU works. The standard backend uses CPU decoding and filters in Auto mode.`}
+          />
+        )}
+      />
+      <form.AppField
         name="hardwareAccelerationMode"
         children={(field) => (
           <field.BasicSelectInput
             options={hardwareAccelerationOptions}
-            selectProps={{ label: t`Hardware Acceleration` }}
+            selectProps={{
+              label: t`CPU / GPU`,
+              disabled: autoHardwareAcceleration,
+            }}
           />
         )}
       />

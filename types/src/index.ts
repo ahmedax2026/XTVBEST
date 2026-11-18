@@ -20,3 +20,5 @@ export * from './TranscodeConfig.js';
 export * from './Troubleshooting.js';
 export * from './util.js';
 export * from './XmlTvSettings.js';
+export * from './ChannelArchive.js';
+export * from './ChannelOverlay.js';

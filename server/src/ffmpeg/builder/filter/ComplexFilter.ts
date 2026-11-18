@@ -171,6 +171,12 @@ export class ComplexFilter implements FilterOptionPipelineStep {
       });
     });
 
+    let presentationFilterComplex = '';
+    if (this.filterChain.presentationFilterSteps.length > 0) {
+      presentationFilterComplex = `${formatLabel(videoLabel)}${collectAndJoinSteps(this.filterChain.presentationFilterSteps)}[vpresentation]`;
+      videoLabel = '[vpresentation]';
+    }
+
     let pixelFormatFilterComplex = '';
     if (this.filterChain.pixelFormatFilterSteps.length > 0) {
       pixelFormatFilterComplex += `${formatLabel(videoLabel)}`;
@@ -188,6 +194,7 @@ export class ComplexFilter implements FilterOptionPipelineStep {
       watermarkFilterComplex,
       subtitleOverlayFilterComplex,
       watermarkOverlayFilterComplex,
+      presentationFilterComplex,
       pixelFormatFilterComplex,
     ];
     const filterComplex = filter(allFilters, isNonEmptyString).join(';');

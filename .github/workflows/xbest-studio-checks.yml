@@ -1,0 +1,409 @@
+name: XBest CPU GPU and login checks
+
+on:
+  push:
+    branches: [feature/xbest-studio]
+  pull_request:
+    branches:
+      [
+        feature/xbest-studio,
+        feature/xbest-cpu-gpu-auth,
+        feature/xbest-live-monitor,
+      ]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  verify:
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest]
+    runs-on: ${{ matrix.os }}
+    env:
+      TURBO_TELEMETRY_DISABLED: '1'
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - name: Enable workspace package manager
+        run: |
+          npm install -g corepack@latest
+          corepack enable
+      - run: pnpm install --frozen-lockfile
+      - name: Check committed source formatting
+        run: pnpm exec prettier --check .
+      - name: Check Arabic and English catalogs
+        run: pnpm --filter @tunarr/web exec lingui compile --strict
+      - name: Build shared packages
+        run: |
+          pnpm --filter @tunarr/types build
+          pnpm --filter @tunarr/shared build
+      - name: Verify generated API artifacts
+        if: runner.os == 'Linux'
+        run: |
+          TUNARR_DATABASE_PATH="$(mktemp -d)" pnpm --filter @tunarr/server generate-openapi
+          pnpm --filter @tunarr/web generate-client
+          git diff --exit-code -- docs/generated web/src/generated
+      - name: Typecheck server and web
+        run: |
+          pnpm --filter @tunarr/server typecheck
+          pnpm --filter @tunarr/web typecheck
+      - name: Test hardware selection, persistence, pipeline and authentication
+        env:
+          XBEST_CAPTURE_LOGIN: '1'
+        run: pnpm --filter @tunarr/server test src/util/defaults.test.ts src/stream/internalStudioUserAgent.test.ts src/stream/etv/EtvNextBinaryResolver.test.ts src/stream/etv/EtvNextDescribe.test.ts src/services/desktop/videoTools.test.ts src/services/desktop/DesktopStartup.test.ts src/ffmpeg/AutoHardwareAcceleration.test.ts src/db/TranscodeConfigDB.test.ts src/ffmpeg/FfmpegStreamFactory.test.ts src/stream/etv/EtvNextSession.test.ts src/util/basicAuth.test.ts src/services/access/AccessControl.test.ts src/services/access/StudioWebLogin.test.ts scripts/releaseArchive.test.ts scripts/customerAssets.test.ts scripts/releaseChecksums.test.ts src/services/archive/ArchiveStore.test.ts src/services/archive/ChannelArchiveService.test.ts src/services/overlay/countdownAss.test.ts src/services/overlay/ChannelOverlayService.test.ts src/stream/ProgramStream.test.ts src/ffmpeg/FfmpegTrancodeSession.test.ts src/ffmpeg/builder/pipeline/ProgramOverlayPipeline.test.ts
+      - name: Typecheck owner access and packaging tests
+        run: pnpm --filter @tunarr/server exec tsc --noEmit -p tsconfig.access-test.json
+      - name: Install FFmpeg for archive acceptance tests
+        if: runner.os == 'Linux'
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y ffmpeg
+      - name: Verify real archive preparation, cancellation and playback offsets
+        if: runner.os == 'Linux'
+        env:
+          XBEST_FFMPEG_TEST: '1'
+        run: pnpm --filter @tunarr/server test src/services/archive/ArchiveStore.test.ts src/services/archive/ChannelArchiveService.test.ts src/services/overlay/countdownAss.test.ts
+      - name: Test live monitor, countdown, links and Arabic catalog
+        run: pnpm --filter @tunarr/web exec vitest run --project unit src/hooks/programming_controls/useAddBreaks.test.ts src/components/channels/ChannelSessionsDialog.test.tsx src/components/channels/ChannelArchiveDialog.test.tsx src/components/channels/ChannelOverlayDialog.test.tsx src/components/channels/ChannelNowPlayingCard.test.tsx src/components/channels/ChannelMenuButton.test.tsx src/components/channels/channelSummary.test.ts src/locales/catalogs.test.ts src/test/i18n.test.ts src/store/settings/store.test.ts src/components/settings/general/WebSettings.test.tsx src/pages/settings/AccessSettingsPage.test.tsx src/pages/settings/ownerPanel.test.ts src/pages/studio/StudioDashboard.test.tsx src/components/shell/XBestShell.test.tsx src/components/channels/ChannelCard.test.tsx src/components/channels/ChannelsView.test.tsx
+      - name: Generate Arabic broadcast artwork using the original server logo
+        if: runner.os == 'Linux'
+        run: |
+          python3 -m pip install --disable-pip-version-check Pillow==11.3.0
+          python3 scripts/generate-xbest-art.py
+      - name: Build web bundle
+        run: pnpm --filter @tunarr/web bundle
+      - name: Install browser for Arabic monitor smoke test
+        if: runner.os == 'Linux'
+        run: pnpm --filter @tunarr/web exec playwright install --with-deps chromium
+      - name: Check Arabic monitor in a real browser
+        if: runner.os == 'Linux'
+        run: |
+          pnpm --filter @tunarr/web exec node src/test/live-monitor-smoke.mjs
+          pnpm --filter @tunarr/web exec node src/test/studio-smoke.mjs
+          pnpm --filter @tunarr/web exec node src/test/owner-panel-smoke.mjs
+      - name: Upload monitor screenshots
+        if: always() && runner.os == 'Linux'
+        uses: actions/upload-artifact@v4
+        with:
+          name: xbest-live-monitor-screenshots
+          path: |
+            web/test-results/live-monitor/
+            web/test-results/studio/
+            web/test-results/owner/
+          if-no-files-found: ignore
+      - name: Check Linux launcher syntax
+        if: runner.os == 'Linux'
+        run: bash -n scripts/start-xbest.sh
+      - name: Check Windows launcher syntax
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $errors = $null
+          [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path scripts/start-xbest.ps1), [ref]$null, [ref]$errors) | Out-Null
+          if ($errors.Count) { throw ($errors | Out-String) }
+
+      - name: Check owner launcher syntax
+        if: runner.os == 'Windows'
+        shell: pwsh
+        run: |
+          $errors = $null
+          [System.Management.Automation.Language.Parser]::ParseFile((Resolve-Path scripts/XBEST-OWNER.ps1), [ref]$null, [ref]$errors) | Out-Null
+          if ($errors.Count) { throw ($errors | Out-String) }
+
+  package:
+    needs: verify
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        target: [linux-x64, win-x64]
+    env:
+      TURBO_TELEMETRY_DISABLED: '1'
+      NODE_ENV: production
+      TUNARR_VERSION: 2026.11.1-preview
+      TUNARR_BUILD: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v6
+        with:
+          node-version: '22'
+      - uses: ilammy/setup-nasm@v1
+      - name: Enable workspace package manager
+        run: |
+          npm install -g corepack@latest
+          corepack enable
+      - run: pnpm install --frozen-lockfile
+        env:
+          NODE_ENV: development
+      - name: Generate Arabic broadcast artwork using the original server logo
+        run: |
+          python3 -m pip install --disable-pip-version-check Pillow==11.3.0
+          python3 scripts/generate-xbest-art.py
+      - name: Build application
+        run: |
+          pnpm --filter @tunarr/types build
+          pnpm --filter @tunarr/shared build
+          pnpm --filter @tunarr/web bundle
+          pnpm --filter @tunarr/server bundle
+      - name: Generate XBEST icon from the studio mark
+        run: node scripts/make-xbest-ico.mjs
+      - name: Package executable and companion tools
+        run: pnpm --filter @tunarr/server make-bin --target ${{ matrix.target }} --output-archives
+      - name: Upload preview and protected launchers
+        uses: actions/upload-artifact@v4
+        with:
+          name: XBEST-preview-${{ matrix.target }}
+          if-no-files-found: error
+          retention-days: 14
+          path: |
+            server/bin/XBEST-20*.zip
+            server/bin/XBEST-20*.tar.gz
+            server/bin/XBEST-20*.SHA256SUMS
+            scripts/start-xbest.ps1
+            scripts/start-xbest.sh
+            docs/xbest-cpu-gpu-login.md
+            LICENSE
+
+      - name: Upload owner distribution separately
+        if: matrix.target == 'win-x64'
+        uses: actions/upload-artifact@v4
+        with:
+          name: XBEST-OWNER-win-x64
+          if-no-files-found: error
+          retention-days: 14
+          path: |
+            server/bin/XBEST-OWNER-*.zip
+            server/bin/XBEST-OWNER-*.SHA256SUMS
+
+  desktop-acceptance:
+    needs: package
+    runs-on: windows-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: XBEST-preview-win-x64
+          path: preview
+      - name: Test the packaged Windows executable with a busy default port
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $archive = Get-ChildItem preview -Recurse -Filter 'XBEST-*.zip' | Select-Object -First 1
+          if (-not $archive) { throw 'XBEST archive missing' }
+          Expand-Archive -LiteralPath $archive.FullName -DestinationPath app
+          $exe = Get-ChildItem app -Recurse -Filter XBEST.exe | Select-Object -First 1
+          if (-not $exe) { throw 'XBEST.exe missing' }
+          if ($exe.VersionInfo.ProductName -ne 'XBEST') { throw 'XBEST executable metadata missing' }
+          $env:TUNARR_DATABASE_PATH = Join-Path $env:RUNNER_TEMP ('XBEST-acceptance-' + [guid]::NewGuid())
+          $env:XBEST_NO_BROWSER = '1'
+          $env:XBEST_AUTOSTART = '1'
+          New-Item -ItemType Directory -Path acceptance -Force | Out-Null
+          $stdout = Join-Path $PWD 'acceptance\startup.log'
+          $stderr = Join-Path $PWD 'acceptance\startup-errors.log'
+          $listener = [System.Net.Sockets.TcpListener]::new([System.Net.IPAddress]::Any, 8000)
+          $app = $null
+          $second = $null
+          try {
+            $listener.Start()
+            $app = Start-Process -FilePath $exe.FullName -WorkingDirectory $exe.Directory.FullName -PassThru -RedirectStandardOutput $stdout -RedirectStandardError $stderr
+            $ready = $false
+            for ($i = 0; $i -lt 240; $i++) {
+              if ($app.HasExited) { throw "XBEST exited with $($app.ExitCode)" }
+              $settingsFile = Join-Path $env:TUNARR_DATABASE_PATH 'settings.json'
+              if (Test-Path $settingsFile) {
+                try {
+                  $settings = Get-Content -LiteralPath $settingsFile -Raw | ConvertFrom-Json
+                  $port = [int]$settings.system.server.port
+                  if ($port -gt 0 -and $port -ne 8000) {
+                    $response = Invoke-WebRequest -Uri "http://localhost:$port/web/" -TimeoutSec 2
+                    if ($response.StatusCode -eq 200 -and $response.Content.Contains('<title>XBEST</title>')) {
+                      $ready = $true
+                      break
+                    }
+                  }
+                } catch {}
+              }
+              Start-Sleep -Seconds 2
+            }
+            if (-not $ready) { throw 'Packaged XBEST did not become ready on an automatic port' }
+            $second = Start-Process -FilePath $exe.FullName -WorkingDirectory $exe.Directory.FullName -PassThru -RedirectStandardOutput (Join-Path $PWD 'acceptance\second.log') -RedirectStandardError (Join-Path $PWD 'acceptance\second-errors.log')
+            if (-not $second.WaitForExit(15000)) { throw 'Second launch did not reuse the running instance' }
+            if ($second.ExitCode -ne 0) { throw 'Second launch failed' }
+            $again = Invoke-WebRequest -Uri "http://localhost:$port/web/" -TimeoutSec 5
+            if ($again.StatusCode -ne 200) { throw 'First instance stopped after second launch' }
+            $scripts = [regex]::Matches($again.Content, 'src="([^"]+\.js)"')
+            if ($scripts.Count -eq 0) { throw 'No web bundle served by the executable' }
+            $js = Invoke-WebRequest -Uri ("http://localhost:" + $port + $scripts[0].Groups[1].Value) -TimeoutSec 10
+            if (-not $js.Content.Contains('xbest-workspace')) { throw 'Packaged executable is not serving the new studio shell' }
+            Write-Host "XBEST packaged desktop acceptance passed on port $port"
+          } finally {
+            if (Test-Path $stdout) { Get-Content -LiteralPath $stdout }
+            if (Test-Path $stderr) { Get-Content -LiteralPath $stderr }
+            if ($second -and -not $second.HasExited) { taskkill /PID $second.Id /T /F }
+            if ($app -and -not $app.HasExited) { taskkill /PID $app.Id /T /F }
+            $listener.Stop()
+          }
+      - name: Upload packaged startup evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: XBEST-Windows-startup-evidence
+          path: acceptance
+          if-no-files-found: ignore
+
+  owner-acceptance:
+    needs: package
+    runs-on: windows-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: XBEST-OWNER-win-x64
+          path: owner-preview
+      - name: Test owner login, email-named account and offline license issuance
+        shell: pwsh
+        run: |
+          $ErrorActionPreference = 'Stop'
+          $zip = Get-ChildItem owner-preview -Recurse -Filter 'XBEST-OWNER-*.zip' | Select-Object -First 1
+          if (-not $zip) { throw 'Owner archive missing' }
+          Expand-Archive -LiteralPath $zip.FullName -DestinationPath owner-app
+          $exe = Get-ChildItem owner-app -Recurse -Filter XBEST.exe | Select-Object -First 1
+          $launcher = Join-Path $exe.Directory.FullName 'XBEST-OWNER.ps1'
+          $dataDirectory = Join-Path $env:RUNNER_TEMP ('XBEST-OWNER-test-' + [guid]::NewGuid())
+          $env:TUNARR_BASIC_AUTH_USER = 'owner@example.test'
+          $env:TUNARR_BASIC_AUTH_PASSWORD = [guid]::NewGuid().ToString('N')
+          $env:XBEST_NO_BROWSER = '1'
+          $authorization = 'Basic ' + [Convert]::ToBase64String([Text.Encoding]::UTF8.GetBytes($env:TUNARR_BASIC_AUTH_USER + ':' + $env:TUNARR_BASIC_AUTH_PASSWORD))
+          $headers = @{ Authorization = $authorization }
+          New-Item -ItemType Directory -Path owner-evidence -Force | Out-Null
+          $stdout = Join-Path $PWD 'owner-evidence\startup.log'
+          $stderr = Join-Path $PWD 'owner-evidence\startup-errors.log'
+          $owner = $null
+          try {
+            $arguments = '-NoProfile -ExecutionPolicy Bypass -File "' + $launcher + '" -Executable "' + $exe.FullName + '" -DataDirectory "' + $dataDirectory + '"'
+            $owner = Start-Process powershell.exe -ArgumentList $arguments -PassThru -RedirectStandardOutput $stdout -RedirectStandardError $stderr
+            $ready = $false
+            for ($i = 0; $i -lt 120; $i++) {
+              if ($owner.HasExited) { throw 'Owner launcher exited before becoming ready' }
+              $settingsFile = Join-Path $dataDirectory 'settings.json'
+              if (Test-Path $settingsFile) {
+                try {
+                  $settings = Get-Content $settingsFile -Raw | ConvertFrom-Json
+                  $port = [int]$settings.system.server.port
+                  $status = Invoke-RestMethod -Uri "http://localhost:$port/api/access/status" -Headers $headers -TimeoutSec 2
+                  if ($status.owner -and $status.issuer -and $status.configured) { $ready = $true; break }
+                } catch {}
+              }
+              Start-Sleep -Seconds 2
+            }
+            if (-not $ready) { throw 'Owner issuer did not become ready' }
+            $account = @{ username = 'customer@example.test'; password = [guid]::NewGuid().ToString('N') } | ConvertTo-Json
+            Invoke-RestMethod -Method Post -Uri "http://localhost:$port/api/access/users" -Headers $headers -ContentType 'application/json' -Body $account | Out-Null
+            $users = Invoke-RestMethod -Uri "http://localhost:$port/api/access/users" -Headers $headers
+            if (-not ($users | Where-Object username -eq 'customer@example.test')) { throw 'Email-named account was not persisted' }
+            $licenseRequest = @{ customer = 'Acceptance Customer'; installation = ('a' * 64); expiresAt = [DateTime]::UtcNow.AddDays(7).ToString('yyyy-MM-ddTHH:mm:ss.fffZ'); validation = 'offline' } | ConvertTo-Json
+            $issued = Invoke-RestMethod -Method Post -Uri "http://localhost:$port/api/access/licenses" -Headers $headers -ContentType 'application/json' -Body $licenseRequest
+            if (-not $issued.token) { throw 'Offline signed license was not issued' }
+            $verified = Invoke-RestMethod -Method Post -Uri "http://localhost:$port/api/access/verify" -ContentType 'application/json' -Body (@{ token = $issued.token } | ConvertTo-Json)
+            if (-not $verified.valid) { throw 'Owner license signature verification failed' }
+            $updated = @{ password = [guid]::NewGuid().ToString('N'); installation = ('a' * 64) } | ConvertTo-Json
+            Invoke-RestMethod -Method Patch -Uri "http://localhost:$port/api/access/users/customer%40example.test" -Headers $headers -ContentType 'application/json' -Body $updated | Out-Null
+            $code = Invoke-RestMethod -Uri "http://localhost:$port/api/access/licenses/$($issued.payload.id)/code" -Headers $headers
+            if ($code.token -ne $issued.token) { throw 'Read-only code retrieval changed the license' }
+            $audit = Invoke-RestMethod -Uri "http://localhost:$port/api/access/audit" -Headers $headers
+            if (-not ($audit | Where-Object action -eq 'user-updated')) { throw 'Owner audit did not persist the account update' }
+            Write-Host 'XBEST owner login, email account, password reset, server binding, audit and offline issuance passed'
+          } finally {
+            if (Test-Path $stdout) { Get-Content $stdout }
+            if (Test-Path $stderr) { Get-Content $stderr }
+            if ($owner -and -not $owner.HasExited) { taskkill /PID $owner.Id /T /F }
+            Remove-Item Env:TUNARR_BASIC_AUTH_PASSWORD -ErrorAction SilentlyContinue
+          }
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: XBEST-owner-startup-evidence
+          path: owner-evidence
+          if-no-files-found: ignore
+
+  ubuntu-acceptance:
+    needs: package
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-22.04, ubuntu-24.04]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v4
+        with:
+          name: XBEST-preview-linux-x64
+          path: preview
+      - name: Install the Linux archive and test the protected panel
+        shell: bash
+        run: |
+          archive=$(find preview -name 'XBEST-*.tar.gz' -print -quit)
+          bash scripts/test-xbest-ubuntu-install.sh "$archive"
+      - name: Report service errors
+        if: failure()
+        run: sudo journalctl -u xbest-studio -u nginx -n 100 --no-pager
+
+  ubuntu-20-acceptance:
+    needs: package
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/download-artifact@v4
+        with:
+          name: XBEST-preview-linux-x64
+          path: preview
+      - name: Test the packaged installer in an Ubuntu 20.04 VM
+        shell: bash
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y --no-install-recommends qemu-system-x86 qemu-utils cloud-image-utils
+          archive=$(realpath "$(find preview -name 'XBEST-*.tar.gz' -print -quit)")
+          smoke=$(realpath scripts/test-xbest-ubuntu-install.sh)
+          cd "$RUNNER_TEMP"
+          cloud=https://cloud-images.ubuntu.com/releases/focal/release
+          image=ubuntu-20.04-server-cloudimg-amd64.img
+          curl -fsSLO "$cloud/$image"
+          curl -fsS "$cloud/SHA256SUMS" | grep -E "[ *]$image$" | sha256sum --check
+          qemu-img resize "$image" 12G
+          ssh-keygen -q -t ed25519 -N '' -f xbest-ci
+          printf '#cloud-config\nssh_authorized_keys:\n  - %s\n' "$(cat xbest-ci.pub)" > user-data
+          printf 'instance-id: xbest-ci\nlocal-hostname: xbest-ci\n' > meta-data
+          cloud-localds seed.iso user-data meta-data
+          accel=(-accel tcg -cpu max)
+          if [[ -e /dev/kvm ]]; then accel=(-accel kvm -cpu host); fi
+          sudo qemu-system-x86_64 "${accel[@]}" -daemonize -display none -serial file:focal-serial.log \
+            -pidfile focal.pid -m 4096 -smp 2 -drive "file=$image,if=virtio,format=qcow2" \
+            -drive file=seed.iso,media=cdrom,readonly=on \
+            -netdev user,id=net0,hostfwd=tcp:127.0.0.1:22020-:22 \
+            -device virtio-net-pci,netdev=net0,romfile=
+          trap 'sudo kill "$(sudo cat focal.pid)" || true' EXIT
+          ssh_args=(-i xbest-ci -o BatchMode=yes -o ConnectTimeout=3 -o StrictHostKeyChecking=accept-new -o UserKnownHostsFile="$RUNNER_TEMP/focal-known-hosts")
+          ready=0
+          for attempt in {1..120}; do
+            if ssh "${ssh_args[@]}" -p 22020 ubuntu@127.0.0.1 true 2>/dev/null; then
+              ready=1
+              break
+            fi
+            sleep 2
+          done
+          if (( ! ready )); then
+            sudo tail -100 focal-serial.log
+            exit 1
+          fi
+          ssh "${ssh_args[@]}" -p 22020 ubuntu@127.0.0.1 'cloud-init status --wait'
+          scp "${ssh_args[@]}" -P 22020 "$archive" ubuntu@127.0.0.1:xbest.tar.gz
+          scp "${ssh_args[@]}" -P 22020 "$smoke" ubuntu@127.0.0.1:test-install.sh
+          ssh "${ssh_args[@]}" -p 22020 ubuntu@127.0.0.1 \
+            'bash test-install.sh xbest.tar.gz || { sudo journalctl -u xbest-studio -u nginx -n 100 --no-pager; exit 1; }'

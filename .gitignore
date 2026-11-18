@@ -61,3 +61,10 @@ plans/pr-*
 !docker/test/.env.example
 docker/test/local.compose.yaml
 .orchestra/
+
+# Runtime license issuer secrets and account hashes must never be committed.
+**/access/issuer.private.pem
+**/access/state.json
+
+# Generated browser previews and captured login fixtures
+/web/test-results/

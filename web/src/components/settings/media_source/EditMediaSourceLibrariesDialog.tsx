@@ -100,7 +100,7 @@ export const EditMediaSourceLibrariesDialog = ({
       <DialogContent>
         <DialogContentText>
           <Trans>
-            Tunarr only syncs content from enabled libraries. Choose the
+            XBest only syncs content from enabled libraries. Choose the
             libraries from {mediaSource.name} that you want to use in your
             channels.
           </Trans>

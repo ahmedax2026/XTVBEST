@@ -171,7 +171,7 @@ export function ChannelPropertiesEditor() {
                     fullWidth
                     label={t`Channel Group`}
                     margin="normal"
-                    helperText={`${t`This is used by iptv clients to categorize the channels. You can leave it as 'tunarr' if you don't need this sort of classification.`}
+                    helperText={`${t`This is used by iptv clients to categorize the channels. You can leave it as 'XBest' if you don't need this sort of classification.`}
                   ${errors.groupTitle ? t`Channel group is required` : ''}`}
                     {...field}
                   />

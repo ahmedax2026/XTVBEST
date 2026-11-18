@@ -2,8 +2,7 @@ import crypto from 'node:crypto';
 import type {
   FastifyReply,
   FastifyRequest,
-  HookHandlerDoneFunction,
-  onRequestHookHandler,
+  onRequestAsyncHookHandler,
 } from 'fastify';
 import { getEnvVar, TUNARR_ENV_VARS } from './env.ts';
 
@@ -15,14 +14,23 @@ export interface BasicAuthConfig {
 export function basicAuthConfigFromEnv(): BasicAuthConfig | undefined {
   const username = getEnvVar(TUNARR_ENV_VARS.BASIC_AUTH_USER_ENV_VAR);
   const password = getEnvVar(TUNARR_ENV_VARS.BASIC_AUTH_PASSWORD_ENV_VAR);
+  if (!username && !password) return;
   if (!username || !password) {
-    return;
+    throw new Error(
+      'Set both TUNARR_BASIC_AUTH_USER and TUNARR_BASIC_AUTH_PASSWORD. Refusing to start with incomplete login credentials.',
+    );
+  }
+  if (username.includes(':')) {
+    throw new Error('The login username cannot contain a colon.');
   }
   return { username, password };
 }
 
 function unauthorized(reply: FastifyReply) {
-  reply.header('WWW-Authenticate', 'Basic realm="Tunarr"');
+  reply.header(
+    'WWW-Authenticate',
+    'Basic realm="XBest Channels Studio", charset="UTF-8"',
+  );
   return reply.status(401).send('Authentication required');
 }
 
@@ -77,28 +85,40 @@ export function isAuthorized(
 
 export function createTunarrBasicAuthHook(
   config: BasicAuthConfig,
-): onRequestHookHandler {
-  return (
+  authenticate?: (header?: string) => Promise<boolean>,
+  onUnauthorized?: (
     request: FastifyRequest,
     reply: FastifyReply,
-    done: HookHandlerDoneFunction,
-  ) => {
-    if (request.routeOptions.config?.authRequired === false) {
-      done();
-      return;
+  ) => FastifyReply,
+): onRequestAsyncHookHandler {
+  const failures = new Map<string, { count: number; reset: number }>();
+  return async (request: FastifyRequest, reply: FastifyReply) => {
+    if (request.routeOptions.config?.authRequired === false) return;
+    const now = Date.now();
+    const previous = failures.get(request.ip);
+    if (previous && previous.reset > now && previous.count >= 10) {
+      reply.header('Retry-After', Math.ceil((previous.reset - now) / 1000));
+      return reply.code(429).send('Too many login attempts');
     }
-
-    const ok = validateBasicAuth(
-      request.headers.authorization,
-      config.username,
-      config.password,
-    );
-
+    const ok = authenticate
+      ? await authenticate(request.headers.authorization)
+      : validateBasicAuth(
+          request.headers.authorization,
+          config.username,
+          config.password,
+        );
     if (!ok) {
-      void unauthorized(reply);
-      return;
+      if (failures.size >= 1000) failures.clear();
+      failures.set(
+        request.ip,
+        previous && previous.reset > now
+          ? { ...previous, count: previous.count + 1 }
+          : { count: 1, reset: now + 60_000 },
+      );
+      return onUnauthorized
+        ? onUnauthorized(request, reply)
+        : unauthorized(reply);
     }
-
-    done();
+    failures.delete(request.ip);
   };
 }

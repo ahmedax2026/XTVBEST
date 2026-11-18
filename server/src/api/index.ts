@@ -1,3 +1,5 @@
+import { channelOverlayApi } from './channelOverlayApi.ts';
+import { channelArchiveApi } from './channelArchiveApi.ts';
 import type { FfmpegEncoder } from '@/ffmpeg/ffmpegInfo.js';
 import { FfmpegInfo } from '@/ffmpeg/ffmpegInfo.js';
 import { globalOptions, serverOptions } from '@/globals.js';
@@ -74,6 +76,8 @@ export const apiRouter: RouterPluginAsyncCallback = async (fastify) => {
     })
     .register(tasksApiRouter)
     .register(channelsApi)
+    .register(channelArchiveApi)
+    .register(channelOverlayApi)
     .register(nativePlaybackApi)
     .register(customShowsApiV2)
     .register(fillerListsApi)

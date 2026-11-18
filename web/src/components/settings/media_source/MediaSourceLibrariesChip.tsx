@@ -24,7 +24,7 @@ export const MediaSourceLibrariesChip = ({ mediaSource, onClick }: Props) => {
   return (
     <Tooltip
       placement="top"
-      title={t`Tunarr only syncs content from enabled libraries. Click to choose libraries.`}
+      title={t`XBest only syncs content from enabled libraries. Click to choose libraries.`}
     >
       <Chip
         size="small"

@@ -18,7 +18,7 @@ export class BaseImageHealthCheck implements HealthCheck {
       return Promise.resolve(
         healthCheckResult({
           type: 'warning',
-          context: `Using deprecated docker image tag: chrisbenincasa/tunarr:${baseImage}. Please use chrisbenincasa/tunarr:${newImage} instead. Hardware-accel specific tags are deprecated, will not receive updates, and will be removed in a future version. Non-suffixed tags contain everything necessary for hardware acceleration.`,
+          context: `XBEST: the Docker image variant ${baseImage} is deprecated. Update your image to the maintained ${newImage} variant, which includes hardware acceleration support.`,
         }),
       );
     }

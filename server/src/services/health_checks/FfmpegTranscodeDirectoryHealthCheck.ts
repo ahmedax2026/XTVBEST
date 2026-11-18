@@ -32,7 +32,7 @@ export class FfmpegTranscodeDirectoryHealthCheck implements HealthCheck {
         if (isNodeError(err.cause) && err.cause.code === 'ENOENT') {
           return healthCheckResult({
             type: 'error',
-            context: `Parent directory of configured transcode directory ${settings.transcodeDirectory} does not exist. Tunarr will not be able to create the transcode directory`,
+            context: `Parent directory of configured transcode directory ${settings.transcodeDirectory} does not exist. XBest will not be able to create the transcode directory`,
           });
         } else {
           this.logger.error(parentStatResult.error);
@@ -57,7 +57,7 @@ export class FfmpegTranscodeDirectoryHealthCheck implements HealthCheck {
         if (!transcodeDirectoryExists && !writable) {
           return healthCheckResult({
             type: 'warning',
-            context: `FFmpeg transcode parent directory may not be writable by Tunarr`,
+            context: `FFmpeg transcode parent directory may not be writable by XBest`,
           });
         }
       }

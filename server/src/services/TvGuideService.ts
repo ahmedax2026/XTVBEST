@@ -1327,8 +1327,8 @@ export class TVGuideService {
 
     const icon = isNonEmptyString(materializedItem.icon)
       ? materializedItem.icon
-      : (resolveIconUrl(channel.icon, makeLocalUrl('/images/tunarr.png')) ??
-        makeLocalUrl('/images/tunarr.png'));
+      : (resolveIconUrl(channel.icon, makeLocalUrl('/images/xbest-logo.png')) ??
+        makeLocalUrl('/images/xbest-logo.png'));
 
     const program = match(materializedItem)
       .returnType<TvGuideProgram>()
@@ -1504,9 +1504,9 @@ export class TVGuideService {
     const currentUpdateTimeMs = +dayjs();
     const channel: ChannelOrmWithPrograms = {
       uuid: PlaceholderChannelId,
-      name: 'Tunarr',
+      name: 'XBest',
       icon: {
-        path: makeLocalUrl('/images/tunarr.png'),
+        path: makeLocalUrl('/images/xbest-logo.png'),
         width: 0,
         duration: 0,
         position: 'bottom-right',

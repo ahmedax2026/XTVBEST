@@ -1,4 +1,7 @@
-import { useAddBreaks } from '@/hooks/programming_controls/useAddBreaks';
+import {
+  useAddBreaks,
+  useAddStudioBumpers,
+} from '@/hooks/programming_controls/useAddBreaks';
 import {
   Box,
   DialogContentText,
@@ -35,6 +38,7 @@ const AddBreaksModalContent = ({
 }: Omit<AddBreaksModalProps, 'open'>) => {
   const { t } = useLingui();
   const addBreaks = useAddBreaks();
+  const addStudioBumpers = useAddStudioBumpers();
 
   const {
     control,
@@ -210,6 +214,14 @@ const AddBreaksModalContent = ({
         </Box>
       </DialogContent>
       <DialogActions>
+        <Button
+          onClick={() => {
+            addStudioBumpers();
+            onClose();
+          }}
+        >
+          <Trans>Insert five-second XBEST bumpers</Trans>
+        </Button>
         <Button onClick={() => onClose()}>
           <Trans>Cancel</Trans>
         </Button>

@@ -3,7 +3,7 @@ import {
   getApiSystemMigrationStateOptions,
   getApiSystemSettingsOptions,
 } from '../generated/@tanstack/react-query.gen.ts';
-import GuidePage from '../pages/guide/GuidePage.tsx';
+import StudioDashboard from '../pages/studio/StudioDashboard.tsx';
 
 export const Route = createFileRoute('/')({
   loader: async ({ context }) => {
@@ -21,5 +21,5 @@ export const Route = createFileRoute('/')({
       });
     }
   },
-  component: () => <GuidePage channelId="all" />,
+  component: StudioDashboard,
 });

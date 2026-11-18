@@ -11,7 +11,9 @@ import {
   describe,
   expect,
   test,
+  vi,
 } from 'vitest';
+import axios from 'axios';
 import { downloadImageToFile } from './cacheImageService.ts';
 
 const png = Buffer.from([0x89, 0x50, 0x4e, 0x47, 0x0d, 0x0a, 0x1a, 0x0a]);
@@ -79,24 +81,48 @@ describe('downloadImageToFile', () => {
   });
 
   test('refuses a cloud metadata address', async () => {
-    const error = await downloadImageToFile(
-      'http://169.254.169.254/latest/meta-data/',
-      target,
-    ).catch((e: unknown) => e);
+    // Even a broken guard must never turn this regression into a real request.
+    const transport = vi
+      .spyOn(axios, 'request')
+      .mockRejectedValue(new Error('Unexpected transport call'));
+    try {
+      const error = await downloadImageToFile(
+        'http://169.254.169.254/latest/meta-data/',
+        target,
+      ).catch((e: unknown) => e);
 
-    expect(isBlockedOutboundUrlError(error)).toBe(true);
-    expect(await fileExists(target)).toBe(false);
+      expect(isBlockedOutboundUrlError(error)).toBe(true);
+      expect(await fileExists(target)).toBe(false);
+      expect(transport).not.toHaveBeenCalled();
+    } finally {
+      transport.mockRestore();
+    }
   });
 
   test('refuses a redirect to a cloud metadata address', async () => {
-    const error = await downloadImageToFile(
-      `${baseUrl}/to-metadata`,
-      target,
-    ).catch((e: unknown) => e);
+    // Exercise the real redirect callback with a mocked transport. No socket
+    // can ever reach the metadata destination, including if the guard regresses.
+    const transport = vi
+      .spyOn(axios, 'request')
+      .mockImplementation(async (config) => {
+        config.beforeRedirect?.(
+          { hostname: '169.254.169.254', protocol: 'http:' },
+          { headers: {}, statusCode: 302 },
+        );
+        throw new Error('Redirect should have been refused');
+      });
+    try {
+      const error = await downloadImageToFile(
+        `${baseUrl}/to-metadata`,
+        target,
+      ).catch((e: unknown) => e);
 
-    expect(requests).toEqual(['/to-metadata']);
-    expect(isBlockedOutboundUrlError(error)).toBe(true);
-    expect(await fileExists(target)).toBe(false);
+      expect(requests).toEqual([]);
+      expect(isBlockedOutboundUrlError(error)).toBe(true);
+      expect(await fileExists(target)).toBe(false);
+    } finally {
+      transport.mockRestore();
+    }
   });
 
   test('aborts a body over the size limit and removes the partial file', async () => {

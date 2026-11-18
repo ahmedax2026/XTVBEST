@@ -173,7 +173,7 @@ export class XmlTvWriter {
     );
     return {
       generatorInfoName: 'tunarr',
-      generatorInfoUrl: 'https://tunarr.com',
+      generatorInfoUrl: 'https://xiptv.live',
       sourceInfoName: 'tunarr',
       sourceInfoUrl: `{{host}}/web`,
       sourceDataUrl: `{{host}}/api/xmltv.xml`,
@@ -208,7 +208,10 @@ export class XmlTvWriter {
       ],
     };
 
-    const iconSrc = resolveIconUrl(channel.icon, '{{host}}/images/tunarr.png');
+    const iconSrc = resolveIconUrl(
+      channel.icon,
+      '{{host}}/images/xbest-logo.png',
+    );
     if (iconSrc) {
       partial.icon = [
         {

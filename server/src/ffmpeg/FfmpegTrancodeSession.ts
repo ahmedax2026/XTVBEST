@@ -25,6 +25,8 @@ export class FfmpegTranscodeSession extends events.EventEmitter<FfmpegEvents> {
     caller: import.meta,
   });
   private state = State.Idle;
+  private cleanupCallbacks: Array<() => Promise<void>> = [];
+  private cleanupTask?: Promise<void>;
 
   constructor(
     public process: FfmpegProcess,
@@ -44,6 +46,7 @@ export class FfmpegTranscodeSession extends events.EventEmitter<FfmpegEvents> {
     });
 
     this.process.on('exit', (...args) => {
+      void this.cleanup();
       this.emit('exit', ...args);
     });
   }
@@ -57,6 +60,7 @@ export class FfmpegTranscodeSession extends events.EventEmitter<FfmpegEvents> {
     }
 
     const rawStream = this.process.start();
+    void this.process.exited.then(() => this.cleanup());
     if (isUndefined(rawStream)) {
       this.state = State.Error;
       this.kill();
@@ -88,10 +92,27 @@ export class FfmpegTranscodeSession extends events.EventEmitter<FfmpegEvents> {
 
   kill() {
     this.state = State.Ended;
-    return this.process.kill();
+    this.process.kill();
+    void this.process.exited.then(() => this.cleanup());
+  }
+
+  registerCleanup(callback: () => Promise<void>) {
+    this.cleanupCallbacks.push(callback);
+  }
+  private cleanup() {
+    return (this.cleanupTask ??= Promise.allSettled(
+      this.cleanupCallbacks.map((callback) => Promise.resolve().then(callback)),
+    ).then((results) => {
+      for (const result of results)
+        if (result.status === 'rejected')
+          this.logger.warn(
+            result.reason,
+            'Could not remove temporary streaming assets',
+          );
+    }));
   }
 
   get exited(): Promise<void> {
-    return this.process.exited;
+    return this.process.exited.then(() => this.cleanup());
   }
 }

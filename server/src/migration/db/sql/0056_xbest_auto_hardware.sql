@@ -1,0 +1,1 @@
+ALTER TABLE `transcode_config` ADD `auto_hardware_acceleration` integer DEFAULT false;

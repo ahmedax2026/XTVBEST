@@ -1,3 +1,4 @@
+import type { ProgramOverlay } from '../services/overlay/countdownAss.ts';
 import type { ChannelStreamMode, Watermark } from '@tunarr/types';
 import type {
   SessionConcatStreamMode,
@@ -28,7 +29,10 @@ export type PlaceholderSessionOpts = {
   outputFormat: OutputFormat;
   realtime?: boolean;
   ptsOffset?: number;
-} & ({ kind: 'error'; title: string; subtitle?: string } | { kind: 'offline' });
+} & (
+  | { kind: 'error'; title: string; subtitle?: string }
+  | { kind: 'offline' | 'bumper' }
+);
 
 /**
  * Whether a concat mode's child already emits normalized HLS, so the concat
@@ -90,6 +94,9 @@ export type StreamSessionCreateArgs = {
 export type StreamEncoding = { mode: 'transcode' } | { mode: 'remux' };
 
 export type StreamOptions = {
+  /** Encode a finite preparation job as fast as the selected profile allows. */
+  offlinePreparation?: boolean;
+  programOverlay?: ProgramOverlay;
   startTime: Duration;
   duration: Duration;
   watermark?: Watermark;

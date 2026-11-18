@@ -353,8 +353,8 @@ export function PlexServerEditDialog({ open, onClose, server }: Props) {
                 />
                 <FormHelperText>
                   <Trans>
-                    Tunarr will attempt to get Plex to pull Tunarr's updated
-                    XMLTV upon regeneration
+                    XBest will attempt to get Plex to pull XBest's updated XMLTV
+                    upon regeneration
                   </Trans>
                 </FormHelperText>
               </FormControl>
@@ -373,7 +373,7 @@ export function PlexServerEditDialog({ open, onClose, server }: Props) {
                 />
                 <FormHelperText>
                   <Trans>
-                    Tunarr will update Plex's "now playing" state while channels
+                    XBest will update Plex's "now playing" state while channels
                     are active.
                   </Trans>
                 </FormHelperText>

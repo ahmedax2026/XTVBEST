@@ -122,7 +122,7 @@
   ],
   "overrides": [
     {
-      "files": ["src/components/ui/**"],
+      "files": ["src/components/ui/**", "src/components/shell/XBestShell.tsx"],
       "rules": {
         "no-restricted-imports": "off"
       }

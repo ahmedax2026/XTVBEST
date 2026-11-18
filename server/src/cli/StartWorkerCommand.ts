@@ -17,7 +17,7 @@ export const StartWorkerCommand: CommandModule<
   GenerateOpenApiCommandArgs
 > = {
   command: 'start-worker',
-  describe: 'Starts a Tunarr worker (internal use only)',
+  describe: 'Starts an XBEST worker (internal use only)',
   handler: async () => {
     if (isMainThread) {
       console.error('This module is only meant to be run as a worker thread.');

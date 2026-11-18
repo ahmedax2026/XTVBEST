@@ -175,14 +175,8 @@ export default function ChannelTranscodingConfig() {
                   The streaming mode affects the type of underlying transcoding
                   process used to create the channel's video stream.
                   <br />
-                  Learn more about Tunarr's stream modes{' '}
-                  <Link
-                    target="_blank"
-                    href="https://tunarr.com/configure/channels/transcoding/#stream-mode"
-                  >
-                    here
-                  </Link>
-                  !
+                  Use HLS for segmented playback or MPEG-TS for a continuous
+                  transport stream. Direct modes copy compatible source streams.
                 </Trans>
               </FormHelperText>
             </FormControl>
@@ -216,6 +210,13 @@ export default function ChannelTranscodingConfig() {
               </FormHelperText>
             </FormControl>
           </Stack>
+          <Typography variant="body2" sx={{ mt: 1 }}>
+            {transcodeConfig.autoHardwareAcceleration
+              ? t`Processing: Auto — GPU with CPU fallback`
+              : transcodeConfig.hardwareAccelerationMode === 'none'
+                ? t`Processing: CPU`
+                : t`Processing: GPU (${transcodeConfig.hardwareAccelerationMode})`}
+          </Typography>
           {!etvNextEnabledGlobally && (
             <FormControl margin="normal">
               <FormControlLabel
@@ -233,7 +234,7 @@ export default function ChannelTranscodingConfig() {
                 {EtvNextRoutableModes.includes(streamMode) ? (
                   <Trans>
                     Stream this channel through the experimental ErsatzTV next
-                    backend instead of Tunarr's own pipeline. Use this to move
+                    backend instead of XBest's own pipeline. Use this to move
                     channels over one at a time. Turning on the global ErsatzTV
                     next feature flag enrolls every channel and replaces this
                     setting.
@@ -340,7 +341,7 @@ export default function ChannelTranscodingConfig() {
                       src={
                         [watermarkPath, channel.icon.path].find(
                           isNonEmptyString,
-                        ) ?? `${backendUri}/images/tunarr.png`
+                        ) ?? `${backendUri}/images/xbest-logo.png`
                       }
                     />
                     {safeTitleIndicatorVisible && (

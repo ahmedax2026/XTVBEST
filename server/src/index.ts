@@ -19,6 +19,11 @@ import 'reflect-metadata';
 import { hideBin } from 'yargs/helpers';
 import yargs from 'yargs/yargs';
 import { commands } from './cli/commands.ts';
+import {
+  desktopStartupEnabled,
+  initializeDesktopInstance,
+} from './services/desktop/DesktopStartup.ts';
+import { globalOptions } from './globals.ts';
 
 // Extend this here once so we don't have to worry about
 // it elsewhere in the app.
@@ -26,31 +31,11 @@ dayjs.extend(duration);
 dayjs.extend(dayjsMod);
 
 function printBanner() {
-  console.log(
-    `
-${chalk.blue(' _____')} ${chalk.green('_   _')}${chalk.yellow(
-      ' _  _ ',
-    )}${chalk.magentaBright('  _   ')}${chalk.red('___ ')}${chalk.cyan('___ ')}
-${chalk.blue('|_   _|')}${chalk.green(' | | | ')}${chalk.yellow(
-      '\\| |',
-    )}${chalk.magentaBright(' /_\\ ')}${chalk.red('| _ \\')}${chalk.cyan(
-      ' _ \\',
-    )}
-${chalk.blue('  | | ')}${chalk.green('| |_| |')}${chalk.yellow(
-      ' .` |',
-    )}${chalk.magentaBright('/ _ \\')}${chalk.red('|   /')}${chalk.cyan('   /')}
-${chalk.blue('  |_| ')}${chalk.green(' \\___/')}${chalk.yellow(
-      '|_|\\_/',
-    )}${chalk.magentaBright('_/ \\_\\')}${chalk.red('_|_\\')}${chalk.cyan(
-      '_|_\\',
-    )}
-\n\t  ${getTunarrVersion()}
-`,
-  );
+  console.log(chalk.red(`XBEST Channels Studio ${getTunarrVersion()}`));
 }
 
 yargs(hideBin(process.argv))
-  .scriptName('tunarr')
+  .scriptName('XBEST')
   .option('log_level', {
     type: 'string',
     choices: ValidLogLevels,
@@ -78,6 +63,18 @@ yargs(hideBin(process.argv))
   .middleware([
     ({ hide_banner }) => (hide_banner ? void 0 : printBanner()),
     (opts) => setGlobalOptions(opts),
+    async (opts) => {
+      if (
+        desktopStartupEnabled() &&
+        (opts._.length === 0 || opts._[0] === 'server')
+      ) {
+        if (
+          !(await initializeDesktopInstance(globalOptions().databaseDirectory))
+        ) {
+          process.exit(0);
+        }
+      }
+    },
     (opts) => {
       if ((opts._ as string[])[0] !== 'generate-openapi') {
         return bootstrapTunarr();

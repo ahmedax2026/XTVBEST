@@ -104,7 +104,7 @@ export class HdhrApiRouter {
         if (lineup.length === 0)
           lineup.push({
             GuideNumber: '1',
-            GuideName: 'Tunarr',
+            GuideName: 'XBest',
             URL: `${req.protocol}://${req.host}/setup`,
           });
 
